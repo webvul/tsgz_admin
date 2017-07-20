@@ -1,0 +1,23 @@
+
+{
+  "user":[
+    {
+      "name":"admin",
+      "status":"超级管理员",
+      "sex":"女",
+      "introduction":"一个有主角光环的人",
+      "limit":1,
+      "avatar":"https://t1.ituba.cc/mm8/tupai/20150909/052955822.jpg",
+      "token":"wqwe22445refdfdfgfgfgds"
+    },
+    {
+      "name":"方明",
+      "sex":"男",
+      "status":"一般管理员",
+      "introduction":"一个有房有车的人",
+      "avatar":"http://www.itouxiang.net/uploads/allimg/20160610/gwca2j3hbmz177945.jpg",
+      "limit":0,
+      "token":"wqwe22445refdfdfgfgfgd1"
+    }
+  ]
+}

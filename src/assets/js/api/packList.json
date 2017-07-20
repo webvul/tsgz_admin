@@ -1,0 +1,152 @@
+{"packList":[
+  {
+    "id":"3e17c10275cd4ff5941e4d4724701000",
+    "isNewRecord":false,
+    "createDate":"2017-07-11 15:55:56",
+    "updateDate":"2017-07-11 15:55:56",
+    "groupName":"未分组",
+    "groupCode":0,
+    "groBusPackagesList":[
+      {
+        "id":"720b436d5525475faebeb46abb2ef0a8",
+        "isNewRecord":false,
+        "createDate":"2017-07-11 14:19:39",
+        "updateDate":"2017-07-11 14:17:16",
+        "busPackageName":"dfret",
+        "groupCode":"0",
+        "tabNum":"1"
+      },
+      {
+        "id":"c996c4d926514ab3b70f3d9d9c214034",
+        "isNewRecord":false,
+        "createDate":"2017-07-11 14:19:36",
+        "updateDate":"2017-07-11 14:17:16",
+        "busPackageName":"骚动",
+        "groupCode":"0",
+        "tabNum":"8"
+      }
+    ]
+  },
+  {
+    "id":"3317c10275cd4ff5941e4d4724701000",
+    "isNewRecord":false,
+    "createDate":"2017-07-11 14:12:01",
+    "updateDate":"2017-07-11 14:12:21",
+    "groupName":"555",
+    "groupCode":1,
+    "groBusPackagesList":[
+      {
+        "id":"15773069e8904ec989b5a9c844719fea",
+        "isNewRecord":false,
+        "createDate":"2017-07-11 15:55:48",
+        "updateDate":"2017-07-11 14:17:16",
+        "busPackageName":"sb",
+        "groupCode":"1",
+        "tabNum":"4"
+      },
+      {
+        "id":"cc11e0d4e4854cb5ae72ffc0329a0046",
+        "isNewRecord":false,
+        "createDate":"2017-07-11 15:55:50",
+        "updateDate":"2017-07-11 14:17:16",
+        "busPackageName":"111",
+        "groupCode":"1",
+        "tabNum":"2"
+      }
+    ]
+  },
+  {
+    "id":"69df035464ce49fbbb9ad923376a3e07",
+    "isNewRecord":false,
+    "createDate":"2017-07-04 18:28:39",
+    "updateDate":"2017-07-04 18:28:00",
+    "groupName":"222",
+    "groupCode":3,
+    "groBusPackagesList":[
+      {
+        "id":"d3b64fe59c5b43aabf66d36dc8e6ea18",
+        "isNewRecord":false,
+        "createDate":"2017-07-11 14:20:31",
+        "updateDate":"2017-07-11 14:17:16",
+        "busPackageName":"得到的",
+        "groupCode":"3",
+        "tabNum":"1"
+      }
+    ]
+  },
+  {
+    "id":"3897c7f491d74d6598ee661bc9300fd2",
+    "isNewRecord":false,
+    "createDate":"2017-07-04 18:29:58",
+    "updateDate":"2017-07-04 18:29:20",
+    "groupName":"2实测2",
+    "groupCode":4,
+    "groBusPackagesList":[
+      {
+        "id":"00bfe7ea0c9a4f6abab26e06424ac8ee",
+        "isNewRecord":false,
+        "createDate":"2017-07-11 15:03:19",
+        "updateDate":"2017-07-11 14:17:16",
+        "busPackageName":"4543(1)",
+        "groupCode":"4",
+        "tabNum":"6"
+      },
+      {
+        "id":"1bdb0db7c712461fa0c74c4b1d74c3ed",
+        "isNewRecord":false,
+        "createDate":"2017-07-11 15:03:21",
+        "updateDate":"2017-07-11 14:17:16",
+        "busPackageName":"123",
+        "groupCode":"4",
+        "tabNum":"2"
+      }
+    ]
+  },
+  {
+    "id":"50873c7633484f55b303ad72de06565c",
+    "isNewRecord":false,
+    "createDate":"2017-07-04 18:33:49",
+    "updateDate":"2017-07-04 18:33:10",
+    "groupName":"2312",
+    "groupCode":7,
+    "groBusPackagesList":[
+      {
+        "id":"cc87f6f274534993856f10ca6c90d4f2",
+        "isNewRecord":false,
+        "createDate":"2017-07-11 14:18:09",
+        "updateDate":"2017-07-11 14:17:16",
+        "busPackageName":"mingc",
+        "groupCode":"7",
+        "tabNum":"2"
+      }
+    ]
+  },
+  {
+    "id":"06279531f44841479a9e8baa6174ec0c",
+    "isNewRecord":false,
+    "createDate":"2017-07-05 17:04:16",
+    "updateDate":"2017-07-05 17:04:16",
+    "groupName":"分组",
+    "groupCode":12,
+    "groBusPackagesList":[
+      {
+        "id":"f296fb32099f438fb90288ef4faa721d",
+        "isNewRecord":false,
+        "createDate":"2017-07-11 14:18:09",
+        "updateDate":"2017-07-11 14:17:16",
+        "busPackageName":"22",
+        "groupCode":"12",
+        "tabNum":"1"
+      },
+      {
+        "id":"ff8cdca2e24a494eb22d113cacf9687e",
+        "isNewRecord":false,
+        "createDate":"2017-07-11 14:18:09",
+        "updateDate":"2017-07-11 14:17:16",
+        "busPackageName":"qwerty",
+        "groupCode":"12",
+        "tabNum":"2"
+      }
+    ]
+  }
+]}
