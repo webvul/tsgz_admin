@@ -7,27 +7,27 @@
             </header>
             <section class="msg">
                 <div class="left">
-                    <el-form label-position="right" label-width="100px" :model="loginMsg">
+                    <el-form label-position="right" label-width="100px" :model="user_msg">
                         <el-form-item label="用户名：">
-                            admin
+                            {{user_msg.loginName}}
                         </el-form-item>
                         <el-form-item label="昵称：">
-                            <el-input v-model="loginMsg.name"></el-input>
+                            <el-input v-model="user_msg.name"></el-input>
                         </el-form-item>
                         <el-form-item label="性别：">
-                            <el-radio-group v-model="loginMsg.sex">
+                            <el-radio-group v-model="user_msg.sex">
                                 <el-radio label="man">男</el-radio>
                                 <el-radio label="woman">女</el-radio>
                             </el-radio-group>
                         </el-form-item>
                         <el-form-item label="邮箱：">
-                            <el-input v-model="loginMsg.token"></el-input>
+                            <el-input v-model="user_msg.email"></el-input>
                         </el-form-item>
                         <el-form-item label="电话：">
-                            <el-input v-model="loginMsg.token"></el-input>
+                            <el-input v-model="user_msg.phone"></el-input>
                         </el-form-item>
                         <el-form-item label="手机：">
-                            <el-input v-model="loginMsg.token"></el-input>
+                            <el-input v-model="user_msg.mobile"></el-input>
                         </el-form-item>
                     </el-form>
                 </div>
@@ -35,7 +35,7 @@
                     <el-form  label-width="100px">
                         <el-form-item label="头像：" class="label_img">
                             <div class="con">
-                                <img :src="loginMsg.avatar" alt="用户头像" class="user_img">
+                                <img :src="prefix+user_msg.photo" alt="用户头像" class="user_img">
                                 <el-button type="text" class="el-button filter-item el-button&#45;&#45;primary"
                                            @click="uploadAvatar()">
                                     <span>上传头像</span>
@@ -57,7 +57,7 @@
                             系统管理员
                         </el-form-item>
                         <el-form-item label="备注：">
-                            <el-input v-model="loginMsg.token"></el-input>
+                            <el-input v-model="user_msg.token"></el-input>
                         </el-form-item>
                     </el-form>
 
@@ -73,7 +73,7 @@
 </template>
 
 <script>
-    import {mapGetters} from 'vuex';
+    import {mapState} from 'vuex';
     import {IPAddress} from '../../utils';
     export default {
         data() {
@@ -82,9 +82,10 @@
                 ipMsg:''
             }
         },
-        computed: mapGetters(['loginMsg']),
-        mounted() {
+        computed: mapState(['user_msg','prefix']),
+        created() {
             this.ipMsg = IPAddress();
+            this.$store.dispatch('handleUserMsg');
         },
         methods: {
             //提交表单
@@ -92,14 +93,14 @@
                 let vm = this;
                 vm.editable = false;
                 let par = {
-                    "status": vm.loginMsg.status,
-                    "name": vm.loginMsg.name,
-                    "token": vm.loginMsg.token,
-                    "avatar":vm.loginMsg.avatar,
-                    "sex": vm.loginMsg.sex,
-                    "introduction": vm.loginMsg.introduction,
+                    "status": vm.user_msg.status,
+                    "name": vm.user_msg.name,
+                    "token": vm.user_msg.token,
+                    "avatar":vm.user_msg.avatar,
+                    "sex": vm.user_msg.sex,
+                    "introduction": vm.user_msg.introduction,
                 };
-                this.$store.commit("editUserINfo",par);
+
 
             },
             //取消
@@ -153,8 +154,8 @@
         display: flex;
         align-items: center;
         img {
-            max-width: 80px;
-            max-height: 80px;
+            width: 80px;
+            height: 80px;
             border-radius: 50%;
             margin-right:5px;
             border:1px solid #ededed;

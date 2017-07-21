@@ -38,7 +38,7 @@
                 logining: false,
                 ruleForm2: {
                     account: 'admin',
-                    checkPass: '123456'
+                    checkPass: 'admin'
                 },
                 rules2: {
                     account: [
@@ -54,7 +54,6 @@
             };
         },
         mounted: function () {
-            this.$store.dispatch('LOAD_NUM');
         },
         //解构赋值，获取state和getters里面的值
         /*computed: {...mapState(['num']),...mapGetters(['changeNum'])},*/
@@ -66,15 +65,16 @@
                 this.$refs.ruleForm2.resetFields();
             },
             handleSubmit2(ev) {
-                var _this = this;
+                let _this = this;
                 this.$refs.ruleForm2.validate((valid) => {
                     if (valid) {
-                        //_this.$router.replace('/table');
                         this.logining = true;
-                        //NProgress.start();
-                        var loginParams = {username: this.ruleForm2.account, password: this.ruleForm2.checkPass};
-                        AJAX.post('loginweb',loginParams,(res)=>{
-                            console.log(res);
+                        let loginParams = {username: this.ruleForm2.account, password: this.ruleForm2.checkPass};
+                        AJAX.post('sys/user/loginweb',loginParams,(res)=>{
+                            console.log(res.data);
+                            _this.logining = false;
+                            sessionStorage.setItem('Token', JSON.stringify(res.data[0].token));
+                            _this.$router.push({path: '/PersonalInfo'});
                         })
                         /*window.setTimeout(() => {
                             _this.logining = false;

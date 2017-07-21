@@ -8,31 +8,12 @@ import axios from 'axios';
 let querystring = require('querystring');
 export default class ajax {
     static get(api, params, callback) {
-        let url = `${URLPATH}${api}?`;
-        for (var key in params) {
-            url += key + '=' + params[key] + '&'
-        }
-        url = url.substring(0, url.length - 1);
-        axios({
-            method: 'get',
-            url: url,
-        })
-            .then(function (response) {
-                callback(response)
-            })
-            .then(function (error) {
-                if (error) {
-                    console.log(error)
-                }
-            });
-    }
-    static get1(api, params, callback) {
-        let url = `${URLPATH1}${api}?`;
+        let token =JSON.parse(sessionStorage.getItem('Token'))?JSON.parse(sessionStorage.getItem('Token')):'';
+        let url = `${URLPATH1}${api}?token=${token}`;
         console.log(url);
         for (var key in params) {
-            url += key + '=' + params[key] + '&'
+            url +='&'+  key + '=' + params[key]
         }
-        url = url.substring(0, url.length - 1);
         axios({
             method: 'get',
             url: url,

@@ -6,7 +6,7 @@ import components from './routesLazy';
 let router = [
     // 默认显示路由
     {
-        path: '/Login',
+        path: '/login',
         name: '登录',
         component: components.Login,
         hidden: true

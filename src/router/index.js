@@ -21,11 +21,11 @@ let router = new VueRoute({
 });
 router.beforeEach((to, from, next) => {
     NProgress.done().start();//模拟页面加载的滚动条
-    if (to.path == '/login') {
-        sessionStorage.removeItem('user');
+    if (to.path === '/login') {
+        sessionStorage.removeItem('Token');
     }
-    let user = JSON.parse(sessionStorage.getItem('user'));
-    if (!user && to.path != '/login') {
+    let token = JSON.parse(sessionStorage.getItem('Token'));
+    if (!token && to.path !== '/login') {
         next({path: '/login'})
     } else {
         next()

@@ -10,18 +10,13 @@
         safelyLevel:(state,level)=>{
             state.level =level;
         },
-        //用于数据的测试
-        testDat:(state,data)=>{
-            state.testData=data;
-        },
         //获取所有用户的信息列表
         user:(state,data)=>{
             state.userList=data.user;
         },
-        //登录用户信息改变
-        loginMsg:(state,data)=>{
-           if(state.loginMsg.limit===1) state.loginMsg=data.user[1];
-           else state.loginMsg=data.user[0];
+        //获取用户的登录信息
+        userLoginMsg:(state,data)=>{
+            state.user_msg=data;
         },
         //用户修改登录信息
         editUserINfo:(state,userinfo)=>{
