@@ -9,7 +9,7 @@ const actions ={
     //获取用户登录信息
     handleUserMsg:({commit})=>{
         AJAX.get("sys/user/userinfo",{},function(msg){
-            commit('userLoginMsg');
+            commit('userLoginMsg',msg.data);
         })
     },
     //获取所有用户的信息列表

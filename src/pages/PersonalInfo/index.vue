@@ -44,7 +44,7 @@
 
                         </el-form-item>
                         <el-form-item label="归属公司：">
-                            杭州总公司
+                            {{user_msg.company}}
                         </el-form-item>
                         <el-form-item label="归属部门：">
                             中检杰德
@@ -73,7 +73,7 @@
 </template>
 
 <script>
-    import {mapState} from 'vuex';
+    import {mapState,mapActions} from 'vuex';
     import {IPAddress} from '../../utils';
     export default {
         data() {
@@ -85,9 +85,10 @@
         computed: mapState(['user_msg','prefix']),
         created() {
             this.ipMsg = IPAddress();
-            this.$store.dispatch('handleUserMsg');
+            this.handleUserMsg();
         },
         methods: {
+            ...mapActions(['handleUserMsg']),
             //提交表单
             submitForm() {
                 let vm = this;

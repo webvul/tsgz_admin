@@ -16,7 +16,8 @@
         },
         //获取用户的登录信息
         userLoginMsg:(state,data)=>{
-            state.user_msg=data;
+            console.log(data);
+            state.user_msg=data[0];
         },
         //用户修改登录信息
         editUserINfo:(state,userinfo)=>{
