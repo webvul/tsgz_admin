@@ -30,6 +30,7 @@
 
 <script>
     import {mapState} from 'vuex';
+    import check from './validatedPassword'
     export default {
         data() {
             const validateNewPassword2 = (rule, value, callback) => {
@@ -40,7 +41,8 @@
                 }
             };
             const validateNewPassword1 =(rule, value, callback) => {
-                if(value.length===0){
+                check.init(value,callback,this.$store.commit);
+                /*if(value.length===0){
                     this.$store.commit('safelyLevel',0);
                     callback(new Error('新密码不能为空!'));
                 }else if (value.length<4) {
@@ -52,7 +54,7 @@
                 }else{
                     this.$store.commit('safelyLevel',3);
                     callback(new Error('安全等级较高!'));
-                }
+                }*/
             };
             return{
                 //密码输入
