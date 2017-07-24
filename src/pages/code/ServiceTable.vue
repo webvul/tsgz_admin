@@ -18,8 +18,9 @@
         </div>
         <el-table
                 :data="BusinessTableList.data"
+                height="85%"
                 border
-                style="width: 98%;height:85%;overflow-y: scroll;">
+                style="width: 98%;height:85%;">
             <el-table-column
                     label="表名"
                     >
