@@ -17,6 +17,9 @@ const packDetail=resolve => require(['../pages/pack/packDetail.vue'], resolve);/
 //商品分类配置
 const goodsList = resolve => require(['../pages/goodsClassification/goodsList.vue'], resolve)
 const Test =resolve => require(['./../pages/test/test.vue'], resolve); //测试的无用界面
+//代码生成工具
+const ServiceTable = resolve => require(['../pages/code/ServiceTable.vue'], resolve)
+const programmeTable =resolve => require(['./../pages/code/programmeTable.vue'], resolve);
 export default {
     Login,
     Home_view,
@@ -30,5 +33,7 @@ export default {
     groupListAdd,
     groupListAddStep,
     packDetail,
-    goodsList
+    goodsList,
+    ServiceTable,
+    programmeTable
 };

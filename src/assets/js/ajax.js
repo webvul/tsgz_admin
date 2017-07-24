@@ -19,7 +19,8 @@ export default class ajax {
             url: url,
         })
             .then(function (response) {
-                callback(response)
+                if(response.data.code="1111")
+                callback(response.data)
             })
             .then(function (error) {
                 if (error) {

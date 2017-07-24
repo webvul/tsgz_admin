@@ -14,6 +14,8 @@ const states={
     packList:[],
     //用户获得商品的列表
     goodsList:[],
+    //业务表列表
+    BusinessTableList:[],
     //路由高亮
     headerCurRouter:'',
     sidebarCurrentRouter:''

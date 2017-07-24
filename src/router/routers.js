@@ -103,6 +103,27 @@ let router = [
         ]
     },
     {
+        path: '/code',
+        component: components.Home_view,
+        name:'代码生成工具',
+        redirect: '/code/ServiceTable',
+        iconCls: 'fa fa-address-card',//图标样式class
+        children: [
+            {
+                path: 'ServiceTable',
+                name: '业务表列表',
+                leaf: true,//只有一个节点
+                component: components.ServiceTable
+            },
+            {
+                path: 'programmeTable',
+                name: '生成方案配置',
+                leaf: true,//只有一个节点
+                component: components.programmeTable
+            },
+        ]
+    },
+    {
         path: '/tes',
         component: components.Home_view,
         name:'测试中心',

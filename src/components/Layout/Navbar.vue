@@ -2,7 +2,7 @@
     <div style="font-size:14px">
         <el-menu class="navbar" mode="horizontal">
             <i class="fa fa-bars" @click="toggleSideBar" :isActive="sidebar.opened"></i>
-            <div class="title">态势感知后台系统</div>
+            <!--<div class="title">态势感知后台系统</div>-->
             <div class="headNav">
                 <el-menu   :default-active="$store.state.headerCurRouter" class="el-menu-demo"
                          mode="horizontal" unique-opened router>

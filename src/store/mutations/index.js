@@ -66,6 +66,9 @@
             })
             console.log(temp_arr);
            state.goodsList=temp_arr
+        },
+        getBusinessTableList:(state,list)=>{
+            state.BusinessTableList=list;
         }
 }
 export  default mutations;

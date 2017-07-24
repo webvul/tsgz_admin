@@ -21,7 +21,7 @@ const actions ={
     //获取用户包的列表
     getPackList:({commit})=>{
         AJAX.get('packList.json',{},function(data){
-            commit("handlePackList",data.data.packList);
+            commit("handlePackList",data.packList);
         })
     },
     //获得商品列表
@@ -29,6 +29,13 @@ const actions ={
         AJAX.post('gcc/gcconfig/getData',{},function(data){
             console.log(data);
             commit("handleGoodsList",data.data);
+        })
+    },
+    //获取业务表列表
+    handleBusinessTableList:({commit},dat)=>{
+        AJAX.get('website/gen/list',dat,(res)=>{
+            console.log(res);
+            commit('getBusinessTableList',res);
         })
     }
 }

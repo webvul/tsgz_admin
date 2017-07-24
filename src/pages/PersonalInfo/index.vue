@@ -43,6 +43,7 @@
                                         :on-success="handleSuccess"
                                         style="border:none"
                                         list-type="text"
+                                        :data="{token:msg}"
                                         :show-file-list="false"
                                         :auto-upload="true"
                                            >
@@ -95,6 +96,7 @@
             return {
                 editable: false,
                 ipMsg:'',
+                msg:JSON.parse(sessionStorage.getItem('Token'))?JSON.parse(sessionStorage.getItem('Token')):''
             }
         },
         computed: {...mapState(['user_msg','prefix']),
@@ -132,10 +134,11 @@
                 alert('稍后补上')
             },
             handlePictureCardPreview(file){
+                console.log(file);
                 this.dialogImageUrl = file.url;
             },
             handleSuccess(file){
-
+                console.log(file);
             }
         }
     };
