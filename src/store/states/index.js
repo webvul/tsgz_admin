@@ -13,7 +13,10 @@ const states={
     //用户的包管理列表
     packList:[],
     //用户获得商品的列表
-    goodsList:[]
+    goodsList:[],
+    //路由高亮
+    headerCurRouter:'',
+    sidebarCurrentRouter:''
 }
 
 export default states;

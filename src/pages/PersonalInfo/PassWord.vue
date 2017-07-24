@@ -120,13 +120,12 @@
         }
     }
     .passwordFooter{
-        width:7rem;
-        text-align: center;
+        margin-left:130px;
         margin-top:30px;
         button{
             background:#3cad54;
             border-color:#3cad54;
-            width:3rem;
+            width:200px;
             &:hover{
                 background:#3cad54;
                 border-color:#3cad54;

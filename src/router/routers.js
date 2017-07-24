@@ -18,61 +18,68 @@ let router = [
         hidden: true
     },
     {
-        path: '/',
+        path: '/home',
+        redirect: '/home/PersonalInfo',
         component: components.Home_view,
         name:'我的面板',
         iconCls: 'fa fa-address-card',//图标样式class
         children: [
             {
-                path: '/PersonalInfo',
+                path: 'PersonalInfo',
                 name: '个人信息',
-                component: components.PersonalInfo
+                component: components.PersonalInfo,
+                leaf: true,//只有一个节点
             },
             {
-                path: '/userManage',
+                path: 'userManage',
                 name: '用户管理',
-                component: components.UserManage
+                component: components.UserManage,
+                leaf: true,//只有一个节点
             },
             {
-                path: '/index',
+                path: 'index',
                 name: '密码修改',
-                component: components.PassWord
+                component: components.PassWord,
+                leaf: true,//只有一个节点
             },
 
         ]
 
     },
     {
-        path: '/',
+        path: '/pack',
         component: components.Home_view,
         name:'业务包',
+        redirect: '/pack/groupList',
         iconCls: 'fa fa-address-card',//图标样式class
         children: [
             {
-                path: '/groupList',
+                path: 'groupList',
                 name: '业务包列表',
+                leaf: true,//只有一个节点
                 component: components.groupList
             },
             {
-                path: '/listEdit',
+                path: 'listEdit',
                 name: '业务包批量管理',
                 component: components.groupListEdit,
                 hidden:true
             },
             {
-                path: '/listAdd/:id',
+                path: 'listAdd/:id',
                 name: '业务包添加',
+                leaf: true,//只有一个节点
                 component: components.groupListAdd,
 
             },
             {
-                path: '/groupListAddStep',
+                path: 'groupListAddStep',
                 name: '添加业务包',
                 component: components.groupListAddStep,
                 hidden:true
             },
             {
-                path: '/packDetail',
+                path: 'packDetail',
                 name: '业务包详情',
                 component: components.packDetail,
                 hidden:true
@@ -81,30 +88,33 @@ let router = [
 
     },
     {
-        path: '/',
+        path: '/goods',
         component: components.Home_view,
         name:'商品分类配置',
+        redirect: '/goods/goodsList',
         iconCls: 'fa fa-address-card',//图标样式class
         children: [
             {
-                path: '/goodsList',
+                path: 'goodsList',
                 name: '菜单列表',
+                leaf: true,//只有一个节点
                 component: components.goodsList
             },
         ]
-
     },
     {
-        path: '/',
+        path: '/tes',
         component: components.Home_view,
         name:'测试中心',
+        redirect: '/tes/test',
         iconCls: 'fa fa-plus-circle',//图标样式class
         leaf: true,//只有一个节点
         children: [
             {
-                path: '/test',
+                path: 'test',
                 name: '测试页面',
-                component: components.Test
+                component: components.Test,
+                leaf: true,//只有一个节点
             },
 
         ]
@@ -112,9 +122,9 @@ let router = [
     },
     // 重定向路由
     {
-        path: '*',
+        path: '/*',
         hidden: true,
-        redirect: {path: '/index'}
+        redirect: {path: '/login'}
     }
 ];
 

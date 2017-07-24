@@ -6,6 +6,10 @@
         toggleSidebar:(state)=>{
             state.sidebar.opened=!state.sidebar.opened;
         },
+        //设置当前高亮的路由
+        setCurrentRoute:(state,path)=>{
+           state.headerCurRouter=path[0].path;
+        },
         //控制用户修改密码的安全等级
         safelyLevel:(state,level)=>{
             state.level =level;

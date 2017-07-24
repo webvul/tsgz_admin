@@ -3,6 +3,19 @@
         <el-menu class="navbar" mode="horizontal">
             <i class="fa fa-bars" @click="toggleSideBar" :isActive="sidebar.opened"></i>
             <div class="title">态势感知后台系统</div>
+            <div class="headNav">
+                <el-menu   :default-active="$store.state.headerCurRouter" class="el-menu-demo"
+                         mode="horizontal" unique-opened router>
+                    <!-- v-if='!item.hidden && (($store.state.user.userinfo.access_status===1 && $store.state.user.userinfo.web_routers[item.path]) || $store.state.user.userinfo.access_status!==1)' -->
+                    <el-menu-item
+                            v-for='(item,index) in $router.options.routes'
+                            :index="item.path"
+                            :key='item.path'
+                            v-if='!item.hidden'>
+                        {{item.name}}
+                    </el-menu-item>
+                </el-menu>
+            </div>
             <div class="header">
                 <div class="message">
                   <i class="el-icon-message"></i>
@@ -140,13 +153,20 @@
                 this.dialogVisible=false;
             }
         },
-        computed: mapState(['sidebar'])
+        computed: mapState(['sidebar']),
+        created(){
+            console.log(this.$route.matched);
+            this.$store.commit('setCurrentRoute',this.$route.matched);
+        }
     }
 </script>
 
 <style lang="scss" scoped>
     .navbar {
         height: 7vh;
+        display: flex;
+        flex-wrap: nowrap;
+        justify-content: space-between;
         border-radius: 0px !important;
         .fa-bars {
             cursor: pointer;
@@ -165,9 +185,18 @@
             font-weight: bolder;
             height:7vh;
             line-height: 7vh;
-            width:40%;
+            width:30%;
             color:#fff;
             display: inline-block;
+        }
+        .headNav{
+            display: inline-block;
+            background:green;
+            .el-menu-item{
+                height:50px;
+                padding:0 10px;
+
+            }
         }
         .header {
             .message,span{
@@ -197,7 +226,6 @@
                     background:#ee8d2f;
                 }
             }
-            float: right;
             line-height: 7vh;
             .head_drop_menu_button {
                 display: flex;

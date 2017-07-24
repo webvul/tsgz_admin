@@ -40,7 +40,7 @@
                 logining: false,
                 ruleForm2: {
                     account: 'admin',
-                    checkPass: 'admin'
+                    checkPass: '123456'
                 },
                 rules2: {
                     account: [
@@ -76,11 +76,11 @@
                             console.log(res.data);
                             _this.logining = false;
                             sessionStorage.setItem('Token', JSON.stringify(res.data[0].token));
-                            _this.$router.push({path: '/PersonalInfo'});
+                            _this.$router.push({path: '/home/PersonalInfo'});
                         })
-                        _this.logining = false;
+                        /*_this.logining = false;
                         sessionStorage.setItem('Token', JSON.stringify('qwwwwwwwwwww'));
-                        _this.$router.push({path: '/PersonalInfo'});
+                        _this.$router.push({path: '/home'});*/
                         /*window.setTimeout(() => {
                          _this.logining = false;
                          sessionStorage.setItem('user', JSON.stringify(loginParams.username));
