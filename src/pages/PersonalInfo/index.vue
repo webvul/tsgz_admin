@@ -35,13 +35,28 @@
                     <el-form  label-width="100px">
                         <el-form-item label="头像：" class="label_img">
                             <div class="con">
-                                <img :src="prefix+user_msg.photo" alt="用户头像" class="user_img">
-                                <el-button type="text" class="el-button filter-item el-button&#45;&#45;primary"
-                                           @click="uploadAvatar()">
+                                <img :src="dialogImageUrl" alt="用户头像" class="user_img">
+                                <el-upload
+                                        action="https://jsonplaceholder.typicode.com/posts/"
+                                        class="el-button filter-item "
+                                        :on-preview="handlePictureCardPreview"
+                                        :on-success="handleSuccess"
+                                        style="border:none"
+                                        list-type="text"
+                                        :show-file-list="false"
+                                        :auto-upload="true"
+                                           >
                                     <span>上传头像</span>
-                                </el-button>
+                                </el-upload>
                             </div>
-
+                            <!--<img width="100%" :src="dialogImageUrl" alt="">
+                            <el-upload
+                                    action="https://jsonplaceholder.typicode.com/posts/"
+                                    list-type="picture"
+                                    :on-preview="handlePictureCardPreview"
+                                    >
+                                <span>上传头像</span>
+                            </el-upload>-->
                         </el-form-item>
                         <el-form-item label="归属公司：">
                             {{user_msg.company}}
@@ -79,10 +94,14 @@
         data() {
             return {
                 editable: false,
-                ipMsg:''
+                ipMsg:'',
             }
         },
-        computed: mapState(['user_msg','prefix']),
+        computed: {...mapState(['user_msg','prefix']),
+            dialogImageUrl(){
+               return this.prefix+this.user_msg.photo;
+            }
+        },
         created() {
             this.ipMsg = IPAddress();
             this.handleUserMsg();
@@ -112,11 +131,17 @@
             uploadAvatar(){
                 alert('稍后补上')
             },
+            handlePictureCardPreview(file){
+                this.dialogImageUrl = file.url;
+            },
+            handleSuccess(file){
+
+            }
         }
     };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
     .app-container{
         margin:10px 1% 0;
         width:97%;
@@ -177,4 +202,5 @@
             width:3rem;
         }
     }
+    /*文件上传*/
 </style>
