@@ -20,7 +20,7 @@
         width: 100%;
         position: absolute;
         bottom: 0;
-        height: 5vh;
+        height: 45px;
         left: 0;
         overflow: hidden;
     }
@@ -30,10 +30,10 @@
     }
 
     .footer_content {
-        margin-top: 0.1vh;
+        margin-top: 2px;
         border-top: 1px solid #cfd8dc;
-        height: 4.8vh;
-        line-height: 4.8vh;
+        height: 43px;
+        line-height: 43px;
         font-size: 0.2rem;
         background: #eceff1;
         padding: 0 0.2rem;
