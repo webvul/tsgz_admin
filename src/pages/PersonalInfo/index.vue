@@ -37,13 +37,12 @@
                             <div class="con">
                                 <img :src="dialogImageUrl" alt="用户头像" class="user_img">
                                 <el-upload
-                                        action="https://jsonplaceholder.typicode.com/posts/"
+                                        action="http://127.0.0.1:8080/jad-saas-mgmt/api/website/upload"
                                         class="el-button filter-item "
                                         :on-preview="handlePictureCardPreview"
                                         :on-success="handleSuccess"
                                         style="border:none"
                                         list-type="text"
-                                        :data="{token:msg}"
                                         :show-file-list="false"
                                         :auto-upload="true"
                                            >

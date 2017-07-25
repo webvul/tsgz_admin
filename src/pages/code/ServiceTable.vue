@@ -11,8 +11,11 @@
                 <el-form-item label="父表表名：">
                     <el-input v-model="labelData.fatherFormName" size="small"></el-input>
                 </el-form-item>
-                <el-button type="primary" size="small" class="btn1">
+                <el-button type="primary" size="small" class="btn1" @click="search">
                     查询
+                </el-button>
+                <el-button type="primary" size="small" class="btn1" @click="addFormDialog = true">
+                    新增
                 </el-button>
             </el-form>
         </div>
@@ -68,7 +71,7 @@
         <el-col :span="24" class="toolbar">
             <div class="left">
                 <span style="padding-left:10px;">选择页数：</span>
-                <el-select v-model="pageSize"  placeholder="选择页数" class="pageSize" size="small">
+                <el-select v-model="pageSize"  placeholder="选择页数" class="pageSize" size="small" @change="changePageSize">
                     <el-option
                             v-for="item in pageSizeOptions"
                             :key="item"
@@ -80,6 +83,25 @@
             <el-pagination class="button" layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="pageSize" :total="BusinessTableList.count" style="padding-right:20px;">
             </el-pagination>
         </el-col>
+        <el-dialog
+                title="选择新增表名"
+                :visible.sync="addFormDialog"
+                size="tiny"
+                style="text-align: center"
+                >
+            <el-select v-model="value" filterable placeholder="请选择新增表名" >
+                <el-option
+                        v-for="item in dabeValue"
+                        :key="item"
+                        :label="item"
+                        :value="item">
+                </el-option>
+            </el-select>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="addFormDialog = false">取 消</el-button>
+                <el-button type="primary" @click="addFormDialog = false">确 定</el-button>
+              </span>
+        </el-dialog>
     </div>
 </template>
 
@@ -93,18 +115,20 @@
                     dis:'',
                     fatherFormName:''
                 },
+                value:'',//用户新增的表名
+                dabeValue:[1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4],
                 total: 0, //总页数
                 page: 1, //当前页数
                 pageSize:15,
                 pageSizeOptions:[15,20,25],
-                tableHeight:0 //表格容器的高度
+                tableHeight:0,//表格容器的高度
+                addFormDialog:false
             }
         },
         computed:{
-            ...mapState(['goodsList','BusinessTableList']),
+            ...mapState(['BusinessTableList']),
         },
         created(){
-            this.getGoodsList();
             this.handleBusinessTableList({
                 pageSize:this.pageSize,
                 pageNo:this.page
@@ -115,13 +139,47 @@
             this.tableHeight=this.$refs.serviceTableContainer.offsetHeight-140;
         },
         methods:{
-            ...mapActions(['getGoodsList','handleBusinessTableList']),
+            ...mapActions(['handleBusinessTableList','handleSearchBusinessTableList','handleDelectBusinessTableList']),
             handleCurrentChange(page){
+                this.page = page;
                 this.handleBusinessTableList({
                     pageSize:this.pageSize,
                     pageNo:page
                 })
-            }
+
+            },
+            changePageSize(){
+                this.handleBusinessTableList({
+                    pageSize:this.pageSize,
+                    pageNo:this.page
+                })
+            },
+            search(){
+                let dat =this.labelData
+                this.handleSearchBusinessTableList(dat);
+            },
+            //删除
+            handleEdit(index,scope){
+                let _this = this;
+                let dat = Object.assign(scope,{
+                    pageSize:this.pageSize,
+                    pageNo:this.page
+                });
+                this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    _this.handleDelectBusinessTableList(dat);
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            },
+            //新增
+
         },
 
     };
