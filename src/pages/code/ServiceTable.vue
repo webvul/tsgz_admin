@@ -49,7 +49,7 @@
                 </template>
             </el-table-column>
             <el-table-column label="操作"
-                width="100"
+                width="140"
             >
                 <template scope="scope">
                     <el-button
@@ -112,7 +112,7 @@
 
         },
         mounted(){
-            this.tableHeight=this.$refs.serviceTableContainer.offsetHeight-150;
+            this.tableHeight=this.$refs.serviceTableContainer.offsetHeight-140;
         },
         methods:{
             ...mapActions(['getGoodsList','handleBusinessTableList']),
@@ -166,8 +166,8 @@
        }
        .toolbar{
            position: absolute;
-           bottom:50px;
-           height:50px;
+           bottom:45px;
+           height:45px;
        overflow-x: hidden;
            display: flex;
            justify-content: space-between;
