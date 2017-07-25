@@ -21,7 +21,7 @@
         //获取用户的登录信息
         userLoginMsg:(state,data)=>{
             console.log(data);
-            state.user_msg=data[0];
+            state.user_msg=data;
         },
         //用户修改登录信息
         editUserINfo:(state,userinfo)=>{

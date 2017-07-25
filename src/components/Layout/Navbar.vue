@@ -1,20 +1,22 @@
 <template>
     <div style="font-size:14px">
-        <el-menu class="navbar" mode="horizontal">
-            <i class="fa fa-bars" @click="toggleSideBar" :isActive="sidebar.opened"></i>
-            <!--<div class="title">态势感知后台系统</div>-->
-            <div class="headNav">
-                <el-menu   :default-active="$store.state.headerCurRouter" class="el-menu-demo"
-                         mode="horizontal" unique-opened router>
-                    <!-- v-if='!item.hidden && (($store.state.user.userinfo.access_status===1 && $store.state.user.userinfo.web_routers[item.path]) || $store.state.user.userinfo.access_status!==1)' -->
-                    <el-menu-item
-                            v-for='(item,index) in $router.options.routes'
-                            :index="item.path"
-                            :key='item.path'
-                            v-if='!item.hidden'>
-                        {{item.name}}
-                    </el-menu-item>
-                </el-menu>
+        <div class="navbar">
+            <div class="left_con">
+                <i class="fa fa-bars" @click="toggleSideBar" :isActive="sidebar.opened"></i>
+                <!--<div class="title">态势感知后台系统</div>-->
+                <div class="headNav">
+                    <el-menu   :default-active="$store.state.headerCurRouter" class="el-menu-demo"
+                               mode="horizontal" unique-opened router>
+                        <!-- v-if='!item.hidden && (($store.state.user.userinfo.access_status===1 && $store.state.user.userinfo.web_routers[item.path]) || $store.state.user.userinfo.access_status!==1)' -->
+                        <el-menu-item
+                                v-for='(item,index) in $router.options.routes'
+                                :index="item.path"
+                                :key='item.path'
+                                v-if='!item.hidden'>
+                            {{item.name}}
+                        </el-menu-item>
+                    </el-menu>
+                </div>
             </div>
             <div class="header">
                 <div class="message">
@@ -48,7 +50,7 @@
                    <i class="el-icon-setting"></i>
                 </span>
             </div>
-        </el-menu>
+        </div>
         <!-- 修改密码弹窗 -->
         <el-dialog title="密码修改" :visible.sync="dialogFormVisible">
 
@@ -163,37 +165,34 @@
 
 <style lang="scss" scoped>
     .navbar {
-        height: 7vh;
+        background:#1f2c33;
+        height: 50px;
         display: flex;
         flex-wrap: nowrap;
+        align-items: center;
         justify-content: space-between;
         border-radius: 0px !important;
-        .fa-bars {
-            cursor: pointer;
-            line-height: 7vh;
-            height: 7vh;
-            font-size: 20px;
-            float: left;
-            padding: 0 15px;
-            color: #fff;
-        }
-        .fa-bars[isactive] {
-            transform: rotate(90deg);
-        }
-        .title{
-            font-size:18px;
-            font-weight: bolder;
-            height:7vh;
-            line-height: 7vh;
-            width:30%;
-            color:#fff;
-            display: inline-block;
+        .left_con{
+            display: flex;
+            align-items: center;
+            .fa-bars {
+                display: inline-block;
+                margin:0 10px;
+                cursor: pointer;
+                font-size: 20px;
+                color: #fff;
+            }
+            .fa-bars[isactive] {
+                transform: rotate(90deg);
+            }
         }
         .headNav{
+            height:50px;
+            overflow-y: hidden;
             display: inline-block;
-            background:green;
             .el-menu-item{
                 height:50px;
+                line-height: 50px;
                 padding:0 10px;
 
             }
@@ -226,7 +225,7 @@
                     background:#ee8d2f;
                 }
             }
-            line-height: 7vh;
+            line-height: 50px;
             .head_drop_menu_button {
                 display: flex;
                 align-items: center;

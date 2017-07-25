@@ -1,5 +1,5 @@
 <template>
-    <div class="page ServiceTable">
+    <div class="page ServiceTable" ref="serviceTableContainer">
         <div class="header">
             <el-form v-model="labelData" label-position="right" label-width="90px" class="ServiceTableForm">
                 <el-form-item label="表名：">
@@ -18,9 +18,9 @@
         </div>
         <el-table
                 :data="BusinessTableList.data"
-                height="85%"
+                :height="tableHeight"
                 border
-                style="width: 98%;height:85%;">
+                >
             <el-table-column
                     label="表名"
                     >
@@ -96,7 +96,8 @@
                 total: 0, //总页数
                 page: 1, //当前页数
                 pageSize:15,
-                pageSizeOptions:[15,20,25]
+                pageSizeOptions:[15,20,25],
+                tableHeight:0 //表格容器的高度
             }
         },
         computed:{
@@ -108,6 +109,10 @@
                 pageSize:this.pageSize,
                 pageNo:this.page
             })
+
+        },
+        mounted(){
+            this.tableHeight=this.$refs.serviceTableContainer.offsetHeight-150;
         },
         methods:{
             ...mapActions(['getGoodsList','handleBusinessTableList']),
@@ -124,6 +129,8 @@
 
 <style lang="scss" scoped>
     .ServiceTable{
+        display: flex;
+        flex-flow: column;
         position:relative;
        .header{
            width:100%;
@@ -158,11 +165,13 @@
            }
        }
        .toolbar{
-        position: absolute;
-        bottom:5px;
+           position: absolute;
+           bottom:50px;
+           height:50px;
        overflow-x: hidden;
            display: flex;
            justify-content: space-between;
+           align-items: center;
            .left{
                width:240px;
                overflow: hidden;

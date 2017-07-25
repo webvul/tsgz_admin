@@ -17,8 +17,8 @@
 .page{
     font-size:12px;
     width:101.5%;
-    height:95%;
-    overflow-y: auto;
+    flex: 1;
+    overflow-y: hidden;
 }
 a{
     text-decoration: none;

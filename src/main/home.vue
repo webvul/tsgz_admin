@@ -49,6 +49,7 @@
       .main-container{
         margin-left: 40px;
         position:relative;
+        display: flex;
       }
     }
     .sidebar-wrapper {
@@ -75,6 +76,8 @@
       overflow: hidden;
       transition: all .28s ease-out;
       margin-left: 180px;
+      display: flex;
+      flex-flow: column;
       height:100vh;
 
     }

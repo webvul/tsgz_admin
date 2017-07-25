@@ -1,19 +1,8 @@
 <template>
-    <!--导航菜单-->
-        <!--<div>
-            <template v-for="(route,index) in $router.options.routes" v-if="!route.hidden&& $route.matched.length && $route.matched[0].path===route.path" >
-                <el-menu :default-active="$route.path" class="el-menu-vertical-demo"
-                         unique-opened router v-for="(item,index1) in route.children" :key="index1">
-                    <el-submenu :index="item.path" v-if="!item.leaf&&!item.hidden">
-                        <template slot="title"><i :class="item.iconCls"></i>{{item.name}}</template>
-                        <el-menu-item v-for="child in item.children" :index="child.path" :key="child.path" v-if="!child.hidden">{{child.name}}</el-menu-item>
-                    </el-submenu>
-                    <el-menu-item v-if="item.leaf&&!item.hidden" :index="item.path"><i :class="item.iconCls"></i>{{item.name}}</el-menu-item>
-
-                </el-menu>
-            </template>
-        </div>-->
     <div id='left-menu'>
+        <div class="logo" style="height:1rem;">
+
+        </div>
         <el-row class='tac'
                 v-for="(route,index) in $router.options.routes"
                 :key='route.path'
@@ -76,7 +65,6 @@
 <style lang="scss">
     $color1:#1f2c33;
     .el-menu-vertical-demo {
-        background: $color1;
         .header_title {
             color: #aab1b5;
 
@@ -91,6 +79,7 @@
         .el-menu-item {
             background: $color1;
             color: #aab1b5;
+            border-bottom:1px solid #00b889;
              &:hover{
                  background: $color1;
                  color: #fff;

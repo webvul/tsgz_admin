@@ -30,8 +30,10 @@
 </script>
 <style lang="scss">
   .appmain{
-      height:88vh;
+      flex:1;
     width:100%;
       overflow: hidden;
+    display: flex;
+    flex-flow: column;
   }
 </style>

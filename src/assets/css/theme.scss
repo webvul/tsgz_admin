@@ -7,19 +7,47 @@ $color4:red;
   color:#fff;
 }*/
 body{
-  //顶部导航栏背景
-  .navbar{
-    background:$color1;
-  }
   //组件激活状态
   .active{
     background:$color1;
   }
-  //侧边栏高亮状态
-  .el-menu-item.is-active{
-    background-color:$color1  !important;
+  //侧边栏颜色
+  .sidebar-wrapper{
+    background:$color1;
+    .el-menu-item {
+    background: $color1;
     color: #fff;
+    border-bottom:1px solid #00b889;
+    &:hover{
+      background: $color1;
+      color: #fff;
+    }
+    &.is-active{
+      background-color:#05ac84  !important;
+      color: #fff;
+    }
   }
+  }
+  //顶部导航栏样式调整
+  .navbar{
+    .el-menu{
+      background:#1f2c33;
+      .el-menu-item{
+        color:#abbac1;
+        border-bottom:5px solid transparent !important;
+        &:hover{
+          background:#1f2c33;
+          color:$color1;
+          border-bottom:5px solid transparent !important;
+        }
+        &.is-active{
+          color:$color1;
+        }
+
+      }
+    }
+  }
+
   //单选框高亮
   .el-radio__input.is-checked .el-radio__inner {
     border-color: $color1;
@@ -40,15 +68,16 @@ body{
 
 
 .theme_blue{
-  .navbar{
-    background:$color2;
-  }
   .el-menu-item.is-active{
     background-color:$color2  !important;
     color: #fff;
   }
   .active{
     background:$color2;
+  }
+  //侧边栏颜色
+  .sidebar-wrapper{
+    background:$color2
   }
   //单选框高亮
   .el-radio__input.is-checked .el-radio__inner {
@@ -69,15 +98,16 @@ body{
 
 
 .theme_green{
-  .navbar{
-    background:$color3;
-  }
   .el-menu-item.is-active{
     background-color:$color3  !important;
     color: #fff;
   }
   .active{
     background:$color3;
+  }
+  //侧边栏颜色
+  .sidebar-wrapper{
+    background:$color3
   }
   //单选框高亮
   .el-radio__input.is-checked .el-radio__inner {
@@ -97,15 +127,16 @@ body{
 
 
 .theme_red{
-  .navbar{
-    background:$color4;
-  }
   .el-menu-item.is-active{
     background-color:$color4  !important;
     color: #fff;
   }
   .active{
     background:$color4;
+  }
+  //侧边栏颜色
+  .sidebar-wrapper{
+    background:$color4
   }
   //单选框高亮
   .el-radio__input.is-checked .el-radio__inner {
