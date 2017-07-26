@@ -41,6 +41,7 @@
 
 <script>
     import {mapState,mapActions} from 'vuex';
+    import AJAX from './../../assets/js/ajax';
     export default {
         data() {
             return {
@@ -75,6 +76,13 @@
             },
             drop(e,list){
                 e.preventDefault();
+                let id = this.packListFrom.id;
+                //console.log(list)
+                let groupid = list.groupCode
+                //console.log(groupid)
+               AJAX.get('website/pack/moveGroup',{id:id,groupid:groupid},(res)=>{
+                        console,log(res)
+                })
                 this.packList[this.pos1].groBusPackagesList.splice(this.pos2,1);
                 list.groBusPackagesList.push(this.packListFrom);
 

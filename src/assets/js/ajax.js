@@ -51,7 +51,9 @@ export default class ajax {
     }
     static post(api,params , callback) {
         let url = `${URLPATH1}${api}`;
-        let temp = querystring.stringify(params);
+        let token =JSON.parse(sessionStorage.getItem('Token'))?JSON.parse(sessionStorage.getItem('Token')):'';
+        let params1=Object.assign(params,{token:token});
+        let temp = querystring.stringify(params1);
         axios.post(url,temp,
             {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
             .then(function (response) {

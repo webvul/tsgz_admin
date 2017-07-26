@@ -77,6 +77,19 @@
             state.addFormListMsg=msg;
         },
         AddFormList:(state,msg)=>{
+            let trans =(obj,key)=>{
+                if(obj[key]==='1'){
+                    obj[key]=true;
+                }
+                if(obj[key]==='0'){
+                    obj[key]=false;
+                }
+            }
+            msg.genTable.columnList.map(function(item,key){
+                for(let i in item){trans(item,i)};
+            })
+            if(!msg.genTable.parentTable) msg.genTable.parentTable='';
+            if(!msg.genTable.parentTableFk) msg.genTable.parentTableFk='';
             state.addFormList=msg;
         },
         deleFormListMsg:(state)=>{

@@ -18,7 +18,9 @@ const states={
     BusinessTableList:[],
     formList:[],
     addFormListMsg:'',//用户新增业务表返回的信息
-    addFormList:[], //用户新增或者修改返回数据列表
+    addFormList:{
+        genTable:{}
+    }, //用户新增或者修改返回数据列表
     //路由高亮
     headerCurRouter:'',
     sidebarCurrentRouter:''

@@ -21,8 +21,9 @@ const actions ={
     },
     //获取用户包的列表
     getPackList:({commit})=>{
-        AJAX.get('packList.json',{},function(data){
-            commit("handlePackList",data.packList);
+        AJAX.get('website/pack/findAllList',{},function(data){
+            console.log(data);
+            commit("handlePackList",data.listGroup);
         })
     },
     //获得商品列表
@@ -65,13 +66,12 @@ const actions ={
     //选择新增业务表
     handleSubmitFormList:({commit},dat)=>{
         AJAX.get('website/gen/isExist',dat,(res)=>{
-                console.log(res);
             commit('submitFormList',res);
         })
     },
     //获取新增/修改业务表
     handleAddFormList:({commit},dat)=>{
-        AJAX.get('website/gen/isExist',dat,(res)=>{
+        AJAX.get('website/gen/findDataByNext',dat,(res)=>{
             commit('AddFormList',res);
         })
     }

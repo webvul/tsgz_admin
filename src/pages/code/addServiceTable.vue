@@ -1,7 +1,201 @@
 <template>
-    <div class="page">
-        添加或者修改
-
+    <div class="page" ref="pageAddContainer">
+        <header>
+            <div class="title">基本信息</div>
+            <el-form v-model="addFormList.genTable" label-position="right" label-width="90px" class="tableForm">
+                <el-form-item label="表名：">
+                    <el-input v-model="addFormList.genTable.name" :disabled="true" size="small"></el-input>
+                </el-form-item>
+                <el-form-item label="说明：">
+                    <el-input v-model="addFormList.genTable.comments" size="small"></el-input>
+                </el-form-item>
+                <el-form-item label="类名：">
+                    <el-input v-model="addFormList.genTable.className" size="small"></el-input>
+                </el-form-item>
+            </el-form>
+            <div class="selectForm">
+                <el-form label-position="right" label-width="100px" v-model="addFormList.genTable">
+                    <el-form-item label="父表表名：" >
+                        <el-select v-model="addFormList.genTable.parentTable" filterable placeholder="请输入" size="small">
+                            <el-option
+                                    v-for="item in addFormList.tableList"
+                                    :key="item.name"
+                                    :label="item.name"
+                                    :value="item.name">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                    <el-form-item label="当前表外键：">
+                        <el-select v-model="addFormList.genTable.parentTableFk" filterable placeholder="请输入" size="small">
+                            <el-option
+                                    v-for="item in addFormList.genTable.columnList"
+                                    :key="item.name"
+                                    :label="item.name"
+                                    :value="item.name">
+                            </el-option>
+                        </el-select>
+                    </el-form-item>
+                </el-form>
+            </div>
+        </header>
+        <div class="tableList">
+            <div class="header">
+                字段列表
+            </div>
+            <el-table
+                    :data="addFormList.genTable.columnList"
+                    border
+                    :height="tableContainerHeight"
+                    style="width:100%"
+                    >
+                <el-table-column
+                        label="列名"
+                        >
+                    <template scope="scope">
+                        <p :title="scope.row.name">{{scope.row.name}}</p>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="说明"
+                        >
+                    <template scope="scope">
+                        <el-input v-model="scope.row.comments"> </el-input>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="物理类型"
+                        prop="jdbcType"
+                        width="140"
+                >
+                </el-table-column>
+                <el-table-column
+                        label="JAVA类型"
+                        width="150"
+                >
+                    <template scope="scope">
+                        <el-select v-model="scope.row.javaType" filterable placeholder="请输入" size="small">
+                            <el-option
+                                    style="width:100px"
+                                    :title="item.value"
+                                    v-for="item in addFormList.cofig.javaTypeList"
+                                    :key="item.value"
+                                    :label="item.value"
+                                    :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="JAVA属性名称"
+                        width="140"
+                >
+                    <template scope="scope">
+                        <el-input v-model="scope.row.javaField"> </el-input>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="主键"
+                        width="65"
+                >
+                    <template scope="scope"
+                    >
+                        <el-checkbox v-model="scope.row.isPk" @change="changePk(scope.$index)"></el-checkbox>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="可空"
+                        width="65"
+                >
+                    <template scope="scope">
+                        <el-checkbox v-model="scope.row.isNull"></el-checkbox>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="插入"
+                        width="65"
+                >
+                    <template scope="scope">
+                        <el-checkbox v-model="scope.row.isInsert" ></el-checkbox>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="编辑"
+                        width="65"
+                >
+                    <template scope="scope">
+                        <el-checkbox v-model="scope.row.isEdit"></el-checkbox>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="列表"
+                        width="65"
+                >
+                    <template scope="scope">
+                        <el-checkbox v-model="scope.row.isList" ></el-checkbox>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="查询"
+                        width="65"
+                >
+                    <template scope="scope">
+                        <el-checkbox v-model="scope.row.isQuery"></el-checkbox>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="查询匹配方式"
+                        width="140"
+                >
+                    <template scope="scope">
+                        <el-select v-model="scope.row.queryType" filterable placeholder="请输入" size="small">
+                            <el-option
+                                    style="width:120px"
+                                    :title="item.value"
+                                    v-for="item in addFormList.cofig.queryTypeList"
+                                    :key="item.value"
+                                    :label="item.value"
+                                    :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="显示表单类型"
+                        width="140"
+                >
+                    <template scope="scope">
+                        <el-select v-model="scope.row.showType" filterable placeholder="请输入" size="small">
+                            <el-option
+                                    style="width:100px"
+                                    :title="item.label"
+                                    v-for="item in addFormList.cofig.showTypeList"
+                                    :key="item.value"
+                                    :label="item.value"
+                                    :value="item.value">
+                            </el-option>
+                        </el-select>
+                    </template>
+                </el-table-column>
+                <el-table-column
+                        label="字典类型"
+                        width="100"
+                >
+                    <template scope="scope">
+                        <el-input v-model="scope.row.dictType"> </el-input>
+                    </template>
+                </el-table-column><el-table-column
+                    label="排序"
+            >
+                <template scope="scope">
+                    <el-input v-model="scope.row.sort"> </el-input>
+                </template>
+            </el-table-column>
+            </el-table>
+        </div>
+        <footer class="footer">
+            <el-button type="text" size="small">返回</el-button>
+            <el-button type="primary" size="small" @click="submit">确认</el-button>
+        </footer>
     </div>
 </template>
 
@@ -10,7 +204,7 @@
     export default {
         data() {
             return {
-
+               tableContainerHeight:0
             }
         },
         computed:{
@@ -24,19 +218,115 @@
 
         },
         mounted(){
-            this.$store.commit("deleFormListMsg");
+            this.tableContainerHeight = this.$refs.pageAddContainer.offsetHeight-290;
+            console.log(this.tableContainerHeight);
 
         },
         watch:{
 
         },
         methods:{
-            ...mapActions(['handleAddFormList'])
+            ...mapActions(['handleAddFormList']),
+            changePk(index){
+                this.addFormList.genTable.columnList.map(function(item,key){
+                    item['isPk']=false;
+                })
+                this.addFormList.genTable.columnList[index]['isPk']= true;
+            },
+            submit(){
+                //转换函数，识别不了字符串 0 1
+                let trans=(obj,key)=>{
+                    if(obj[key]===true) obj[key]='1';
+                    if(obj[key]===false) obj[key]='0';
+                };
+                this.addFormList.genTable.columnList.map(function(item,key){
+                    for(let i in item) {trans(item,i)}
+                });
+                console.log(this.addFormList.genTable.columnList)
+
+            }
+
         },
+
 
     };
 </script>
 
 <style lang="scss" scoped>
+    .page{
+        position:relative;
+        .footer{
+            position:absolute;
+            bottom:25px;
+            height:40px;
+            width:100%;
+            line-height:40px;
+            padding-left:20px;
 
+        }
+    }
+    .title{
+        padding-left:15px;
+        font-size:18px;
+        font-weight:bold;
+        height:50px;
+        line-height: 50px;
+        color:#0088CC;
+    }
+    .tableForm{
+        border-top:1px solid #ddd;
+        border-bottom:1px solid #ddd;
+        position: relative;
+        display: flex;
+        height:50px;
+        line-height: 50px;
+        .el-form-item{
+            position:relative;
+            left:-20px;
+            top:6px;
+            &:nth-child(2){
+                left:-40px;
+            }
+            &:nth-child(3){
+                left:-40px;
+            }
+        }
+        .el-input{
+            width:130px;
+        }
+        .el-form-item__label{
+            width:50px;
+        }
+        .btn1{
+            margin-top:4px;
+            width:50px;
+            height:30px;
+        }
+    },
+    .selectForm{
+        height:50px;
+        border-bottom:1px solid #ddd;
+        .el-form{
+            display: flex;
+            position:relative;
+            top:7px;
+            .el-form-item{
+                position:relative;
+                &:nth-child(1){
+                    left:-5px;
+                }
+                &:nth-child(2){
+                    left:5px;
+                }
+            }
+        }
+    }
+    .tableList .header{
+        padding-left:15px;
+        font-size:18px;
+        font-weight:bold;
+        height:50px;
+        line-height: 50px;
+        color:#0088CC;
+    }
 </style>

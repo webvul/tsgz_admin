@@ -32,6 +32,7 @@
   .appmain{
       flex:1;
     width:100%;
+    min-width: 900px;
       overflow: hidden;
     display: flex;
     flex-flow: column;
