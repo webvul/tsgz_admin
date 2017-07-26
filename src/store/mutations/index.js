@@ -69,6 +69,19 @@
         },
         getBusinessTableList:(state,list)=>{
             state.BusinessTableList=list;
-        }
+        },
+        getFormList:(state,list)=>{
+            state.formList=list;
+        },
+        submitFormList:(state,msg)=>{
+            state.addFormListMsg=msg;
+        },
+        AddFormList:(state,msg)=>{
+            state.addFormList=msg;
+        },
+        deleFormListMsg:(state)=>{
+            state.addFormListMsg='';
+        },
+
 }
 export  default mutations;

@@ -14,7 +14,7 @@
                 <el-button type="primary" size="small" class="btn1" @click="search">
                     查询
                 </el-button>
-                <el-button type="primary" size="small" class="btn1" @click="addFormDialog = true">
+                <el-button type="primary" size="small" class="btn1" @click="add">
                     新增
                 </el-button>
             </el-form>
@@ -63,7 +63,7 @@
                     <el-button
                             size="small"
                             type="text"
-                            @click="handleEdit(scope.$index, scope.row)">删除
+                            @click="handleDelete(scope.$index, scope.row)">删除
                     </el-button>
                 </template>
             </el-table-column>
@@ -87,19 +87,18 @@
                 title="选择新增表名"
                 :visible.sync="addFormDialog"
                 size="tiny"
-                style="text-align: center"
                 >
-            <el-select v-model="value" filterable placeholder="请选择新增表名" >
+            <el-select v-model="formValue" filterable placeholder="请选择新增表名" >
                 <el-option
-                        v-for="item in dabeValue"
-                        :key="item"
-                        :label="item"
-                        :value="item">
+                        v-for="item in formList.tableList"
+                        :key="item.name"
+                        :label="item.name"
+                        :value="item.name">
                 </el-option>
             </el-select>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="addFormDialog = false">取 消</el-button>
-                <el-button type="primary" @click="addFormDialog = false">确 定</el-button>
+                <el-button type="primary" @click="submitAddFormList">确 定</el-button>
               </span>
         </el-dialog>
     </div>
@@ -115,8 +114,7 @@
                     dis:'',
                     fatherFormName:''
                 },
-                value:'',//用户新增的表名
-                dabeValue:[1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4,1,2,3,4],
+                formValue:'',//用户新增的表名
                 total: 0, //总页数
                 page: 1, //当前页数
                 pageSize:15,
@@ -126,7 +124,7 @@
             }
         },
         computed:{
-            ...mapState(['BusinessTableList']),
+            ...mapState(['BusinessTableList','formList','addFormListMsg']),
         },
         created(){
             this.handleBusinessTableList({
@@ -138,8 +136,11 @@
         mounted(){
             this.tableHeight=this.$refs.serviceTableContainer.offsetHeight-140;
         },
+        watch:{
+           '$store.state.addFormListMsg':'routerToAdd'
+        },
         methods:{
-            ...mapActions(['handleBusinessTableList','handleSearchBusinessTableList','handleDelectBusinessTableList']),
+            ...mapActions(['handleBusinessTableList','handleSearchBusinessTableList','handleDelectBusinessTableList','handleFormList','handleSubmitFormList']),
             handleCurrentChange(page){
                 this.page = page;
                 this.handleBusinessTableList({
@@ -159,7 +160,7 @@
                 this.handleSearchBusinessTableList(dat);
             },
             //删除
-            handleEdit(index,scope){
+            handleDelete(index,scope){
                 let _this = this;
                 let dat = Object.assign(scope,{
                     pageSize:this.pageSize,
@@ -178,8 +179,54 @@
                     });
                 });
             },
-            //新增
+            //修改
+            handleEdit(index,scope){
+                let _this = this;
+                this.$confirm('此操作将编辑此操作表, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    this.$router.push({
+                        path:'/code/addServiceTable',
+                        query:{
+                            id:scope.id,
+                            name:scope.name
+                        }
+                    })
 
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            },
+            //新增
+            add(){
+                this.handleFormList();
+                this.addFormDialog=true;
+            },
+            submitAddFormList(){
+                this.handleSubmitFormList({name:this.formValue});
+
+            },
+            routerToAdd(){
+                if(this.addFormListMsg.message==='成功'){
+                    this.addFormDialog=false;
+                    this.$router.push({
+                        path:'/code/addServiceTable',
+                        query:{
+                            id:'',
+                            name:this.formValue
+                        }
+                    })
+                    this.formValue='';
+                }
+                if(this.addFormListMsg.message!=='成功'){
+                    this.$message.error(this.addFormListMsg.message);
+                }
+            }
         },
 
     };

@@ -121,6 +121,13 @@ let router = [
                 leaf: true,//只有一个节点
                 component: components.programmeTable
             },
+            {
+                path: 'addServiceTable',
+                name: '新增-修改表',
+                leaf: true,//只有一个节点
+                component: components.addServiceTable,
+                hidden:true
+            },
         ]
     },
     {

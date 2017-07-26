@@ -34,11 +34,48 @@ const actions ={
     },
     //获取业务表列表
     handleBusinessTableList:({commit},dat)=>{
-        AJAX.get('website/gen/list',dat,(res)=>{
+        AJAX.get('website/gen/findAllList',dat,(res)=>{
             console.log(res);
             commit('getBusinessTableList',res);
         })
+    },
+    //搜索业务表
+    handleSearchBusinessTableList:({commit},dat)=>{
+        AJAX.get('website/gen/findAllList',dat,(res)=>{
+            commit('getBusinessTableList',res);
+        })
+    },
+    //删除业务表
+    handleDelectBusinessTableList:({commit},dat)=>{
+        AJAX.get('website/gen/deleteGenById',{id:dat.id},(res)=>{
+            AJAX.get('website/gen/findAllList',{
+                pageSize:dat.pageSize,
+                pageNo:dat.pageNo
+            },(res1)=>{
+                commit('getBusinessTableList',res1);
+            })
+        })
+    },
+    //获取新增业务表
+    handleFormList:({commit})=>{
+        AJAX.get('website/gen/findAllData',{},(res)=>{
+            commit('getFormList',res);
+        })
+    },
+    //选择新增业务表
+    handleSubmitFormList:({commit},dat)=>{
+        AJAX.get('website/gen/isExist',dat,(res)=>{
+                console.log(res);
+            commit('submitFormList',res);
+        })
+    },
+    //获取新增/修改业务表
+    handleAddFormList:({commit},dat)=>{
+        AJAX.get('website/gen/isExist',dat,(res)=>{
+            commit('AddFormList',res);
+        })
     }
+
 }
 
 export default  actions;

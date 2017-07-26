@@ -28,6 +28,27 @@ export default class ajax {
                 }
             });
     }
+    static delete(api, params, callback) {
+        let token =JSON.parse(sessionStorage.getItem('Token'))?JSON.parse(sessionStorage.getItem('Token')):'';
+        let url = `${URLPATH1}${api}?token=${token}`;
+        console.log(url);
+        for (var key in params) {
+            url +='&'+  key + '=' + params[key]
+        }
+        axios({
+            method: 'delete',
+            url: url,
+        })
+            .then(function (response) {
+                if(response.data.code="1111")
+                    callback(response.data)
+            })
+            .then(function (error) {
+                if (error) {
+                    console.log(error)
+                }
+            });
+    }
     static post(api,params , callback) {
         let url = `${URLPATH1}${api}`;
         let temp = querystring.stringify(params);

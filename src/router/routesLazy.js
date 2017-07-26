@@ -20,6 +20,7 @@ const Test =resolve => require(['./../pages/test/test.vue'], resolve); //测试�
 //代码生成工具
 const ServiceTable = resolve => require(['../pages/code/ServiceTable.vue'], resolve)
 const programmeTable =resolve => require(['./../pages/code/programmeTable.vue'], resolve);
+const addServiceTable =resolve => require(['./../pages/code/addServiceTable.vue'], resolve);
 export default {
     Login,
     Home_view,
@@ -35,5 +36,6 @@ export default {
     packDetail,
     goodsList,
     ServiceTable,
-    programmeTable
+    programmeTable,
+    addServiceTable
 };
