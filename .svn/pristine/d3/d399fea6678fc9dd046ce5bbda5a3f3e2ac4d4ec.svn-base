@@ -1,0 +1,62 @@
+/**
+ * Created by Administrator on 2017/7/10 0010.
+ */
+//const URLPATH = "http://192.168.10.228:8080/jad-saas-mgmt/api/";
+const URLPATH="src/assets/js/api/";
+const URLPATH1="http://127.0.0.1:8080/jad-saas-mgmt/api/";
+import axios from 'axios';
+export default class ajax {
+    static get(api, params, callback) {
+        let url = `${URLPATH}${api}?`;
+        for (var key in params) {
+            url += key + '=' + params[key] + '&'
+        }
+        url = url.substring(0, url.length - 1);
+        axios({
+            method: 'get',
+            url: url,
+        })
+            .then(function (response) {
+                callback(response)
+            })
+            .then(function (error) {
+                if (error) {
+                    console.log(error)
+                }
+            });
+    }
+    static get1(api, params, callback) {
+        let url = `${URLPATH1}${api}?`;
+        console.log(url);
+        for (var key in params) {
+            url += key + '=' + params[key] + '&'
+        }
+        url = url.substring(0, url.length - 1);
+        axios({
+            method: 'get',
+            url: url,
+        })
+            .then(function (response) {
+                callback(response)
+            })
+            .then(function (error) {
+                if (error) {
+                    console.log(error)
+                }
+            });
+    }
+    static post(api, params, callback) {
+        let url = `${URLPATH1}${api}?`;
+        axios.post(url,{URLPATH1},
+            {headers: {'Content-Type': 'application/x-www-form-urlencoded'}})
+            .then(function (response) {
+                callback(response)
+            })
+            .then(function (error) {
+                if (error) {
+                    console.log(error)
+                }
+            });
+    }
+
+}

@@ -1,0 +1,38 @@
+<template>
+    <div class="pannel">
+        <div v-for="item,key,index in pannel" v-if="index<3" >{{item}}</div>
+    </div>
+</template>
+
+<script>
+    export default {
+        props:['pannel'],
+        methods: {
+
+        }
+    }
+</script>
+
+<style lang="scss">
+    .pannel{
+        margin:0.2rem;
+        width:5rem;
+        height:1.6rem;
+        background:#fff;
+        box-shadow: 2px 2px 2px #888888;
+        padding:0.2rem;
+        line-height:0.4rem;
+        border-radius: 4px;
+        font-weight:bolder;
+        font-size:0.18rem;
+    }
+    .pannel div:nth-child(1){
+        color:pink;
+    }
+    .pannel div:nth-child(2){
+        color:green;
+    }
+    .pannel div:nth-child(3){
+        color:orange;
+    }
+</style>

@@ -1,0 +1,28 @@
+<template>
+ <div class="page">
+    <component v-bind:is="loginMsg.limit===1?'SumIndex':'DefaultIndex'"> </component>
+ </div>
+</template>
+
+<script>
+    import {mapGetters} from 'vuex';
+    import SumIndex from './SumIndex.vue'; //超级管理员
+    import DefaultIndex from './DefaultIndex.vue'; //一般管理员权限
+    export default {
+        data () {
+            return {}
+        },
+        computed:mapGetters(['loginMsg']),
+        components:{
+            SumIndex,
+            DefaultIndex
+        },
+        methods: {
+
+        }
+    }
+</script>
+
+<style lang="scss">
+
+</style>

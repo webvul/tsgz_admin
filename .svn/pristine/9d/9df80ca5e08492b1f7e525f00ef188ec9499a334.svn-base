@@ -1,0 +1,155 @@
+/*展示设计风格*/
+$color1:#00c392;  //默认风格
+$color2:blue;
+$color3:green;
+$color4:red;
+/*:root{
+  color:#fff;
+}*/
+body{
+  //组件激活状态
+  .active{
+    background:$color1;
+  }
+  //侧边栏颜色
+  .sidebar-wrapper{
+    background:$color1;
+    .el-menu-item {
+    background: $color1;
+    color: #fff;
+    border-bottom:1px solid #00b889;
+    &:hover{
+      background: $color1;
+      color: #fff;
+    }
+    &.is-active{
+      background-color:#05ac84  !important;
+      color: #fff;
+    }
+  }
+  }
+  //顶部导航栏样式调整
+  .navbar{
+    .el-menu{
+      background:#1f2c33;
+      .el-menu-item{
+        color:#abbac1;
+        border-bottom:5px solid transparent !important;
+        &:hover{
+          background:#1f2c33;
+          color:$color1;
+          border-bottom:5px solid transparent !important;
+        }
+        &.is-active{
+          color:$color1;
+        }
+
+      }
+    }
+  }
+
+  //单选框高亮
+  .el-radio__input.is-checked .el-radio__inner {
+    border-color: $color1;
+    background: $color1;
+  }
+  //主要按钮的颜色
+  .el-button--primary {
+    color: #fff;
+    background-color: $color1;
+    border-color: $color1;
+    &:hover{
+      background-color: $color1;
+      border-color: $color1;
+    }
+  }
+}
+
+
+
+.theme_blue{
+  .el-menu-item.is-active{
+    background-color:$color2  !important;
+    color: #fff;
+  }
+  .active{
+    background:$color2;
+  }
+  //侧边栏颜色
+  .sidebar-wrapper{
+    background:$color2
+  }
+  //单选框高亮
+  .el-radio__input.is-checked .el-radio__inner {
+    border-color: $color2;
+    background: $color2;
+  }
+  .el-button--primary {
+    color: #fff;
+    background-color: $color2;
+    border-color: $color2;
+    &:hover{
+      background-color: $color2;
+      border-color: $color2;
+    }
+  }
+
+}
+
+
+.theme_green{
+  .el-menu-item.is-active{
+    background-color:$color3  !important;
+    color: #fff;
+  }
+  .active{
+    background:$color3;
+  }
+  //侧边栏颜色
+  .sidebar-wrapper{
+    background:$color3
+  }
+  //单选框高亮
+  .el-radio__input.is-checked .el-radio__inner {
+    border-color: $color3;
+    background: $color3;
+  }
+  .el-button--primary {
+    color: #fff;
+    background-color: $color3;
+    border-color: $color3;
+    &:hover{
+      background-color: $color3;
+      border-color: $color3;
+    }
+  }
+}
+
+
+.theme_red{
+  .el-menu-item.is-active{
+    background-color:$color4  !important;
+    color: #fff;
+  }
+  .active{
+    background:$color4;
+  }
+  //侧边栏颜色
+  .sidebar-wrapper{
+    background:$color4
+  }
+  //单选框高亮
+  .el-radio__input.is-checked .el-radio__inner {
+    border-color: $color4;
+    background: $color4;
+  }
+  .el-button--primary {
+    color: #fff;
+    background-color: $color4;
+    border-color: $color4;
+    &:hover{
+      background-color: $color4;
+      border-color: $color4;
+    }
+  }
+}

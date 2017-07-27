@@ -1,0 +1,85 @@
+<template>
+  <div class="app-wrapper" :class="{hideSidebar:!sidebar.opened}">
+    <div class="sidebar-wrapper">
+      <Sidebar class="sidebar-container" />
+    </div>
+    <div class="main-container">
+      <Navbar/>
+      <App-main/>
+      <FooterBar />
+    </div>
+  </div>
+</template>
+
+<script>
+    import { mapState } from 'vuex'
+    import { Navbar, Sidebar, AppMain ,FooterBar} from './../components/Layout';
+    export default {
+        name: 'layout',
+        components: {
+            Navbar,
+            Sidebar,
+            AppMain,
+            FooterBar
+        },
+        computed: mapState(['sidebar'])
+    }
+</script>
+
+<style rel="stylesheet/scss" lang="scss" scoped>
+  @import "./../assets/css/mixin.scss";
+  .app-wrapper {
+    @include clearfix;
+    position: relative;
+    height: 100%;
+    width: 100%;
+    &.hideSidebar {
+      .sidebar-wrapper {
+        transform: translate(-2.7rem, 0);
+        .sidebar-container {
+          transform: translate(2.07rem, 0);
+        }
+        &:hover {
+          transform: translate(0, 0);
+          .sidebar-container {
+            transform: translate(0, 0);
+          }
+        }
+      }
+      .main-container{
+        margin-left: 0;
+        position:relative;
+        display: flex;
+      }
+    }
+    .sidebar-wrapper {
+      width: 2.07rem;
+      position: fixed;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 1001;
+      overflow: hidden;
+      transition: all .28s ease-out;
+    }
+    .sidebar-container {
+      transition: all .28s ease-out;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: -0.27rem;
+      overflow-y: scroll;
+    }
+    .main-container {
+      position:relative;
+      overflow: hidden;
+      transition: all .28s ease-out;
+      margin-left: 2.07rem;
+      display: flex;
+      flex-flow: column;
+      height:100vh;
+
+    }
+  }
+</style>

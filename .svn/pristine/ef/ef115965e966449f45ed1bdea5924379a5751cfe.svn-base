@@ -1,0 +1,36 @@
+<template>
+  <div>
+    <el-col :span="24" class="breadcrumb-container">
+      <strong class="title">{{$route.name}}</strong>
+      <el-breadcrumb separator="/" class="breadcrumb-inner">
+        <el-breadcrumb-item v-for="item in $route.matched" :key="item.path">
+          {{ item.name }}
+        </el-breadcrumb-item>
+      </el-breadcrumb>
+    </el-col>
+  </div>
+</template>
+
+<script>
+import { mapState } from 'vuex'
+export default {
+  methods: {
+
+  },
+    computed: mapState(['sidebar'])
+}
+</script>
+
+<style lang="scss" scoped>
+  @import "./../../assets/css/style.scss";
+  .breadcrumb-container{
+    font-size: 0.18rem;
+    display: flex;
+    justify-content: space-between;
+    height:5vh;
+    align-items: center;
+    /*border-bottom:1px solid #ddd;*/
+    padding: 0 0.12rem;
+    box-shadow: 1px 1px 1px $color1;
+  }
+</style>

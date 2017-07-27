@@ -1,0 +1,59 @@
+/*展示设计风格*/
+$color1:#00c392;  //默认风格
+$color2:blue;
+$color3:green;
+$color4:red;
+/*:root{
+  color:#fff;
+}*/
+body{
+  //顶部导航栏背景
+  .navbar{
+    background:$color1;
+  }
+  //组件激活状态
+  .active{
+    background:$color1;
+  }
+  //侧边栏高亮状态
+  .el-menu-item.is-active{
+    background-color:$color1  !important;
+    color: #fff;
+  }
+}
+.theme_blue{
+  .navbar{
+    background:$color2;
+  }
+  .el-menu-item.is-active{
+    background-color:$color2  !important;
+    color: #fff;
+  }
+  .active{
+    background:$color2;
+  }
+}
+.theme_green{
+  .navbar{
+    background:$color3;
+  }
+  .el-menu-item.is-active{
+    background-color:$color3  !important;
+    color: #fff;
+  }
+  .active{
+    background:$color3;
+  }
+}
+.theme_red{
+  .navbar{
+    background:$color4;
+  }
+  .el-menu-item.is-active{
+    background-color:$color4  !important;
+    color: #fff;
+  }
+  .active{
+    background:$color4;
+  }
+}
