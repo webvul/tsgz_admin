@@ -1,6 +1,5 @@
 <template>
     <div class="page goodsPage">
-        22222
         <el-table
                 :data="goodsList"
                 border

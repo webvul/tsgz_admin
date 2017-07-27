@@ -30,11 +30,13 @@
         //包管理列表
         handlePackList:(state,pack)=>{
            pack.map((item,key)=>{
+               item.editAble= false;
                if(key===0) item.cho=true;
                else item.cho=false;
                if(item.groBusPackagesList)
                item.groBusPackagesList.map((item1,key1)=>{
                    item1.edit=false;
+                   item1.editAble= false;
                })
            })
            state.packList=pack;

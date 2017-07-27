@@ -12,7 +12,7 @@ body{
   .sidebar-wrapper{
     .el-submenu{
       .el-submenu__title{
-        border-bottom:1px solid #00b889;
+        border-bottom:1px solid rgba(0,0,0,0.1);
         background: $color1;
         color: #fff;
         &:hover{
@@ -29,13 +29,13 @@ body{
     .el-menu-item {
     background: $color1;
     color: #fff;
-    border-bottom:1px solid #00b889;
+    border-bottom:1px solid rgba(0,0,0,0.1);
     &:hover{
       background: $color1;
       color: #fff;
     }
     &.is-active{
-      background-color:#05ac84  !important;
+      background-color:rgba(34,191,152,0.5)  !important;
       color: #fff;
     }
   }
@@ -57,6 +57,10 @@ body{
         }
 
       }
+    }
+    .icon_item:hover, .icon_item:hover .icon{
+      background:$color1;
+      color:#fff !important;
     }
   }
 
@@ -92,7 +96,7 @@ body{
   .sidebar-wrapper{
     .el-submenu{
       .el-submenu__title{
-        border-bottom:1px solid #00b889;
+        border-bottom:1px solid rgba(0,0,0,0.1);
         background: $color1;
         color: #fff;
         &:hover{
@@ -109,13 +113,13 @@ body{
     .el-menu-item {
       background: $color1;
       color: #fff;
-      border-bottom:1px solid #00b889;
+      border-bottom:1px solid rgba(0,0,0,0.1);
       &:hover{
         background: $color1;
         color: #fff;
       }
       &.is-active{
-        background-color:#05ac84  !important;
+        background-color:rgba(34,191,152,0.5)  !important;
         color: #fff;
       }
     }
@@ -137,6 +141,10 @@ body{
         }
 
       }
+    }
+    .icon_item:hover, .icon_item:hover .icon{
+      background:$color1;
+      color:#fff !important;
     }
   }
 
@@ -167,7 +175,7 @@ body{
   .sidebar-wrapper{
     .el-submenu{
       .el-submenu__title{
-        border-bottom:1px solid #00b889;
+        border-bottom:1px solid rgba(0,0,0,0.1);
         background: $color2;
         color: #fff;
         &:hover{
@@ -184,13 +192,13 @@ body{
     .el-menu-item {
       background: $color2;
       color: #fff;
-      border-bottom:1px solid #00b889;
+      border-bottom:1px solid rgba(0,0,0,0.1);
       &:hover{
         background: $color2;
         color: #fff;
       }
       &.is-active{
-        background-color:#05ac84  !important;
+        background-color:rgba(43,186,191,0.5)  !important;
         color: #fff;
       }
     }
@@ -212,6 +220,10 @@ body{
         }
 
       }
+    }
+    .icon_item:hover, .icon_item:hover .icon{
+      background:$color2;
+      color:#fff !important;
     }
   }
 
@@ -243,7 +255,7 @@ body{
   .sidebar-wrapper{
     .el-submenu{
       .el-submenu__title{
-        border-bottom:1px solid #00b889;
+        border-bottom:1px solid rgba(0,0,0,0.1);
         background: $color3;
         color: #fff;
         &:hover{
@@ -260,13 +272,13 @@ body{
     .el-menu-item {
       background: $color3;
       color: #fff;
-      border-bottom:1px solid #00b889;
+      border-bottom:1px solid rgba(0,0,0,0.1);
       &:hover{
         background: $color3;
         color: #fff;
       }
       &.is-active{
-        background-color:#05ac84  !important;
+        background-color:rgba(22,174,239,0.5)  !important;
         color: #fff;
       }
     }
@@ -288,6 +300,10 @@ body{
         }
 
       }
+    }
+    .icon_item:hover, .icon_item:hover .icon{
+      background:$color3;
+      color:#fff !important;
     }
   }
 
@@ -318,7 +334,7 @@ body{
   .sidebar-wrapper{
     .el-submenu{
       .el-submenu__title{
-        border-bottom:1px solid #00b889;
+        border-bottom:1px solid rgba(0,0,0,0.1);
         background: $color4;
         color: #fff;
         &:hover{
@@ -335,13 +351,13 @@ body{
     .el-menu-item {
       background: $color4;
       color: #fff;
-      border-bottom:1px solid #00b889;
+      border-bottom:1px solid rgba(0,0,0,0.1);
       &:hover{
         background: $color4;
         color: #fff;
       }
       &.is-active{
-        background-color:#05ac84  !important;
+        background-color:rgba(247,85,85,0.5)  !important;
         color: #fff;
       }
     }
@@ -363,6 +379,10 @@ body{
         }
 
       }
+    }
+    .icon_item:hover, .icon_item:hover .icon{
+      background:$color4;
+      color:#fff !important;
     }
   }
 
@@ -393,7 +413,7 @@ body{
   .sidebar-wrapper{
     .el-submenu{
       .el-submenu__title{
-        border-bottom:1px solid #00b889;
+        border-bottom:1px solid rgba(0,0,0,0.1);
         background: $color4;
         color: #fff;
         &:hover{
@@ -410,13 +430,13 @@ body{
     .el-menu-item {
       background: $color4;
       color: #fff;
-      border-bottom:1px solid #00b889;
+      border-bottom:1px solid rgba(0,0,0,0.1);
       &:hover{
         background: $color4;
         color: #fff;
       }
       &.is-active{
-        background-color:#05ac84  !important;
+        background:rgba(250,101,67,0.5) !important;
         color: #fff;
       }
     }
@@ -438,6 +458,10 @@ body{
         }
 
       }
+    }
+    .icon_item:hover, .icon_item:hover .icon{
+      background:$color5;
+      color:#fff !important;
     }
   }
 

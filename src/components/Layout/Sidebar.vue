@@ -1,6 +1,6 @@
 <template>
     <div id='left-menu'>
-        <div class="logo" style="padding-bottom:10px;border-bottom:1px solid #20b48f">
+        <div class="logo" style="padding-bottom:10px;border-bottom:1px solid rgba(0,0,0,0.1)">
             <img src="./../../assets/img/login/logo.png" alt="" style="width:190px;height:85px;margin:15px;" >
         </div>
         <el-row class='tac'
@@ -76,11 +76,10 @@
             height: 49px;
         }
         .el-menu-item {
-            background: $color1;
             color: #aab1b5;
-            border-bottom:1px solid #00b889;
+            border-bottom:1px solid rgba(0,0,0,0.5);
              &:hover{
-                 background: $color1;
+
                  color: #fff;
             }
         }

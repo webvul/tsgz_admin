@@ -23,6 +23,7 @@
 a{
     text-decoration: none;
 }
-.el-table__body, .el-table__footer, .el-table__header {
-    table-layout: inherit !important;
+/*表格通用样式*/
+table{
+    border-collapse:separate;
 }

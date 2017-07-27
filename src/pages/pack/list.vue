@@ -7,7 +7,7 @@
         <div v-model="packList"   @dragover="dragOver" @dragenter="dragEnter" @dragleave="dragLeave"  @dragend="dragEnd">
                 <div v-for="item,index in packList" :key="item.id" class="packListItem" @drop="drop($event,item)">
                     <div :class="item.cho?'head active':'head'">
-                        <div class="left">
+                        <div class="left" @click="updateGroupName(item)">
                             <i :class="item.cho?'el-icon-arrow-down':'el-icon-arrow-right'" @click.stop="item.cho=!item.cho"></i>
                             <span>{{item.groupName}}</span>
                         </div>
@@ -21,19 +21,41 @@
                         </li>
                         <li v-for="itemList,index2 in item.groBusPackagesList" @mouseover="itemList.edit=true" @click="handleRouteDetail(itemList)" @mouseleave="itemList.edit=false" :id="itemList.id" @dragstart="dragStart(itemList,index,index2)" draggable="true" >
                                 <img src="./img/list_temp.png" alt="">
-                                <span>{{itemList.busPackageName}}</span>
+                                <span :contenteditable="itemList.editAble" autofocus="true">{{itemList.busPackageName}}</span>
                                 <div class="tips" v-if="itemList.edit">
                                     <div class="del" @click="deleteGroup(itemList,index2,item)">
                                         <i class='el-icon-delete'></i>
                                         <span>删除</span>
                                     </div>
-                                    <div class="edit">
+                                    <div class="edit" @click="handleRouteupdate(itemList)">
                                         <i class='el-icon-information'></i>
                                         <span>编辑</span>
                                     </div>
                                 </div>
+                            <el-dialog
+                                    title="编辑包名"
+                                    :visible.sync="itemList.editAble"
+                                    size="tiny"
+                            >
+                                <el-input class="packName" v-model="itemList.busPackageName"></el-input>
+                                <span slot="footer" class="dialog-footer">
+                                    <el-button @click="itemList.editAble=false">取 消</el-button>
+                                    <el-button type="primary" @click="rename(itemList)">确 定</el-button>
+                                  </span>
+                            </el-dialog>
                         </li>
                     </ul>
+                    <el-dialog
+                            title="编辑组名"
+                            :visible.sync="item.editAble"
+                            size="tiny"
+                    >
+                        <el-input class="groupName" v-model="item.groupName"></el-input>
+                        <span slot="footer" class="dialog-footer">
+                                    <el-button @click="item.editAble=false">取 消</el-button>
+                                    <el-button type="primary" @click="renameGroup(item)">确 定</el-button>
+                                  </span>
+                    </el-dialog>
                 </div>
         </div>
 
@@ -45,9 +67,11 @@
             <el-input class="groupName" v-model="group_name"></el-input>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="addFormDialog = false">取 消</el-button>
-                <el-button type="primary" @click="addGroupList(packList,index)">确 定</el-button>
+                <el-button type="primary" @click="addGroupList(packList)">确 定</el-button>
               </span>
         </el-dialog>
+
+
     </div>
 </template>
 
@@ -61,7 +85,9 @@
                 pos1:null,//要拖动的包在哪一个组
                 pos2:null,//要拖动的包在组的哪一个位置
                 addFormDialog:false,
-                group_name:'' //新增组名
+                updateFormDialog:false,
+                group_name:'', //新增组名
+
             }
         },
         computed:{
@@ -103,19 +129,46 @@
             dragEnd(e){
             },
             handleRouteEdit(){
-                this.$router.push('/listEdit')
+                this.$router.push('/pack/listEdit')
+            },
+            updateGroupName(item){
+                console.log(item)
+                item.editAble=true;
+            },
+            renameGroup(item){
+                console.log(item)
+                AJAX.post('website/pack/renameGroup',{
+                    groupName:item.groupName,id:item.id,groupCode:item.groupCode},(res)=>{
+                    //console.log(res.data.id)
+                    item.editAble=false;
+                })
             },
             handleRouteAdd(){
                 this.group_name = '';
                 this.addFormDialog=true;
 
             },
+            rename(itemList){
+                console.log(itemList)
+
+                AJAX.post('website/pack/rename',{
+                    busPackageName:itemList.busPackageName,id:itemList.id,groupCode:itemList.groupCode},(res)=>{
+                    //console.log(res.data.id)
+                    console.log("222222222222")
+                    itemList.editAble=false;
+                })
+            },
+            handleRouteupdate(itemList,index,index1){
+                itemList.editAble=true;
+
+
+            },
             addGroupList(packList){
                 let group_name = this.group_name;
-                console.log(group_name);
-                console.log(packList);
+                //console.log(group_name);
+                //console.log(packList);
                 AJAX.post('website/pack/saveGroupList',{groupName:group_name},(res)=>{
-                    console.log(res.data.id)
+                    //console.log(res.data.id)
                     let id = res.data.id
                     this.addFormDialog=false;
                    packList.push({

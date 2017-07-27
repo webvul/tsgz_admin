@@ -38,7 +38,7 @@
                 </el-form>
             </div>
         </header>
-        <div class="tableList">
+        <div class="tableList" style="padding:0 15px 0 5px;">
             <div class="header">
                 字段列表
             </div>
@@ -46,14 +46,13 @@
                     :data="addFormList.genTable.columnList"
                     border
                     :height="tableContainerHeight"
-                    style="width:100%"
+                    :style="'width:100%;height:'+tableContainerHeight"
                     >
                 <el-table-column
                         label="列名"
-
                         >
                     <template scope="scope">
-                        <p :title="scope.row.name">{{scope.row.name}}</p>
+                        <span :title="scope.row.name">{{scope.row.name}}</span>
                     </template>
                 </el-table-column>
                 <el-table-column
@@ -323,11 +322,7 @@
             color:#0088CC;
         }
         /*控制表格的整体样式*/
-        .el-table th > .cell{
-            font-size:12px !important;
-            padding-left:10px;
 
-        }
         .el-table .cell{
             font-size:12px !important;
             padding-left:5px;

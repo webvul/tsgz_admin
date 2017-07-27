@@ -1,39 +1,60 @@
 <template>
-    <section class="page">
-       <div v-if="loadding">
-            <el-button @click="test">测试</el-button>
-       </div>
-        <loadding v-else/>
-    </section>
+    <el-table
+            :data="tableData3"
+            height="250"
+            border
+            style="width: 100%">
+        <el-table-column
+                prop="date"
+                label="日期"
+                width="180">
+        </el-table-column>
+        <el-table-column
+                prop="name"
+                label="姓名"
+                width="180">
+        </el-table-column>
+        <el-table-column
+                prop="address"
+                label="地址">
+        </el-table-column>
+    </el-table>
 </template>
 
 <script>
-  import loadding from './../../components/loadding/loadding.vue'
-  //import test_npm_package_wang from 'test_npm_package_wang'
-export default {
-  data () {
-      return{
-          loadding:true, //为true显示加载动画 为false显示页面
-      }
-  },
-  components: {
-      loadding
-  },
-  methods: {
-      test(){
-        //var a= test_npm_package_wang({percent:50,amount:300});
-       // alert(a);
-      }
-  }
-}
+    export default {
+        data() {
+            return {
+                tableData3: [{
+                    date: '2016-05-03',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                }, {
+                    date: '2016-05-02',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                }, {
+                    date: '2016-05-04',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                }, {
+                    date: '2016-05-01',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                }, {
+                    date: '2016-05-08',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                }, {
+                    date: '2016-05-06',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                }, {
+                    date: '2016-05-07',
+                    name: '王小虎',
+                    address: '上海市普陀区金沙江路 1518 弄'
+                }]
+            }
+        }
+    }
 </script>
-
-<!--使用sass语法进行编译样式-->
-<style lang="scss" scoped>
-  @import "./../../assets/css/style";
-  .mainContainer{
-    line-height:0;
-    background-color: $color1;
-
-  }
-</style>
