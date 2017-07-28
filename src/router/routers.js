@@ -94,6 +94,12 @@ let router = [
                 component: components.packDetail,
                 hidden:true
             },
+            {
+                path: 'confirmAdd',
+                name: '业务包保存确定页',
+                component: components.confirmAdd,
+                hidden:true
+            },
         ]
 
     },
@@ -109,6 +115,13 @@ let router = [
                 name: '商品分类',
                 leaf: true,//只有一个节点
                 component: components.goodsList
+            },
+            {
+                path: 'goodsListEdit',
+                name: '菜单修改',
+                leaf: true,//只有一个节点
+                component: components.goodsListEdit,
+                hidden:true
             },
         ]
     },
@@ -137,6 +150,40 @@ let router = [
                 leaf: true,//只有一个节点
                 component: components.addServiceTable,
                 hidden:true
+            },
+        ]
+    },
+    {
+        path: '/dynData',
+        component: components.Home_view,
+        name:'数据导入工具',
+        redirect: '/dynData/DataImport',
+        iconCls: 'fa fa-address-card',//图标样式class
+        children: [
+            {
+                path: 'DataImport',
+                name: '数据导入',
+                component: components.MainApp,
+                redirect: '/dynData/DataImport/dataSourceConfig',
+                iconCls: 'icon iconfont icon-gerenxinxi',//图标样式class
+                children:[
+                    {
+                        path: 'dataSourceConfig',
+                        name: '数据源配置',
+                        component: components.dataSourceConfig,
+                        leaf: true,//只有一个节点
+                    },{
+                        path: 'extTableImport',
+                        name: '外部表结构导入',
+                        component: components.extTableImport,
+                        leaf: true,//只有一个节点
+                    },{
+                        path: 'dataImportTimer',
+                        name: '数据导入定时任务',
+                        component: components.dataImportTimer,
+                        leaf: true,//只有一个节点
+                    },
+                ]
             },
         ]
     },

@@ -1,15 +1,17 @@
 <template>
     <div class="page goodsPage" ref="el">
         <el-table
-                :data="gccList"
+                ref="tabTree"
+                :data="showData"
                 :height="height"
                 border
                 style="width: 99%">
             <el-table-column
                     label="名称"
-                    width="180"
-                    >
+                    :resizable="true"
+            >
                 <template scope="scope">
+                    <i :style="'margin-left:'+(scope.row.rank*10)+'px'" :class="scope.row.open?'el-icon-caret-right open':'el-icon-caret-right'" v-if="scope.row.isNextnode==='1'" @click="showIndex2(scope.$index,scope.row)"></i>
                     <span style="margin-left: 10px">{{ scope.row.name }}</span>
                 </template>
             </el-table-column>
@@ -62,33 +64,78 @@
 
 <script>
     import AJAX from './../../assets/js/ajax';
-    import {mapState,mapActions} from 'vuex';
     export default {
         data() {
             return {
                 gccList:[],
                 height:0,
+                showData:[],
+                filterRules:1
             }
         },
         computed:{
-            ...mapState(['goodsList']),
         },
         created(){
             let _this = this;
             AJAX.get('gcc/gccContror/findGccList',{},function(data){
                 _this.gccList = data.data;
-                console.info( data.data)
+                _this.gccList.map((item,key)=>{
+                    if(item.parentId==='1'){
+                        item.rank =1; //排名第一
+                        item.open=false; //初始为关闭状态
+                        _this.showData.push(item);
+                    }
+                });
+                /*_this.showData.map(function(item,key){
+                 trans_arr(item,_this.gccList,item.rank,key)
+                 })
+                 function trans_arr(temp,old_arr,rank,key){
+                 let ran =rank;
+                 old_arr.map(function (item1,key1){
+                 if(temp.isNextnode==='1'&&temp.id===item1.parentId&&temp.rank===rank){
+                 item1.rank=ran+1;
+                 item1.open=true;
+                 _this.showData.splice(key+1,0,item1)
+                 }
+                 })
+                 }*/
+
 
             })
         },
         mounted(){
-            this.height=this.$refs.el.offsetHeight;
-            console.info(this.height)
+            let _this =this;
+            console.log(_this.showData);
+            this.height=this.$refs.el.offsetHeight-60;
+            $(window).resize(function(){
+                _this.height=$(window).height()-150;
+            })
 
         },
         methods:{
-            ...mapActions(['getGoodsList']),
+            showIndex2(index,row){
+                let _this = this;
+                let _temp =row.rank;
+                //判断菜单的开合
+                if(!row.open){
+                    this.showData[index].open=true;
+                    _this.gccList.map((item,key)=>{
+                        if(item.parentId===row.id){
+                            item.rank =_temp+1; //排名第一
+                            item.open=false; //初始为关闭状态
+                            _this.showData.splice(index+1,0,item);
+                        }
+                    })
+                }else{
+                    this.showData[index].open=false;
+                    for(var i=_this.showData.length-1;i>=0;i--){
+                        if(_this.showData[i].parentId===row.id){
+                            _this.showData.splice(i,1)
+                        }
+                    }
+                }
 
+            }
         },
 
     };
@@ -97,5 +144,15 @@
 <style lang="scss" scoped>
     .goodsPage{
         padding:0.1rem;
+    }
+    .el-icon-caret-right{
+        color:#666;
+        font-size:12px;
+    }
+    .open{
+        transform: rotate(90deg);
+    }
+    .activeRow{
+        background:pink;
     }
 </style>

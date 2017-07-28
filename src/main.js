@@ -6,6 +6,7 @@ import 'element-ui/lib/theme-default/index.css'
 import './assets/font_kjmavcnbocz93sor/demo.css'
 import './assets/font_kjmavcnbocz93sor/iconfont.css'
 import $ from 'jquery' //引用jquery插件
+import './assets/js/common' //自定义的全局方法
 import './assets/css/common.css' //引用全局的css样式
 import 'normalize.css'
 import App from './main.vue'

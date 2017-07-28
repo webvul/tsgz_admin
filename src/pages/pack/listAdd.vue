@@ -4,11 +4,11 @@
             <el-col :span="5" class="grid left">
                 <div class="sql_list">
                     <h5>数据连接</h5>
-                    <div v-for="item in 4" :class="defaultActive===item?'item active':'item'" @click="defaultActive=item" >demo{{item}}</div>
+                    <div v-for="item,key in dbsNameList" :class="defaultActive===key?'item active':'item'" @click="chooseActive(key,item)" >{{item.dbsName}}</div>
                 </div>
                 <div class="pack_list">
                     <h5>业务包</h5>
-                    <div class="item" v-for="item in 8" :key="item">业务包{{item}}</div>
+                    <div class="item" v-for="item,key in busPackageNameList" :key="key">{{item.busPackageName}}</div>
                 </div>
             </el-col>
             <el-col :span="19" class="grid right">
@@ -22,16 +22,21 @@
                     </el-input>
                 </div>
                 <div class="dabeList">
-                    <span v-for="item in 50" :key="item" :title="'数据表'+item" :class="choList.indexOf(item)===-1?'span':'span active'" @click="choDabe(item)">
+                    <span v-for="item,key in alltablelist" :key="key"
+                          v-if="key>((page-1)*60)&&key<(page*60)"
+                          :title="item.tabName" :class="choList.indexOf(item.tabName)===-1?'span':'span active'" @click="choDabe(item)">
                         <img src="./img/download.png" alt="" style="" />
-                        数据表{{item}}
+                        {{item.tabName}}
                     </span>
                 </div>
                 <div class="paginationContainer">
                     <el-pagination
+                            @current-change="handleCurrentChange"
+                            :page-size="pageSize"
                             small
+                            :current-page="page"
                             layout="prev, pager, next"
-                            :total="50">
+                            :total="alltablelist.length">
                     </el-pagination>
                     <div class="footer">
                         <el-button size="small" @click="goback">上一步</el-button>
@@ -50,14 +55,25 @@
 
 <script>
     import {mapGetters} from 'vuex';
+    import AJAX from './../../assets/js/ajax';
     export default {
         data() {
             return {
                 editable: false,
-                defaultActive:1,
+                defaultActive:0,
                 inputValue:'', //搜索的keyword,
-                choList:[],//用户选择的列表
+                choList:[],//用户选择的列表,
+                page:1,
+                pageSize:60,
+                msg:'',
+                dbsNameList:[],
+                busPackageNameList:[],
+                alltablelist:[],
+
             }
+        },
+        created(){
+            this.ajax();
         },
         computed: mapGetters(['loginMsg']),
         mounted() {
@@ -65,13 +81,35 @@
         },
         methods:{
             choDabe(ite){
-                let index = this.choList.indexOf(ite);
+                let index = this.choList.indexOf(ite.tabName);
               if(index===-1){
-                  this.choList.push(ite)
+                  this.choList.push(ite.tabName)
               }else{
                   this.choList.splice(index,1)
               }
 
+            },
+            handleCurrentChange(page){
+              this.page = page;
+            },
+            chooseActive(key,item){
+                this.defaultActive = key;
+                //console.log(item.dbsName)
+                AJAX.post('website/packadd/getTableByConn',{dbsName:item.dbsName},(res)=>{
+                    //console.log(res.data)
+                    this.page=1;
+                    this.alltablelist = res.data.list;
+                })
+
+            },
+            ajax(){
+                AJAX.post('website/packadd/addGroup',{},(res)=>{
+                    //console.log(res.data)
+                    this.dbsNameList = res.data.dbsNameList;
+                    this.busPackageNameList = res.data.list1;
+                    this.alltablelist = res.data.list;
+
+                })
             },
             handleIconClick(){
                 this.$message({
@@ -84,7 +122,12 @@
             },
             pageGoStep(){
                 if(this.choList.length){
-                    this.$router.push("/groupListAddStep")
+                    this.$router.push({
+                        path:'/pack/confirmAdd',
+                        query:{
+                            choList:this.choList,
+                        }
+                    })
                 }
                 else{
                     this.$message.error('你至少得选择一个表吧');

@@ -120,7 +120,7 @@
                 let groupid = list.groupCode
                 //console.log(groupid)
                AJAX.get('website/pack/moveGroup',{id:id,groupid:groupid},(res)=>{
-                        console.log(res)
+                        //console.log(res)
                 })
                 this.packList[this.pos1].groBusPackagesList.splice(this.pos2,1);
                 list.groBusPackagesList.push(this.packListFrom);
@@ -132,11 +132,11 @@
                 this.$router.push('/pack/listEdit')
             },
             updateGroupName(item){
-                console.log(item)
+               // console.log(item)
                 item.editAble=true;
             },
             renameGroup(item){
-                console.log(item)
+               // console.log(item)
                 AJAX.post('website/pack/renameGroup',{
                     groupName:item.groupName,id:item.id,groupCode:item.groupCode},(res)=>{
                     //console.log(res.data.id)
@@ -154,7 +154,7 @@
                 AJAX.post('website/pack/rename',{
                     busPackageName:itemList.busPackageName,id:itemList.id,groupCode:itemList.groupCode},(res)=>{
                     //console.log(res.data.id)
-                    console.log("222222222222")
+                   // console.log("222222222222")
                     itemList.editAble=false;
                 })
             },
@@ -196,9 +196,9 @@
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    console.log(itemList)
+                    //console.log(itemList)
                    let id = itemList.id;
-                    console.log(list);
+                    //console.log(list);
                    AJAX.delete('website/pack/deleteGroup',{id:id},(res)=>{
 
                        list.groBusPackagesList.splice(index,1);
@@ -219,11 +219,11 @@
                         cancelButtonText: '取消',
                         type: 'warning'
                     }).then(() => {
-                        console.log(packList)
+                       // console.log(packList)
                         let id = list.id;
                         let groupCode = list.groupCode;
                         AJAX.delete('website/pack/deleteGroupList',{id:id,groupCode:groupCode},(res)=>{
-                            console.log(res)
+                            //console.log(res)
                             packList.splice(index,1);
                         })
                     }).catch(() => {
