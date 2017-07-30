@@ -12,7 +12,7 @@ import 'normalize.css'
 import App from './main.vue'
 import router from './router/index' //引入路由
 import store from './store/index'  //引入vuex
-Vue.use(ElementUI)
+Vue.use(ElementUI);
 
 new Vue({
     router,

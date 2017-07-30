@@ -51,7 +51,7 @@ export default {
     ServiceTable,
     programmeTable,
     addServiceTable,
-    dataSourceConfig,
+   dataSourceConfig,
     extTableImport,
     dataImportTimer,
     test111

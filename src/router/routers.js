@@ -153,7 +153,7 @@ let router = [
             },
         ]
     },
-    {
+    /*{
         path: '/dynData',
         component: components.Home_view,
         name:'数据导入工具',
@@ -186,7 +186,7 @@ let router = [
                 ]
             },
         ]
-    },
+    },*/
     {
         path: '/tes',
         component: components.Home_view,
