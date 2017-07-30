@@ -13,12 +13,6 @@ const actions ={
             commit('userLoginMsg',msg[0].data);
         })
     },
-    //获取所有用户的信息列表
-    getUserList:({commit})=>{
-        AJAX.get('user.json',{},function(data){
-            commit("user",data.data);
-        })
-    },
     //获取用户包的列表
     getPackList:({commit})=>{
         AJAX.get('website/pack/findAllList',{},function(data){
