@@ -107,6 +107,7 @@
 
 <script>
     import {mapState,mapActions} from 'vuex';
+    import AJAX from './../../assets/js/ajax';
     export default {
         data() {
             return {
@@ -125,7 +126,7 @@
             }
         },
         computed:{
-            ...mapState(['BusinessTableList','formList','addFormListMsg']),
+            ...mapState(['BusinessTableList','formList']),
         },
         created(){
             this.handleBusinessTableList({
@@ -141,11 +142,8 @@
                 _this.tableHeight=$(window).height()-230;
             })
         },
-        watch:{
-           '$store.state.addFormListMsg':'routerToAdd'
-        },
         methods:{
-            ...mapActions(['handleBusinessTableList','handleSearchBusinessTableList','handleDelectBusinessTableList','handleFormList','handleSubmitFormList']),
+            ...mapActions(['handleBusinessTableList','handleSearchBusinessTableList','handleDelectBusinessTableList','handleFormList']),
             handleCurrentChange(page){
                 this.page = page;
                 this.handleBusinessTableList({
@@ -213,9 +211,23 @@
                 this.addFormDialog=true;
             },
             submitAddFormList(){
-                this.handleSubmitFormList({name:this.formValue});
-                this.addFormDialog=false;
-
+                let _this = this;
+                AJAX.get('website/gen/isExist',{name:_this.formValue},(res)=>{
+                    if(res.message==='成功'){
+                        this.addFormDialog=false;
+                        this.$router.push({
+                            path:'/code/addServiceTable',
+                            query:{
+                                id:'',
+                                name:this.formValue
+                            }
+                        })
+                        this.formValue='';
+                    }
+                    if(res.message!=='成功'){
+                        this.$message.error(res.message);
+                    }
+                })
             },
             routerToAdd(){
                 if(this.$route.path=='/code/ServiceTable'){
