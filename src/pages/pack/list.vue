@@ -16,7 +16,7 @@
                         </div>
                     </div>
                     <ul class="itemList" v-if="item.cho">
-                        <li @click="handleRouterAddPack(item.id)">
+                        <li @click="handleRouterAddPack(item.groupCode)">
                             <img src="./img/add.png" alt="">
                         </li>
                         <li v-for="itemList,index2 in item.groBusPackagesList" @mouseover="itemList.edit=true" @click="handleRouteDetail(itemList)" @mouseleave="itemList.edit=false" :id="itemList.id" @dragstart="dragStart(itemList,index,index2)" draggable="true" >
@@ -181,14 +181,18 @@
             },
             handleRouterAddPack(id){
                 this.$router.push(
-                   '/listAdd/'+id
+                   '/pack/listAdd/'+id
                 )
             },
             handleRouteDetail(item){
-                /*this.$router.push({
-                    path:'/packDetail',
-                    query:item
-                })*/
+                this.$router.push({
+                    path:'/pack/packDetail',
+                    query:{
+                        id:item.id,
+                        name:item.busPackageName
+                    }
+
+                })
             },
             deleteGroup(itemList,index,list){
                this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {

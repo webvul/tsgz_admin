@@ -27,3 +27,16 @@ a{
 table{
     border-collapse:separate;
 }
+/*自定义弹窗样式*/
+.mymodel  .el-dialog__header{
+    padding: 0 10px;
+}
+.mymodel  .el-dialog__body{
+    padding: 0 10px 20px;
+}
+
+/*
+自定义表格*/
+.mymodel .el-input__inner {
+    border:none
+}

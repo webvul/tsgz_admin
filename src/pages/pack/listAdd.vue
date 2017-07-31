@@ -63,6 +63,7 @@
                 defaultActive:0,
                 inputValue:'', //搜索的keyword,
                 choList:[],//用户选择的列表,
+                tableDataList:[],//用户选择的列表和数据连接拼接,
                 page:1,
                 pageSize:60,
                 msg:'',
@@ -82,10 +83,15 @@
         methods:{
             choDabe(ite){
                 let index = this.choList.indexOf(ite.tabName);
+                let index2 = this.choList.indexOf(ite.tabName+"-"+this.defaultActive);
               if(index===-1){
-                  this.choList.push(ite.tabName)
+                  this.choList.push(ite.tabName);
+                  this.tableDataList.push(ite.tabName+"-"+this.defaultActive);
+
               }else{
-                  this.choList.splice(index,1)
+                  this.choList.splice(index,1);
+                  this.tableDataList.splice(index2,1);
+
               }
 
             },
@@ -125,7 +131,8 @@
                     this.$router.push({
                         path:'/pack/confirmAdd',
                         query:{
-                            choList:this.choList,
+                            tableDataList:this.tableDataList,
+                            groupCode:this.$route.params.id,
                         }
                     })
                 }

@@ -151,7 +151,7 @@
                 this.$router.go(-1);
             },
             handleSave(){
-                this.$router.push('/groupList')
+                this.$router.push('/pack/groupList')
             }
 
         },

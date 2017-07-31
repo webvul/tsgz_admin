@@ -5,6 +5,7 @@
 const URLPATH="src/assets/js/api/";
 const URLPATH1="http://127.0.0.1:8080/jad-saas-mgmt/api/";
 import axios from 'axios';
+import router from './../../router'
 let querystring = require('querystring');
 export default class ajax {
     static get(api, params, callback) {
@@ -19,8 +20,13 @@ export default class ajax {
             url: url,
         })
             .then(function (response) {
-                if(response.data.code="1111")
-                callback(response.data)
+                if(response.data.code==="1111"){
+                    callback(response.data)
+                }
+                if(response.data.code==="0000"){
+                    router.push('/login');
+                }
+
             })
             .then(function (error) {
                 if (error) {

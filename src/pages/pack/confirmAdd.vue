@@ -4,14 +4,14 @@
   <div class="page" ref="el">
     <div></div>
     <div>
-      <el-form label-position="right" label-width="90px" class="ServiceTableForm">
+      <el-form label-position="right" label-width="90px" class="confirmAdd">
         <el-form-item label="任务名称：">
-          <el-input></el-input>
+          <el-input  v-model="group_name"></el-input>
         </el-form-item>
       </el-form>
     </div>
     <div class="dabeList">
-      <span v-for="item,key in $route.query.choList" :key="key"
+      <span v-for="item,key in choList" :key="key"
             :title="item">
           <img src="./img/download.png" alt="" style="" />
           {{item}}
@@ -20,7 +20,7 @@
     <div class="footer">
       <el-button size="small">上一步</el-button>
       <div>
-        <el-button type="primary" size="small">下一步</el-button>
+        <el-button type="primary" size="small" @click="pageGoStep()">保存</el-button>
 
       </div>
     </div>
@@ -34,14 +34,22 @@
             return {
                 msg:[],
                 height:0,
-                value:''
+                value:'',
+                group_name:'',
+                choList:[],
+                groupCode:'',  //是否已经分组
+                status:0    //不重复点击
             }
         },
         computed:{
 
         },
         created(){
-
+            let tableDataList = this.$route.query.tableDataList;
+            console.log(tableDataList)
+            tableDataList.map((item,key)=>{
+                this.choList.push(item.split("-")[0])
+            })
 
         },
         mounted(){
@@ -54,6 +62,31 @@
             asdf(){
                 alert(111);
             },
+            pageGoStep(){
+                if(this.status==1){
+                    return;
+                }
+                this.status = 1;
+                let name = this.group_name;
+                console.log(name)
+                console.log(this.$route.query.tableDataList)
+                console.log(this.$route.query.groupCode)
+                if(this.$route.query.groupCode!=null){
+                    this.groupCode = this.$route.query.groupCode;
+                }
+                let tabArr = this.$route.query.tableDataList;
+                if(name.trim()!=""){
+                 AJAX.post('website/packadd/addTable',{name:name,tabArr:tabArr,groupCode:this.groupCode},(res)=>{
+                        console.log(res)
+                        this.$router.push('/pack/groupList')
+                    })
+                 this.status = 1;
+                }else{
+                    this.status = 0;
+                    this.$message.error('请填写业务表名');
+                }
+
+            },
             abc(){
                 console.log("sss")
             }
@@ -63,7 +96,7 @@
 </script>
 
 <style lang="scss" scoped>
-.ServiceTableForm{
+.confirmAdd{
   width:400px;
   position:relative;
 }

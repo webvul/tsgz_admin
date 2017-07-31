@@ -16,6 +16,8 @@ const groupListAdd=resolve => require(['../pages/pack/listAdd.vue'], resolve); /
 const groupListAddStep=resolve => require(['../pages/pack/listAddStep2.vue'], resolve);//业务包添加第二步
 const packDetail=resolve => require(['../pages/pack/packDetail.vue'], resolve);//业务包详情页面
 const confirmAdd=resolve => require(['../pages/pack/confirmAdd.vue'], resolve);//业务包表添加确定页面
+const groBusPackagesUpdate =resolve => require(['../pages/pack/groBusPackagesUpdate.vue'], resolve);//业务包管理详情页面
+const packSQL=resolve => require(['../pages/pack/packSQL.vue'], resolve);//SQL数据集配置
 //商品分类配置
 const goodsList = resolve => require(['../pages/goodsClassification/goodsList.vue'], resolve)
 const goodsListEdit = resolve => require(['../pages/goodsClassification/addGoodsFrom.vue'], resolve)
@@ -40,12 +42,16 @@ export default {
     UserManage,
     PersonalInfo,
     Test,
+    //业务包
     groupList,
     groupListEdit,
     groupListAdd,
     groupListAddStep,
     packDetail,
     confirmAdd,
+    groBusPackagesUpdate,
+    packSQL,
+    //商品分类
     goodsList,
     goodsListEdit,
     ServiceTable,

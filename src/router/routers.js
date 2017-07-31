@@ -76,6 +76,12 @@ let router = [
                 hidden:true
             },
             {
+                path: 'packSQL',
+                name: 'SQL数据集配置',
+                component: components.packSQL,
+                hidden:true
+            },
+            {
                 path: 'listAdd/:id',
                 name: '业务包添加',
                 leaf: true,//只有一个节点
@@ -90,7 +96,7 @@ let router = [
             },
             {
                 path: 'packDetail',
-                name: '业务包详情',
+                name: '业务包管理详情',
                 component: components.packDetail,
                 hidden:true
             },
@@ -153,7 +159,7 @@ let router = [
             },
         ]
     },
-    /*{
+   {
         path: '/dynData',
         component: components.Home_view,
         name:'数据导入工具',
@@ -186,7 +192,7 @@ let router = [
                 ]
             },
         ]
-    },*/
+    },
     {
         path: '/tes',
         component: components.Home_view,
