@@ -8,9 +8,9 @@ const actions ={
     },
     //获取用户登录信息
     handleUserMsg:({commit})=>{
-        AJAX.get("sys/user/userinfo",{},function(msg){
+        AJAX.get("website/sys/user/userinfo",{},function(msg){
             console.log(msg);
-            commit('userLoginMsg',msg[0].data);
+            commit('userLoginMsg',msg.data);
         })
     },
     //获取用户包的列表

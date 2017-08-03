@@ -71,10 +71,10 @@
                     if (valid) {
                         this.logining = true;
                         let loginParams = {username: this.ruleForm2.account, password: this.ruleForm2.checkPass};
-                        AJAX.post('sys/user/loginweb', loginParams, (res) => {
+                        AJAX.post('website/sys/user/loginweb', loginParams, (res) => {
                             console.log(res.data);
                             _this.logining = false;
-                            sessionStorage.setItem('Token', JSON.stringify(res.data[0].token));
+                            sessionStorage.setItem('Token', JSON.stringify(res.data.token));
                             _this.$router.push({path: '/home/Personal'});
                         })
                         /*_this.logining = false;
