@@ -1,14 +1,14 @@
 <template>
-    <div class="page AddDataTable"  ref="addDataTableContainer">
-    <!--查询表单-->
+    <div class="page ImportTableColumn"  ref="ImportTableColumn">
+    <!--基本信息-->
         <div>
             <el-form :inline="true" v-model="seaForm" class="demo-form-inline">
-                <el-form-item labelWidth="30px"></el-form-item>
+                <el-form-item labelWidth="100px"></el-form-item>
                 <el-form-item label="表名：">
-                    <el-input v-model="seaForm.tabName" placeholder="表名" ></el-input>
+                    <el-input v-model="seaForm.tabName" placeholder="表名" :disabled="true"></el-input>
                 </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="search">查询</el-button>
+                <el-form-item label="描述：">
+                    <el-input v-model="seaForm.comments" placeholder="描述"  :disabled="true"></el-input>
                 </el-form-item>
             </el-form>
         </div>
@@ -25,32 +25,29 @@
                         label="序号">
                 </el-table-column>
                 <el-table-column
-                        type="selection"
-                        width="55"
-                        label="全选">
-                </el-table-column>
-                <el-table-column
-                        prop="tabName"
-                        label="表名"
+                        prop="name"
+                        label="列名"
                 >
                 </el-table-column>
                 <el-table-column
                         prop="comments"
-                        label="描述"
+                        label="说明"
                 >
                 </el-table-column>
                 <el-table-column
-                        prop="dbsName"
-                        label="数据源名称"
+                        prop="jdbcType"
+                        label="物理类型"
                 >
                 </el-table-column>
-                <el-table-column label="操作">
-                    <template scope="scope">
-                        <el-button
-                                type="text"
-                                @click="handleSeach(scope.$index, scope.row)">查看
-                        </el-button>
-                    </template>
+                <el-table-column
+                        prop="isPk"
+                        label="主键"
+                >
+                </el-table-column>
+                <el-table-column
+                        prop="isNull"
+                        label="是否可空"
+                >
                 </el-table-column>
             </el-table>
         </div>
@@ -70,7 +67,8 @@
             return {
                 msg:[],
                 seaForm:{
-                    tabName:''
+                    tabName:'',
+                    comments:''
                 },
                 height:400
             }
@@ -81,11 +79,14 @@
         created(){
             let dat =this
             //获取业务表列表
-            AJAX.get('website/dyn/dynImportTab/getDataTabList',{
+            AJAX.get('website/dyn/dynImportTab/getTaCcolumn',{
                 dbsId:dat.$route.query.dbsId,
-                tabName:dat.seaForm.tabName
+                tabName:dat.$route.query.tabName,
+                dbsDriverclass:dat.$route.query.dbsDriverclass,
             },function(data){
-                dat.msg = data.data;
+                console.log(data.data);
+                console.log(data.data.columnList);
+               dat.msg =data.data.columnList;
             })
         },
         mounted(){
@@ -105,6 +106,7 @@
                     tabName:dat.seaForm.tabName
                 },function(data){
                     dat.msg = data.data;
+
                 })
             },
             //查询
@@ -115,15 +117,9 @@
                     tabName:scope.tabName,
                     dbsDriverclass:scope.dbsDriverclass,
                 },function(data){
-                    console.log(data.data);
-                    dat.$router.push({
-                        path:'/dynData/DataImport/importTableColumn',
-                        query:{
-                            dbsId:scope.dbsId,
-                            tabName:scope.tabName,
-                            dbsDriverclass:scope.dbsDriverclass,
-                        }
-                    })
+                    console.log(data.data)
+                    dat.msg = data.data;
+
                 })
             }
         },
@@ -131,7 +127,7 @@
 </script>
 
 <style lang="scss">
-    .AddDataTable{
+    .ImportTableColumn{
         display: flex;
         flex-flow: column;
         position:relative;
@@ -139,7 +135,7 @@
             width:100%;
             height:50px;
             line-height: 50px;
-            .AddDataTable{
+            .ImportTableColumn{
                 position: relative;
                 top:6px;
                 display: flex;

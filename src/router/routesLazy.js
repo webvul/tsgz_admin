@@ -34,6 +34,7 @@ const dataSourceConfig = resolve => require(['../pages/dynData/dataSourceConfig.
 const extTableImport =resolve => require(['./../pages/dynData/extTableImport.vue'], resolve);
 const dataImportTimer =resolve => require(['./../pages/dynData/dataImportTimer.vue'], resolve);
 const addDataTable =resolve => require(['./../pages/dynData/addDataTable.vue'], resolve);
+const importTableColumn =resolve => require(['./../pages/dynData/importTableColumn.vue'], resolve);
 const test111 =resolve => require(['./../pages/test/tes111.vue'], resolve);
 export default {
     Login,
@@ -65,5 +66,6 @@ export default {
     extTableImport,
     dataImportTimer,
     addDataTable,
+    importTableColumn,
     test111
 };

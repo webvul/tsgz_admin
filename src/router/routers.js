@@ -202,6 +202,12 @@ let router = [
                         leaf: true,//只有一个节点
                         hidden:true
                     },{
+                        path: 'importTableColumn',
+                        name: '查看表字段',
+                        component: components.importTableColumn,
+                        leaf: true,//只有一个节点
+                        hidden:true
+                    },{
                         path: 'dataImportTimer',
                         name: '数据导入定时任务',
                         component: components.dataImportTimer,

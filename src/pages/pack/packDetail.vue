@@ -280,6 +280,9 @@
             },
             modalColumn(row,index){
                 //console.log(row)
+                this.columnDataList = '';
+                this.step=1;
+                this.color='';
                 this.columnIndex=index;
                 this.realtables = row.relationTables==='none'?'':row.relationTables;
                 this.realcolumn = row.relationColumn;
@@ -332,7 +335,12 @@
                         break;
                     }
                     case 'SQL' :{
-                        this.$router.push('/pack/packSQL');
+                        this.$router.push({path:'/pack/packSQL/',
+                            query:{
+                                id:this.$route.query.id,
+                                name:this.form.name
+                            }
+                        });
                         break;
                     }
                     case 'EXCELL' :{

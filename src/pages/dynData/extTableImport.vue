@@ -190,14 +190,14 @@
             //获取指定数据源下的数据表
             submitImportTable(){
                 let dat =this;
-                AJAX.get('website/dyn/dynImportTab/getDataTabList',{id:dat.importFormValue},(res)=>{
+                alert(dat.importFormValue);
+                AJAX.get('website/dyn/dynImportTab/getDataTabList',{dbsId:dat.importFormValue},(res)=>{
                     if(res.message==='SUCCESS'){
-                        console.log(res.data);
                         dat.importFormDialog=false;
                         this.$router.push({
                             path:'/dynData/DataImport/addDataTable',
                             query:{
-                                id:dat.importFormValue
+                                dbsId:dat.importFormValue
                             }
                         })
                         this.importFormValue='';
