@@ -18,6 +18,8 @@ const packDetail=resolve => require(['../pages/pack/packDetail.vue'], resolve);/
 const confirmAdd=resolve => require(['../pages/pack/confirmAdd.vue'], resolve);//业务包表添加确定页面
 const groBusPackagesUpdate =resolve => require(['../pages/pack/groBusPackagesUpdate.vue'], resolve);//业务包管理详情页面
 const packSQL=resolve => require(['../pages/pack/packSQL.vue'], resolve);//SQL数据集配置
+const packEXCELL=resolve => require(['../pages/pack/packEXCELL.vue'], resolve);//SQL数据集配置
+const packETL=resolve => require(['../pages/pack/packETL.vue'], resolve);//SQL数据集配置
 //商品分类配置
 const goodsList = resolve => require(['../pages/goodsClassification/goodsList.vue'], resolve)
 const goodsListEdit = resolve => require(['../pages/goodsClassification/addGoodsFrom.vue'], resolve)
@@ -31,7 +33,7 @@ const addServiceTable =resolve => require(['./../pages/code/addServiceTable.vue'
 const dataSourceConfig = resolve => require(['../pages/dynData/dataSourceConfig.vue'], resolve)
 const extTableImport =resolve => require(['./../pages/dynData/extTableImport.vue'], resolve);
 const dataImportTimer =resolve => require(['./../pages/dynData/dataImportTimer.vue'], resolve);
-
+const addDataTable =resolve => require(['./../pages/dynData/addDataTable.vue'], resolve);
 const test111 =resolve => require(['./../pages/test/tes111.vue'], resolve);
 export default {
     Login,
@@ -51,6 +53,8 @@ export default {
     confirmAdd,
     groBusPackagesUpdate,
     packSQL,
+    packEXCELL,
+    packETL,
     //商品分类
     goodsList,
     goodsListEdit,
@@ -60,5 +64,6 @@ export default {
    dataSourceConfig,
     extTableImport,
     dataImportTimer,
+    addDataTable,
     test111
 };

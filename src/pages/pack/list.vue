@@ -19,15 +19,15 @@
                         <li @click="handleRouterAddPack(item.groupCode)">
                             <img src="./img/add.png" alt="">
                         </li>
-                        <li v-for="itemList,index2 in item.groBusPackagesList" @mouseover="itemList.edit=true" @click="handleRouteDetail(itemList)" @mouseleave="itemList.edit=false" :id="itemList.id" @dragstart="dragStart(itemList,index,index2)" draggable="true" >
+                        <li v-for="itemList,index2 in item.groBusPackagesList" @mouseover="itemList.edit=true" @click.stop="handleRouteDetail(itemList)" @mouseleave="itemList.edit=false" :id="itemList.id" @dragstart="dragStart(itemList,index,index2)" draggable="true" >
                                 <img src="./img/list_temp.png" alt="">
                                 <span :contenteditable="itemList.editAble" autofocus="true">{{itemList.busPackageName}}</span>
                                 <div class="tips" v-if="itemList.edit">
-                                    <div class="del" @click="deleteGroup(itemList,index2,item)">
+                                    <div class="del" @click.stop="deleteGroup(itemList,index2,item)">
                                         <i class='el-icon-delete'></i>
                                         <span>删除</span>
                                     </div>
-                                    <div class="edit" @click="handleRouteupdate(itemList)">
+                                    <div class="edit" @click.stop="handleRouteupdate(itemList)">
                                         <i class='el-icon-information'></i>
                                         <span>编辑</span>
                                     </div>
@@ -35,12 +35,14 @@
                             <el-dialog
                                     title="编辑包名"
                                     :visible.sync="itemList.editAble"
+                                    :show-close="false"
+                                    @close="close"
                                     size="tiny"
                             >
                                 <el-input class="packName" v-model="itemList.busPackageName"></el-input>
                                 <span slot="footer" class="dialog-footer">
-                                    <el-button @click="itemList.editAble=false">取 消</el-button>
-                                    <el-button type="primary" @click="rename(itemList)">确 定</el-button>
+                                    <el-button @click.stop="itemList.editAble=false">取 消</el-button>
+                                    <el-button type="primary" @click.stop="rename(itemList)">确 定</el-button>
                                   </span>
                             </el-dialog>
                         </li>
@@ -149,7 +151,7 @@
 
             },
             rename(itemList){
-                console.log(itemList)
+                //console.log(itemList)
 
                 AJAX.post('website/pack/rename',{
                     busPackageName:itemList.busPackageName,id:itemList.id,groupCode:itemList.groupCode},(res)=>{
@@ -238,6 +240,9 @@
                     });
                 }
 
+            },
+            close(){
+               event.stopPropagation()
             }
 
         },

@@ -16,6 +16,11 @@ const states={
     goodsList:[],
     //业务表列表
     BusinessTableList:[],
+    chooseTableList:{
+        name:'',
+        id:'',
+        list:[]
+    },
     formList:[],
     addFormListMsg:'',//用户新增业务表返回的信息
     addFormList:{

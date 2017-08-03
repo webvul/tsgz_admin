@@ -1,26 +1,25 @@
 <template>
     <div>
         <div class="login_content" v-if="loadding">
-            <canvas id="cas" class="htmleaf-container"></canvas>
+            <img src="./../assets/img/login/login_logo.png" class="login_img" alt="" style="width:3.17rem;height:0.55rem">
             <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="0px"
                      class="demo-ruleForm login-container" action="">
-                <h3 class="title">系统登录</h3>
+                <h3 class="title">欢迎您登陆</h3>
                 <el-form-item prop="account">
-                    <el-input type="text" v-model="ruleForm2.account" auto-complete="off" placeholder="账号"></el-input>
+                    <el-input type="text"  v-model="ruleForm2.account" auto-complete="off" placeholder="账号"></el-input>
                 </el-form-item>
                 <el-form-item prop="checkPass">
                     <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off"
                               placeholder="密码"></el-input>
                 </el-form-item>
                 <el-form-item>
-                    <el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox>
+                    <el-checkbox v-model="checked" checked class="remember">记住我</el-checkbox>
                 </el-form-item>
                 <el-form-item style="width:100%;">
                     <el-button type="primary" style="width:100%;" @click.native.prevent="handleSubmit2"
                                :loading="logining">
                         登录
                     </el-button>
-                    <!--<el-button @click.native.prevent="handleReset2">重置</el-button>-->
                 </el-form-item>
             </el-form>
         </div>
@@ -96,48 +95,58 @@
     }
 </script>
 
-<style scoped>
-    #cas {
-        display: block;
-        height: 100%;
-        left: 0;
-        margin: 0;
-        padding: 0;
-        position: absolute;
-        top: 0;
-        width: 100%;
-    }
-
-    .login-container {
-        background: rgba(255, 255, 250, 0.8) !important;
-    }
-
+<style lang="scss">
     .login_content {
         width: 100%;
         height: 100vh;
-        background: url('../assets/img/login/login_bg.jpg');
+        background: url('../assets/img/login/login_bg.png');
         position: relative;
         background-size: cover;
+        .login_img{
+            position: absolute;
+            top:20px;
+            left:40px
+        }
     }
 
     .login-container {
-        position: relative;
-        top: 180px;
-        background: #fff;
+        position: absolute;
+        top: 150px;
+        right:100px;
+        background: transparent;
         -webkit-border-radius: 5px;
         border-radius: 5px;
         -moz-border-radius: 5px;
-        margin: 0 auto;
         width: 350px;
         padding: 35px 35px 15px 35px;
-        /*border: 1px solid #eaeaea;*/
-        /*box-shadow: 0 0 25px #cac6c6;*/
+        .el-input__inner{
+            background-color: transparent;
+            border:none;
+            color:rgba(255,255,255,0.45);
+            border-radius:0;
+            border-bottom:1px solid rgba(255,255,255,0.45);
+        }
+        .el-checkbox__input.is-checked .el-checkbox__inner {
+            border-color: #75c988 !important;
+            background:#75c988 !important;
+            border-radius: 0;
+        }
+        .el-checkbox__label{
+            color:#fff;
+            font-weight: 200;
+        }
+        .el-button{
+            width:3rem;
+            height:36px;
+            border-radius: 0;
+            font-size: 0.22rem;
+        }
     }
 
     .title {
         margin: 0px auto 40px auto;
         text-align: center;
         font-size: 18px;
-        color: #505458;
+        color: #fff;
     }
 </style>

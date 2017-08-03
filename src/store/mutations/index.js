@@ -97,6 +97,17 @@
         deleFormListMsg:(state)=>{
             state.addFormListMsg='';
         },
+        //保存添加业务包信息
+        addChooseTableList:(state,data)=>{
+            state.chooseTableList=data
+        },
+        removeChooseTableList:(state)=>{
+            state.chooseTableList={
+                name:'',
+                id:'',
+                list:[]
+            }
+        }
 
 }
 export  default mutations;

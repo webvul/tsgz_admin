@@ -69,10 +69,10 @@ body{
     border-color: $color1 !important;
     background: $color1 !important;
   }
-  .el-checkbox__input.is-checked .el-checkbox__inner {
+ /* .el-checkbox__input.is-checked .el-checkbox__inner {
     border-color: $color1 !important;
     background: $color1 !important;
-  }
+  }*/
   //主要按钮的颜色
   .el-button--primary {
     color: #fff;
@@ -149,10 +149,10 @@ body{
   }
 
   //单选框高亮
-  .el-radio__input.is-checked .el-radio__inner {
+  /*.el-radio__input.is-checked .el-radio__inner {
     border-color: $color1;
     background: $color1;
-  }
+  }*/
   //主要按钮的颜色
   .el-button--primary {
     color: #fff;
@@ -228,10 +228,10 @@ body{
   }
 
   //单选框高亮
-  .el-radio__input.is-checked .el-radio__inner {
+ /* .el-radio__input.is-checked .el-radio__inner {
     border-color: $color2;
     background: $color2;
-  }
+  }*/
   //主要按钮的颜色
   .el-button--primary {
     color: #fff;
@@ -308,10 +308,10 @@ body{
   }
 
   //单选框高亮
-  .el-radio__input.is-checked .el-radio__inner {
+/*  .el-radio__input.is-checked .el-radio__inner {
     border-color: $color3;
     background: $color3;
-  }
+  }*/
   //主要按钮的颜色
   .el-button--primary {
     color: #fff;
@@ -387,10 +387,10 @@ body{
   }
 
   //单选框高亮
-  .el-radio__input.is-checked .el-radio__inner {
+  /*.el-radio__input.is-checked .el-radio__inner {
     border-color: $color4;
     background: $color4;
-  }
+  }*/
   //主要按钮的颜色
   .el-button--primary {
     color: #fff;
@@ -466,10 +466,10 @@ body{
   }
 
   //单选框高亮
-  .el-radio__input.is-checked .el-radio__inner {
+  /*.el-radio__input.is-checked .el-radio__inner {
     border-color: $color4;
     background: $color4;
-  }
+  }*/
   //主要按钮的颜色
   .el-button--primary {
     color: #fff;
@@ -479,5 +479,38 @@ body{
       background-color: $color4;
       border-color: $color4;
     }
+  }
+}
+
+/*每个表样式*/
+.tablist{
+  width:100%;
+  max-height:200px;
+  overflow-y:auto;
+  .span{
+    cursor: pointer;
+    border:1px solid #ddd;
+    margin-right:1.9%;
+    margin-top:5px;
+    display: inline-block;
+    width:10.1%;
+    padding-right:0.02rem;
+    height:25px;
+    line-height: 25px;
+    overflow-x: hidden;
+    text-overflow:ellipsis;
+    overflow-y: hidden;
+    white-space: nowrap;
+    &.active{
+      background:#65cea7;
+      color:#fff;
+    }
+    img{
+      width:16px;
+      height:16px;
+      vertical-align: middle ;
+      margin:0 4px;
+    }
+
   }
 }

@@ -149,7 +149,7 @@
             },
             changeDefaultTheme(theme){
                 changeTheme(document.body,theme);
-    }
+            }
         },
         computed: mapState(['sidebar']),
         created(){
@@ -166,10 +166,11 @@
         display: flex;
         flex-wrap: nowrap;
         align-items: center;
-        justify-content: space-between;
+        /*justify-content: space-between;*/
         border-radius: 0px !important;
         margin-bottom: 0 !important;
         .left_con{
+            flex:1;
             display: flex;
             align-items: center;
             .icon-shousuo {
@@ -191,12 +192,13 @@
                 height:50px;
                 line-height: 50px;
                 padding:0 10px;
-
             }
         }
         .header {
+            flex:1;
             height:50px;
             display: flex;
+            justify-content: flex-end;
             align-items: center;
             .message,.icon_item{
                 display: inline-block;

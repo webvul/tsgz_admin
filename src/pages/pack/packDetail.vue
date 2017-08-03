@@ -45,7 +45,11 @@
                         <el-input v-model="scope.row.comments" size="small" class="noBorderInput"> </el-input>
                     </template>
                 </el-table-column>
-                <el-table-column property="relationTables" label="关联表" width="100"></el-table-column>
+                <el-table-column label="关联表" width="100">
+                    <template scope="scope">
+                        <span :title="scope.row.relationTables">{{scope.row.relationTables==='none'?'':scope.row.relationTables}}</span>
+                    </template>
+                </el-table-column>
                 <el-table-column type="selection" width="150" header-align="left"  align="center"
                                  :reserve-selection="true"
                 >
@@ -85,13 +89,13 @@
                     <div class="text" id="textid">{{columnName}}</div>
                 </div>
                 <div class="box2">
-                    <div :class="activeTabs===0?'item active':'item'" @click="cho_item(0)" >1:1</div>
-                    <div :class="activeTabs===1?'item active':'item'" @click="cho_item(1)" >1:N</div>
-                    <div :class="activeTabs===2?'item active':'item'" @click="cho_item(2)" >N:1</div>
+                    <div :class="activeTabs==='0'?'item active':'item'" @click="cho_item('0')" >1:1</div>
+                    <div :class="activeTabs==='1'?'item active':'item'" @click="cho_item('1')" >1:N</div>
+                    <div :class="activeTabs==='2'?'item active':'item'" @click="cho_item('2')" >N:1</div>
                 </div>
                 <div class="box box3">
-                    <div class="text" id="oppositetable"></div>
-                    <div class="text" id="oppositeid"></div>
+                    <div class="text" id="oppositetable">{{realtables}}</div>
+                    <div class="text" id="oppositeid">{{realcolumn}}</div>
                 </div>
                 <div class="line1"></div>
                 <div class="line2"></div>
@@ -100,10 +104,16 @@
             <div class="relateDabeButton">
                 <el-button type="primary" @click="contactTable">+ 关联到其他表</el-button>
             </div>
-            <div class="tablist">
-                <span v-for="item in 6" :key="item"  class="span">
+            <div class="tablist" v-if="step===1">
+                <span v-for="item,key in columnDataList" :key="key"  :class="color===key?'span active':'span'" @click="choItem(item,key)">
                 <img src="./img/download.png" alt="" style="" />
-                {{333333333333333333}}
+                {{item.tabName}}
+            </span>
+            </div>
+            <div class="tablist" v-if="step===2">
+                <span v-for="item,key in columnDataList" :key="key"  :class="color2===key?'span active':'span'" @click="choItem2(item,key)">
+                <img src="./img/download.png" alt="" style="" />
+                {{item}}
             </span>
             </div>
         </el-dialog>
@@ -142,8 +152,15 @@
                 }],
                 tabNames:'', //表名
                 preTable:'', //表预览 表名
-                activeTabs:0,//初始关联表
-                columnName:''//字段名
+                activeTabs:'0',//初始关联表
+                columnName:'',//字段名
+                columnDataList:[],//关联其他的表
+                columnIndex:0,//点击表字段索引
+                color:'',
+                color2:'',
+                step:1,
+                realcolumn:'',
+                realtables:''
             }
 
         },
@@ -183,6 +200,9 @@
                     tablename:item.tableNames
                 },function(res){
                     let cho=[];
+                    res.list.map(function(item,index){
+                        if(!item.relationTables) item.relationTables='none';
+                    })
                     _this.dabeList=res.list;
                     //设置初始选中项
                     _this.dabeList.map(function(item,key){
@@ -212,6 +232,12 @@
             },
             saveDate(){
                 console.log(this.dabeList);
+                let _this = this;
+                AJAX.post("website/pack/updateDataById",{
+                    dabeList:JSON.stringify(this.dabeList),
+                },function(res){
+                        _this.dialogTableVisible = false;
+                })
             },
             deletePack(){
                 let _this = this;
@@ -248,11 +274,19 @@
                     id:_this.$route.query.id,
                     name:_this.tabNames
                 },function(res){
-                    console.log(res);
+                    //console.log(res);
                     _this.preTable=res.mapData;
                 })
             },
             modalColumn(row,index){
+                //console.log(row)
+                this.columnIndex=index;
+                this.realtables = row.relationTables==='none'?'':row.relationTables;
+                this.realcolumn = row.relationColumn;
+                if(row.correspondence){
+                    this.activeTabs = row.correspondence;
+                }
+
                 this.columnName=row.columnName;
                 this.dialogTableVisible2=true;
             },
@@ -260,21 +294,87 @@
                 this.activeTabs=num;
             },
             removeDabe(){
-                alert("移除")
+                this.realtables = '';
+                this.realcolumn = '';
+                this.dabeList[this.columnIndex].relationTables='none';
+                this.dabeList[this.columnIndex].relationColumn='';
             },
             //关联到其他表
             contactTable(){
-
+                let _this = this;
+                AJAX.get("website/pack/getDataTable",{
+                    mainId:this.$route.query.id,
+                    tablename:this.tabNames
+                },function(res){
+                    //console.log(res.list);
+                    _this.columnDataList = res.list;
+                })
+            },
+            //将数据保存store
+            addTabList(){
+                //将数据放入全局变量中
+                let data={
+                    name:this.form.name,
+                    id:this.$route.query.id,
+                    list:this.list
+                }
+                this.$store.commit('addChooseTableList',data);
             },
             //选择项
             choseVal(){
-                console.log(this.form.value);
+               // console.log(this.form.value);
                 switch (this.form.value){
+                    case '添加库/业务包' :{
+                        this.addTabList();
+                        this.$router.push({
+                            path:'/pack/listAdd/:id'
+                        });
+                        break;
+                    }
                     case 'SQL' :{
                         this.$router.push('/pack/packSQL');
                         break;
                     }
+                    case 'EXCELL' :{
+                        this.$router.push('/pack/packEXCELL');
+                        break;
+                    }
+                    case 'ETL' :{
+                        this.$router.push('/pack/packETL');
+                        break;
+                    }
                 }
+            },
+            choItem(item,key){
+                this.color=key;
+                let _this = this;
+                //console.log(item.tabName)
+                AJAX.get("website/pack/getTableColumn",{
+                    mainId:this.$route.query.id,
+                    tablename:this.tabNames,
+                    classname:item.tabName
+                },function(res){
+                    //console.log(res.list);
+                    _this.columnDataList = res.list;
+                    _this.realtables = item.tabName;
+                    _this.realcolumn = '';
+                    _this.step = 2;
+                })
+            },
+            choItem2(item,key){
+                this.color2=key;
+                this.realcolumn = item;
+                this.dabeList[this.columnIndex].relationTables=this.realtables;
+                this.dabeList[this.columnIndex].relationColumn=item;
+                this.dabeList[this.columnIndex].correspondence=this.activeTabs;
+                this.columnDataList = '';
+                this.init();
+            },
+            init(){
+                this.columnDataList = '';
+                this.step = 1;
+                this.color='';
+                this.color2=''
             }
         }
 
@@ -366,7 +466,7 @@
         color: #1f2d3d;
         font-weight: bold;
         z-index:100;
-        right:75px;
+        right:70px;
     }
     /* 第二个模态框样式 */
     .relate_con{
@@ -466,36 +566,5 @@
         color:#fff;
         border-radius:4px;
 
-    }
-    .tablist{
-        width:100%;
-        max-height:200px;
-        overflow-y:auto;
-        .span{
-            cursor: pointer;
-            border:1px solid #ddd;
-            margin-right:1.9%;
-            margin-top:5px;
-            display: inline-block;
-            width:10.1%;
-            padding-right:0.02rem;
-            height:25px;
-            line-height: 25px;
-            overflow-x: hidden;
-            text-overflow:ellipsis;
-            overflow-y: hidden;
-            white-space: nowrap;
-            &.active{
-                background:#65cea7;
-                color:#fff;
-            }
-            img{
-                width:16px;
-                height:16px;
-                vertical-align: middle ;
-                margin:0 4px;
-            }
-
-        }
     }
 </style>

@@ -20,13 +20,10 @@ export default class ajax {
             url: url,
         })
             .then(function (response) {
-                if(response.data.code==="1111"){
-                    callback(response.data)
-                }
                 if(response.data.code==="0000"){
-                    router.push('/login');
+                   return router.push('/login');
                 }
-
+                callback(response.data)
             })
             .then(function (error) {
                 if (error) {

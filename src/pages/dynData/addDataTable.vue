@@ -1,5 +1,5 @@
 <template>
-    <div class="page ExtTableImport"  ref="extTableImportContainer">
+    <div class="page AddDataTable"  ref="addDataTableContainer">
     <!--查询表单-->
         <div>
             <el-form :inline="true" v-model="seachForm" class="demo-form-inline">
@@ -7,15 +7,8 @@
                 <el-form-item label="表名：">
                     <el-input v-model="seachForm.tabName" placeholder="表名" ></el-input>
                 </el-form-item>
-                <el-form-item label="描述：">
-                    <el-input v-model="seachForm.comments" placeholder="描述" ></el-input>
-                </el-form-item>
-                <el-form-item label="数据源名称：">
-                    <el-input v-model="seachForm.dbsName"placeholder="数据源名称"  ></el-input>
-                </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="search">查询</el-button>
-                    <el-button type="primary" @click="importExtTable">导入</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -26,6 +19,16 @@
                     border
                     :max-height="height"
                     style="width: 100%">
+                <el-table-column
+                        type="index"
+                        width="50"
+                        label="序号">
+                </el-table-column>
+                <el-table-column
+                        type="selection"
+                        width="55"
+                        label="全选">
+                </el-table-column>
                 <el-table-column
                         prop="tabName"
                         label="表名"
@@ -46,7 +49,7 @@
                     <template scope="scope">
                         <el-button
                                 type="text"
-                                @click="handleDelete(scope.$index, scope.row)">删除
+                                @click="handleSeach(scope.$index, scope.row)">查看
                         </el-button>
                     </template>
                 </el-table-column>
@@ -68,26 +71,6 @@
             </el-col>
         </div>
 
-        <div>
-            <!--导入弹窗页-->
-            <el-dialog title="导入表添加"
-                       :visible.sync="importFormDialog"
-                       size="tiny">
-                <el-select v-model="importFormValue" filterable placeholder="请选择数据源" >
-                    <el-option
-                            v-for="item in tableList"
-                            :key="item.dbsName"
-                            :label="item.dbsName"
-                            :value="item.id">
-                    </el-option>
-                </el-select>
-                <div slot="footer" class="dialog-footer">
-                    <el-button @click="importFormDialog = false">返回</el-button>
-                    <el-button type="primary" @click="submitImportTable">导入</el-button>
-                </div>
-            </el-dialog>
-        </div>
-
     </div>
 </template>
 
@@ -105,17 +88,12 @@
                 msg:[],
                 seachForm:{
                     tabName:'',
-                    comments:'',
-                    dbsName:''
                 },
                 total: 0, //总页数
                 page: 1, //当前页数
                 pageSize:15,
                 pageSizeOptions:[15,20,25],
-                height:400,
-                importFormDialog:false,
-                importFormValue:'',
-                tableList:[]
+                height:400
             }
         },
         computed:{
@@ -127,9 +105,7 @@
             AJAX.post('website/dyn/dynImportTab/findAllList',{
                 pageSize:dat.pageSize,
                 pageNo:dat.page,
-                tabName:dat.seachForm.tabName,
-                comments:dat.seachForm.comments,
-                dbsName:dat.seachForm.dbsName
+                tabName:dat.seachForm.tabName
             },function(data){
                 dat.msg = data.data.data;
                 dat.total=data.data.count;
@@ -169,46 +145,15 @@
                 AJAX.post('website/dyn/dynImportTab/findAllList',{
                     pageSize:dat.pageSize,
                     pageNo:dat.page,
-                    tabName:dat.seachForm.tabName,
-                    comments:dat.seachForm.comments,
-                    dbsName:dat.seachForm.dbsName
+                    tabName:dat.seachForm.tabName
                 },function(data){
                     dat.msg = data.data.data;
                     console.log(data.data)
                 })
             },
-            //点击导入按钮，获取所有数据源
-            importExtTable(){
-                let dat =this;
-                AJAX.get('website/dyn/dynImportTab/getDataSource',{
-                },(res1)=>{
-                    console.log(res1.data);
-                    dat.tableList=res1.data;
-                }),
-                dat.importFormDialog=true
-            },
-            //获取指定数据源下的数据表
-            submitImportTable(){
-                let dat =this;
-                AJAX.get('website/dyn/dynImportTab/getDataTabList',{id:dat.importFormValue},(res)=>{
-                    if(res.message==='SUCCESS'){
-                        console.log(res.data);
-                        dat.importFormDialog=false;
-                        this.$router.push({
-                            path:'/dynData/DataImport/addDataTable',
-                            query:{
-                                id:dat.importFormValue
-                            }
-                        })
-                        this.importFormValue='';
-                    }
-                    if(res.message!=='SUCCESS'){
-                        this.$message.error(res.message);
-                    }
-                })
-            },
+
             //删除
-            handleDelete(index,scope){
+            handleSeach(index,scope){
                 let _this = this;
                 let dat = Object.assign(scope,{
                     pageSize:_this.pageSize,
@@ -242,7 +187,7 @@
 </script>
 
 <style lang="scss">
-    .ExtTableImport{
+    .AddDataTable{
         display: flex;
         flex-flow: column;
         position:relative;
@@ -250,7 +195,7 @@
             width:100%;
             height:50px;
             line-height: 50px;
-            .ExtTableImport{
+            .AddDataTable{
                 position: relative;
                 top:6px;
                 display: flex;

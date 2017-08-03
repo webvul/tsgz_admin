@@ -17,8 +17,10 @@
 .page{
     font-size:12px;
     width:101.5%;
+    min-width:1000px;
     flex: 1;
-    overflow: hidden;
+    overflow-y: hidden;
+    overflow-x: auto;
 }
 a{
     text-decoration: none;
@@ -39,4 +41,7 @@ table{
 自定义表格*/
 .mymodel .el-input__inner {
     border:none
+}
+.el-table .cell{
+    word-break: keep-all;
 }

@@ -82,6 +82,18 @@ let router = [
                 hidden:true
             },
             {
+                path: 'packEXCELL',
+                name: 'Excell数据集配置',
+                component: components.packEXCELL,
+                hidden:true
+            },
+            {
+                path: 'packETL',
+                name: 'ETL数据集配置',
+                component: components.packETL,
+                hidden:true
+            },
+            {
                 path: 'listAdd/:id',
                 name: '业务包添加',
                 leaf: true,//只有一个节点
@@ -183,6 +195,12 @@ let router = [
                         name: '外部表结构导入',
                         component: components.extTableImport,
                         leaf: true,//只有一个节点
+                    },{
+                        path: 'addDataTable',
+                        name: '导入新外部表结构',
+                        component: components.addDataTable,
+                        leaf: true,//只有一个节点
+                        hidden:true
                     },{
                         path: 'dataImportTimer',
                         name: '数据导入定时任务',

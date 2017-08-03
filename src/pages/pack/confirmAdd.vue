@@ -38,7 +38,8 @@
                 group_name:'',
                 choList:[],
                 groupCode:'',  //是否已经分组
-                status:0    //不重复点击
+                status:0,    //不重复点击
+                groupId:0
             }
         },
         computed:{
@@ -46,7 +47,10 @@
         },
         created(){
             let tableDataList = this.$route.query.tableDataList;
-            console.log(tableDataList)
+            this.group_name = this.$route.query.name;
+            this.groupId = this.$route.query.id;
+           // console.log(this.group_name)
+            //console.log(this.groupId)
             tableDataList.map((item,key)=>{
                 this.choList.push(item.split("-")[0])
             })
@@ -54,9 +58,6 @@
         },
         mounted(){
 
-        },
-        watch:{
-            'value':'abc'
         },
         methods:{
             asdf(){
@@ -68,27 +69,45 @@
                 }
                 this.status = 1;
                 let name = this.group_name;
-                console.log(name)
+               /* console.log(name)
                 console.log(this.$route.query.tableDataList)
-                console.log(this.$route.query.groupCode)
+                console.log(this.$route.query.groupCode)*/
                 if(this.$route.query.groupCode!=null){
                     this.groupCode = this.$route.query.groupCode;
                 }
                 let tabArr = this.$route.query.tableDataList;
-                if(name.trim()!=""){
-                 AJAX.post('website/packadd/addTable',{name:name,tabArr:tabArr,groupCode:this.groupCode},(res)=>{
-                        console.log(res)
+                //console.log(tabArr)
+               // console.log(this.groupId)
+                let arr = "";
+                for(let x=0;x<tabArr.length;x++){
+                    if(arr==""){
+                        arr = tabArr[x];
+                    }else{
+                        arr = arr+","+tabArr[x];
+                    }
+                }
+                console.log(arr)
+                if(this.groupId!=null && this.groupId!='' && this.groupId!=0){
+                    AJAX.post('website/packadd/editBase',{tabArr:arr,id:this.groupId},(res)=>{
+                        //console.log(res)
                         this.$router.push('/pack/groupList')
                     })
-                 this.status = 1;
+                    this.status = 1;
                 }else{
-                    this.status = 0;
-                    this.$message.error('请填写业务表名');
+                    if(name.trim()!=""){
+                        AJAX.post('website/packadd/addTable',{name:name,tabArr:arr,groupCode:this.groupCode},(res)=>{
+                           // console.log(res)
+                            this.$router.push('/pack/groupList')
+                        })
+                        this.status = 1;
+                    }else{
+                        this.status = 0;
+                        this.$message.error('请填写业务表名');
+                    }
                 }
-
             },
             abc(){
-                console.log("sss")
+               // console.log("sss")
             }
         },
 

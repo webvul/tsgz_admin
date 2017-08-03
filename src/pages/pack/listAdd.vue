@@ -23,7 +23,7 @@
                 </div>
                 <div class="dabeList">
                     <span v-for="item,key in alltablelist" :key="key"
-                          v-if="key>((page-1)*60)&&key<(page*60)"
+                          v-if="key>=((page-1)*60)&&key<(page*60)"
                           :title="item.tabName" :class="choList.indexOf(item.tabName)===-1?'span':'span active'" @click="choDabe(item)">
                         <img src="./img/download.png" alt="" style="" />
                         {{item.tabName}}
@@ -70,20 +70,35 @@
                 dbsNameList:[],
                 busPackageNameList:[],
                 alltablelist:[],
+                chooseTableList:{}
 
             }
         },
+        watch:{
+            'chooseTableList':'chotablist'
+        },
         created(){
+            this.chooseTableList=this.$store.state.chooseTableList;
+            //清空全局数据
+            this.$store.commit("removeChooseTableList");
+            console.log(this.chooseTableList);
+            //this.choList = this.chooseTableList.list
             this.ajax();
         },
         computed: mapGetters(['loginMsg']),
         mounted() {
-            console.log(this.$route.params.id);
+
         },
         methods:{
+            chotablist(){
+                this.chooseTableList.list.map((item)=>{
+                    this.choList.push(item.tableNames);
+                    this.tableDataList.push(item.tableNames+"-"+0);
+                })
+            },
             choDabe(ite){
                 let index = this.choList.indexOf(ite.tabName);
-                let index2 = this.choList.indexOf(ite.tabName+"-"+this.defaultActive);
+                let index2 = this.tableDataList.indexOf(ite.tabName+"-"+this.defaultActive);
               if(index===-1){
                   this.choList.push(ite.tabName);
                   this.tableDataList.push(ite.tabName+"-"+this.defaultActive);
@@ -99,18 +114,18 @@
               this.page = page;
             },
             chooseActive(key,item){
+                let _this = this;
                 this.defaultActive = key;
                 //console.log(item.dbsName)
                 AJAX.post('website/packadd/getTableByConn',{dbsName:item.dbsName},(res)=>{
-                    //console.log(res.data)
                     this.page=1;
                     this.alltablelist = res.data.list;
                 })
 
             },
             ajax(){
+                let _this =this;
                 AJAX.post('website/packadd/addGroup',{},(res)=>{
-                    //console.log(res.data)
                     this.dbsNameList = res.data.dbsNameList;
                     this.busPackageNameList = res.data.list1;
                     this.alltablelist = res.data.list;
@@ -133,6 +148,8 @@
                         query:{
                             tableDataList:this.tableDataList,
                             groupCode:this.$route.params.id,
+                            name:this.chooseTableList.name,
+                            id:this.chooseTableList.id,
                         }
                     })
                 }
@@ -191,6 +208,7 @@
                     height:25px;
                     line-height: 25px;
                     overflow-x: hidden;
+                    overflow-y: hidden;
                     text-overflow:ellipsis;
                     white-space: nowrap;
                     &.active{
