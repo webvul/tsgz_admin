@@ -284,6 +284,7 @@
                 this.step=1;
                 this.color='';
                 this.columnIndex=index;
+                this.activeTabs='0';
                 this.realtables = row.relationTables==='none'?'':row.relationTables;
                 this.realcolumn = row.relationColumn;
                 if(row.correspondence){
@@ -344,11 +345,22 @@
                         break;
                     }
                     case 'EXCELL' :{
-                        this.$router.push('/pack/packEXCELL');
+                        this.$router.push({path:'/pack/packEXCELL/',
+                            query:{
+                                id:this.$route.query.id,
+                                name:this.form.name
+                            }
+                        });
                         break;
                     }
                     case 'ETL' :{
-                        this.$router.push('/pack/packETL');
+                        this.$router.push({path:'/pack/packETL/',
+                            query:{
+                                id:this.$route.query.id,
+                                name:this.form.name
+                            }
+                        });
+                        //this.$router.push('/pack/packETL');
                         break;
                     }
                 }

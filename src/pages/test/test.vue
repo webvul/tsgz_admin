@@ -1,132 +1,57 @@
 <template>
-    <div class="page goodsPage">
-        <div class="tableTree">
-            <el-input
-                    placeholder="查询"
-                    v-model="filterText"
-                    size="small"
-            >
-            </el-input>
-
-            <el-tree
-                    :highlight-current="true"
-                    :class="'filter-tree'"
-                    :data="gccList"
-                    :props="defaultProps"
-                    default-expand-all
-                    style="font-size:12px;"
-                    node-key="name"
-                    current-node-key="name"
-                    :filter-node-method="filterNode"
-                    @node-click="choNodeKey"
-                    ref="goodsTableTree">
-            </el-tree>
-        </div>
-        <div class="content" @click="getCheckNode">2</div>
-    </div>
+    <el-transfer
+            v-model="value3"
+            filterable
+            :left-default-checked="[2, 3]"
+            :right-default-checked="[1]"
+            :render-content="renderFunc"
+            :titles="['Source', 'Target']"
+            :button-texts="['到左边', '到右边']"
+            :footer-format="{
+      noChecked: '${total}',
+      hasChecked: '${checked}/${total}'
+    }"
+            @change="handleChange"
+            :data="data">
+        <el-button class="transfer-footer" slot="left-footer" size="small">操作</el-button>
+        <el-button class="transfer-footer" slot="right-footer" size="small">操作</el-button>
+    </el-transfer>
 </template>
 
+<style>
+    .transfer-footer {
+        margin-left: 20px;
+        padding: 6px 5px;
+    }
+</style>
+
 <script>
-    import AJAX from './../../assets/js/ajax';
-    import {tranlateDataTree} from '../../utils'
     export default {
         data() {
+            const generateData = _ => {
+                const data = [];
+                for (let i = 1; i <= 15; i++) {
+                    data.push({
+                        key: i,
+                        label: `备选项 ${ i }`,
+                        disabled: i % 4 === 0
+                    });
+                }
+                return data;
+            };
             return {
-                gccList:[],
-                height:0,
-                defaultProps: {
-                    children: 'child',
-                    label: 'name'
-                },
-                filterText:'',
-                detaillData:{}
+                data: generateData(),
+                value3: [1],
+                renderFunc(h, option) {
+                    return <span>{ option.key } - { option.label }</span>;
+                }
+            };
+        },
 
+        methods: {
+            handleChange(value, direction, movedKeys) {
+                console.log(value, direction, movedKeys);
             }
-        },
-        watch: {
-            filterText(val) {
-                this.$refs.goodsTableTree.filter(val);
-            }
-        },
-        computed:{
-
-        },
-        created(){
-            let _this = this;
-            AJAX.get('website/gcc/gccContror/findGccList',{},function(data){
-                _this.gccList =tranlateDataTree(data);
-                _this.detaillData=_this.gccList[0]
-            })
-        },
-        mounted(){
-            let _this =this;
-            this.height=$(window).height()-150;
-            $(window).resize(function(){
-                _this.height=$(window).height()-150;
-            });
-            //设置首行高亮
-            window.setTimeout(function(){
-                $('.filter-tree .el-tree-node').eq(0).addClass("is-current")
-            },100)
-
-
-        },
-        methods:{
-            filterNode(value, data) {
-                if (!value) return true;
-                return data.name.indexOf(value) !== -1;
-            },
-            choNodeKey(obj,node,self){
-                $('.filter-tree .el-tree-node').eq(0).removeClass("is-current");
-                console.log(self);
-            },
-            getCheckNode(){
-                console.log(this.$refs.goodsTableTree.getCheckedNodes());
-            }
-
-        },
-
+        }
     };
 </script>
-
-<style lang="scss">
-    .goodsPage{
-        display: flex;
-        padding-bottom:44px;
-        .tableTree{
-            height:100%;
-            width: 200px;
-            overflow-x: auto;
-            position: relative;
-            z-index: 1;
-
-            .el-input{
-                width:175px;
-                margin:10px 5px;
-
-            }
-            .el-tree{
-                border:none;
-                .el-tree-node__label{
-                    font-size:12px;
-                }
-            }
-        }
-        .content{
-            position: relative;
-            margin-left:-15px;
-            height:100%;
-            z-index:2;
-            background:#fff;
-            flex:4;
-            border-left:1px solid #ddd;
-        }
-        .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
-            background-color: #ddd !important;
-        }
-        .goodsPage .el-tree .el-tree-node > .el-tree-node__content {
-            background-color: #ddd !important;
-        }
-    }
-
-</style>

@@ -1,5 +1,5 @@
 <template>
-    <div class="page">
+    <div class="page pageExcell">
         <el-row :gutter="20">
             <el-col :span="14" class="col_span">
                 <div class="left_con">
@@ -8,8 +8,8 @@
                         <div class="header">
                             <p>上传信息</p>
                             <div class="icon_button">
-                                <el-button type="primary" size="small" style="margin-right:5px;">上传数据</el-button>
-                                <i class="el-icon-warning" style="font-size:20px;color:#22bf98" @click="dialogTableVisible=true"></i>
+                                <el-button type="primary" size="small" style="margin-right:5px;" @click="openWindow">上传数据</el-button>
+                                <i class="el-icon-warning" style="font-size:20px;color:#22bf98" @click="openWindowKnow"></i>
                             </div>
                         </div>
                         <div id="preData"></div>
@@ -32,10 +32,20 @@
             <el-button type="primary">保存</el-button>
         </div>
         <!--弹窗-->
-        <el-dialog  :visible.sync="dialogTableVisible" size="tiny" :show-close="false" class="mymodel">
+        <el-dialog  :visible.sync="dialogTableVisible"   title="导入数据" class="dialogModal">
+            <div class="submitButton">
+                <input type="file" name="file" value="选择jar包"/>
+                <el-button type="primary" size="small">导入</el-button>
+            </div>
+            <div class="dialogFooter">
+                <span>导入文件不能超过5M，仅允许导入xls、csv、xlsx格式文件</span>
+                <el-button type="default" size="small" @click="dialogTableVisible=false">关闭</el-button>
+            </div>
+        </el-dialog>
+        <!--注意事项-->
+        <el-dialog  :visible.sync="dialogTableVisible1"  :show-close="false" class="mymodel">
             <div class="dialogHeader">
-                <p class="title">表数据设置</p>
-                <el-button type="primary" size="small" @click="preWatch">表预览</el-button>
+                <p class="title">注意事项</p>
             </div>
             <!--定位用-->
             <div class="pos">参与分析</div>
@@ -56,7 +66,8 @@
                     value:''
                 },
                 excellData:'',
-                dialogTableVisible:false
+                dialogTableVisible:false,
+                dialogTableVisible1:false
             }
         },
         computed:{
@@ -66,15 +77,20 @@
 
         },
         methods:{
-
+            openWindow(){
+                this.dialogTableVisible = true;
+            },
+            openWindowKnow(){
+                this.dialogTableVisible1 = true;
+            }
         }
 
 
     };
 </script>
 
-<style lang="scss" scoped>
-    .page{
+<style lang="scss">
+    .pageExcell{
         position:relative;
         .el-row{
             height:100%;
@@ -134,36 +150,59 @@
                 }
             }
         }
-
-    }
-    .header{
-        p{
-            font-size:14px;
-            color:#999;
-        }
-        text-align:center;
-        height:50px;
-        line-height:50px;
-        padding:0 6px;
-        display: flex;
-        justify-content: space-between;
-        .icon_button{
-            cursor: pointer;
+        .header{
+            p{
+                font-size:14px;
+                color:#999;
+            }
+            text-align:center;
+            height:50px;
+            line-height:50px;
+            padding:0 6px;
             display: flex;
-            align-items: center;
-            padding-right:5px;
+            justify-content: space-between;
+            .icon_button{
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                padding-right:5px;
+            }
         }
-    }
-    h5{
-        height:50px;
-        line-height:50px;
-        padding:0 6px;
-        border-bottom:1px solid #eee;
-        color: #317eac;
-        font-weight: bold;
-        margin-top:0;
-        margin-bottom:0;
-        background:#eee;
+        h5{
+            height:50px;
+            line-height:50px;
+            padding:0 6px;
+            border-bottom:1px solid #eee;
+            color: #317eac;
+            font-weight: bold;
+            margin-top:0;
+            margin-bottom:0;
+            background:#eee;
+        }
+        .dialogModal .el-dialog{
+            .el-dialog__body{
+                padding:20px 0 0!important;
+            }
+            .submitButton{
+                input{
+                    padding-left:180px;
+                }
+                height:100px;
+                text-align: center;
+                .el-button{
+                    margin-top:20px;
+                }
+            }
+        }
+        .dialogFooter{
+            height:40px;
+            background-color: #eee;
+            white-space: nowrap;
+            align-items: center;
+            display: flex;
+            justify-content: space-between;
+            padding:0 10px;
+        }
     }
 
 

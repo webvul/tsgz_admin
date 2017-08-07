@@ -111,7 +111,7 @@
                 </div>
                 <div class="line1"></div>
                 <div class="line2"></div>
-                <div class="close" @click="">&times;</div>
+                <div class="close" @click="removeDabe">&times;</div>
             </div>
             <div class="relateDabeButton">
                 <el-button type="primary" @click="contactTable">+ 关联到其他表</el-button>
@@ -209,7 +209,7 @@
             saveDate(){
                 console.log(this.dabeList)
                 console.log(this.form.value)
-                console.log(this.$route.params.id)
+                console.log(this.$route.query.id)
                 console.log(this.sqlname)
                 let _this = this;
                 if(_this.sqlname.trim()==''){
@@ -235,6 +235,7 @@
                 this.step=1;
                 this.color='';
                 this.columnIndex=index;
+                this.activeTabs='0';
                 this.realtables = row.relationTables==='none'?'':row.relationTables;
                 this.realcolumn = row.relationColumn;
                 if(row.correspondence){
@@ -287,6 +288,12 @@
                 this.step = 1;
                 this.color='';
                 this.color2=''
+            },
+            removeDabe(){
+                this.realtables = '';
+                this.realcolumn = '';
+                this.dabeList[this.columnIndex].relationTables='none';
+                this.dabeList[this.columnIndex].relationColumn='';
             },
             preview(){
                 /*console.log(this.form.value);

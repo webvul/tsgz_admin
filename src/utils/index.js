@@ -51,3 +51,35 @@ export function tranlateDataTree(old_arr){
     }
     return temp_arr;
 }
+//将对象结构转换为树形结构
+
+export function tranlateDataTree2(old_arr){
+    console.log('zheli'+old_arr);
+    let temp_arr=[];
+    old_arr.map((item,key)=>{
+        if(item.parentHsCode==-1){
+            item.rank=1;
+            temp_arr.push(item);
+        }
+    });
+    temp_arr.map((item)=>{
+        translate(old_arr,item)
+    })
+    function translate(old_arr,temp_i){
+        temp_i.children=[];
+        let temp_rank=temp_i.rank;
+        old_arr.map((item,key)=>{
+            if(item.parentHsCode== temp_i.hsCode){
+                item.rank=temp_rank+1;
+                temp_i.children.push(item)
+            }
+        })
+        if(!temp_i.children.length){return true}
+        else{
+            temp_i.children.map((item_arr)=>{
+                translate(old_arr,item_arr)
+            })
+        }
+    }
+    return temp_arr;
+}

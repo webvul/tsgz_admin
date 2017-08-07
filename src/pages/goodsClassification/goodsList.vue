@@ -1,5 +1,5 @@
 <template>
-    <div class="page goodsPage">
+    <div class="page goodsTreePage">
             <div class="tableTree">
                 <el-input
                         placeholder="查询"
@@ -51,7 +51,7 @@
                             </el-form-item>
                             <el-form-item label="" :label-width="formLabelWidth">
                                 <el-button size="small" icon="plus" type="primary" @click="newAdd" v-text="">新增</el-button>
-                                <el-button size="small" icon="plus" type="primary" @click="onSubmit"  v-text="">保存</el-button>
+                                <el-button size="small" icon="plus" type="primary" @click="onSubmit" :disabled="form.name?false:true" v-text="">保存</el-button>
                                 <el-button size="small" icon="check" type="primary" @click="handleGoodsClass" v-text="" v-show="form.id && form.id!=null">添加商品代码</el-button>
                                 <el-button size="small" type="danger" @click="deleteSelected" icon="delete" v-show="form.id && form.id!=null">删除
                                 </el-button>
@@ -75,9 +75,40 @@
                   <el-button type="primary" @click="selectIconDialog = false">确 定</el-button>
                 </span>
             </el-dialog>
-            <el-dialog title="配置商品代码" :visible.sync="dialogTableVisible" >
-                <div>这里选择商品代码</div>
-
+            <el-dialog title="配置商品代码" :visible.sync="dialogTableVisible" size="large" >
+                <div class="diaglogBody">
+                    <div class="leftGoodsContainer">
+                        <el-tree
+                                :data="data2"
+                                show-checkbox
+                                default-expand-all
+                                node-key="id"
+                                ref="tree"
+                                highlight-current
+                                :props="defaultProps2">
+                        </el-tree>
+                    </div>
+                    <div class="rightGoodsContainer">
+                        <el-tree
+                                :data="data2"
+                                show-checkbox
+                                default-expand-all
+                                node-key="id"
+                                ref="tree"
+                                highlight-current
+                                :props="defaultProps2">
+                        </el-tree>
+                    </div>
+                </div>
+                <div class="diaglogFooter">
+                    <span>选择左边的商品，加入右边列表。</span>
+                    <div>
+                        <el-button type="default" size="small">确认选中</el-button>
+                        <el-button type="default" size="small">清除已选</el-button>
+                        <el-button type="default" size="small">保存择</el-button>
+                        <el-button type="default" size="small">关闭</el-button>
+                    </div>
+                </div>
             </el-dialog>
     </div>
 </template>
@@ -86,8 +117,11 @@ import selectTree from "../../components/tableTree/selectTree.vue"
 import treeter from "../../components/tableTree/treeter"
 import merge from 'element-ui/src/utils/merge';
 import AJAX from './../../assets/js/ajax';
-import {tranlateDataTree} from '../../utils'
+import {tranlateDataTree} from '../../utils';
+import {tranlateDataTree2} from '../../utils'
 export default {
+
+
         mixins: [treeter],
         components: {
             'el-select-tree': selectTree
@@ -118,6 +152,47 @@ export default {
                     desc: ''
                 },
                 dialogTableVisible:false //获取添加商品代码的弹窗
+                ,
+                leftContainerData:[],
+                rightContainerData:[],
+                data2: [{
+                    id: 1,
+                    label: '一级 1',
+                    children: [{
+                        id: 4,
+                        label: '二级 1-1',
+                        children: [{
+                            id: 9,
+                            label: '三级 1-1-1'
+                        }, {
+                            id: 10,
+                            label: '三级 1-1-2'
+                        }]
+                    }]
+                }, {
+                    id: 2,
+                    label: '一级 2',
+                    children: [{
+                        id: 5,
+                        label: '二级 2-1'
+                    }, {
+                        id: 6,
+                        label: '二级 2-2'
+                    }]
+                }, {
+                    id: 3,
+                    label: '一级 3',
+                    children: [{
+                        id: 7,
+                        label: '二级 3-1'
+                    }, {
+                        id: 8,
+                        label: '二级 3-2'
+                    }]
+                }],defaultProps2: {
+                    children: 'children',
+                    label: 'label'
+                }
             }
         },
         mounted(){
@@ -158,7 +233,9 @@ export default {
                     isShow: '',
                     delivery: false,
                     parentId: null,
-                    desc: ''
+                    desc: '',
+                    parentHsCode:null,
+                    hsCode:null
                 };
             },
             deleteSelected(){
@@ -171,36 +248,15 @@ export default {
                     _this.newAdd();
                 });
             },
-            /*batchDelete(){
-                var checkKeys = this.$refs.menuTree.getCheckedKeys();
-                if (checkKeys == null || checkKeys.length <= 0) {
-                    this.$message.warning('请选择要删除的资源');
-                    return;
-                }
-                this.$confirm('确定删除?', '提示', {
-                    confirmButtonText: '确定',
-                    cancelButtonText: '取消',
-                    type: 'warning'
-                }).then(() => {
-                    this.$http.get(api.SYS_MENU_DELETE + "?menuIds=" + checkKeys.join(','))
-                        .then(res => {
-                            this.$message('操作成功');
-                            this.load();
-                        }).catch(e => {
-                        this.$message('操作成功');
-                        console.log(checkKeys);
-                        this.batchDeleteFromTree(this.menuTree, checkKeys);
-                    })
-                });
-            },*/
             handleNodeClick(data){
                 this.form = merge({}, data);
             },
             handleGoodsClass(){
+                let _this = this;
                this.dialogTableVisible=true;
                let menu_id = this.form.id;
                AJAX.get("website/gcc/gccViewGoodsContror/findAllList",{menuid:menu_id},function(res){
-                   console.log(res);
+
                })
             },
             onSubmit(){
@@ -213,44 +269,19 @@ export default {
                         _this.form.id = res.data.id;
                         _this.appendTreeNode(_this.gccList, _this.form);
                     });
-                    /*this.$http.post(api.SYS_MENU_ADD, this.form)
-                        .then(res => {
-                            this.$message('操作成功');
-                            this.form.id = res.data.id;
-                            this.appendTreeNode(this.menuTree, res.data);
-                        }).catch(e => {
-                        this.maxId += 1;
-                        this.$message('操作成功');
-                        this.form.id = this.maxId;
-                        var  ddd = {
-                            id: this.form.id,
-                            name: this.form.name,
-                            sort: this.form.sort,
-                            icon:this.form.icon,
-                            href:this.form.href,
-                            isShow: this.form.isShow,
-                            delivery: this.form.delivery,
-                            parentId: this.form.parentId,
-                            desc: this.form.desc,
-                            children:[]
-                        }
-                        console.log(ddd)
-                        this.appendTreeNode(this.menuTree, ddd);
-                        this.menuTree.push({});
-                        this.menuTree.pop();
-                    })*/
                 } else {
                     AJAX.post("website/gcc/gccContror/addeditMeun",{
                         params:JSON.stringify(_this.form)
                     },function(res){
                         _this.$message('操作成功');
-                        _this.updateTreeNode(_this.gccList, merge({},this.form));
+                        _this.updateTreeNode(_this.gccList, merge({},_this.form));
                     });
                 }
             },
             load(){
                 let _this = this;
                 AJAX.get('website/gcc/gccContror/findGccList',{},function(data){
+                    console.log(data);
                     _this.gccList =tranlateDataTree(data);
                     _this.form = merge({}, _this.gccList[0]);
                 })
@@ -263,75 +294,105 @@ export default {
 </script>
 
 <style  lang="scss">
-    .select-tree .icons-wrapper{
-        display: block;
-    }
-    .select-tree .is-empty i{
-        width: 30px;
-        height: 30px;
-        line-height: 30px;
-        text-align: center;
-        display: inline-block;
-        cursor: pointer;
-    }
-    .select-tree .is-empty i:hover{
-        background-color: #0d6aad;
-        color: #ffffff;
-    }
-    .goodsPage{
-        display: flex;
-        padding-bottom:44px;
-    .tableTree{
-        height:100%;
-        width: 200px;
-        overflow-x: auto;
-        position: relative;
-        z-index: 1;
-
-    .el-input{
-        width:175px;
-        margin:10px 5px;
-
-    }
-    .el-tree{
-        border:none;
-    .el-tree-node__label{
-        font-size:12px;
-    }
-    }
-    }
-    .content{
-        position: relative;
-        margin-left:-15px;
-        height:100%;
-        z-index:2;
-        background:#fff;
-        flex:4;
-        border-left:1px solid #ddd;
-        header{
-            height:40px;
+    .goodsTreePage{
             display: flex;
-            padding-left:10px;
-            align-items: center;
-            border-bottom:1px solid #ddd;
-            .el-button{
-                height:30px;
+            padding-bottom:44px;
+            .tableTree{
+                height:100%;
+                width: 200px;
+                overflow-x: auto;
+                position: relative;
+                z-index: 1;
+
+                .el-input{
+                    width:175px;
+                    margin:10px 5px;
+
+                }
+                .el-tree{
+                    border:none;
+                    .el-tree-node__label{
+                        font-size:12px;
+                    }
+                }
+            }
+            .content{
+                position: relative;
+                margin-left:-15px;
+                height:100%;
+                z-index:2;
+                background:#fff;
+                flex:4;
+                border-left:1px solid #ddd;
+                header{
+                    height:40px;
+                    display: flex;
+                    padding-left:10px;
+                    align-items: center;
+                    border-bottom:1px solid #ddd;
+                    .el-button{
+                        height:30px;
+                    }
+                }
+                .checkbox, .radio{
+                    display: inline-block;
+                    /*position:relative;
+                    top:-10px;*/
+                }
+                .el-form-item__content{
+                    line-height: inherit;
+                }
+            }
+        /*配置商品代码弹窗样式*/
+        .el-tree{
+            border:none;
+        }
+        .el-dialog__body{
+            padding:10px;
+        }
+        .diaglogBody{
+            border: 1px solid #d1dbe5;
+            display: flex;
+            height:350px;
+            overflow-y: auto;
+            .leftGoodsContainer{
+                flex:1;
+                overflow-x: auto;
+                width:50%;
+            }
+            .rightGoodsContainer{
+                flex:1;
+                overflow-x:auto;
+                width:50%;
+
             }
         }
-        .checkbox, .radio{
+        .diaglogFooter{
+            display: flex;
+            padding-top:10px;
+            justify-content: space-between;
+       }
+        /*配置商品代码弹窗样式结束*/
+            .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
+                background-color: #ddd !important;
+            }
+            .goodsPage .el-tree .el-tree-node > .el-tree-node__content {
+                background-color: #ddd !important;
+            }
+        .select-tree .icons-wrapper{
+            display: block;
+        }
+        .select-tree .is-empty i{
+            width: 30px;
+            height: 30px;
+            line-height: 30px;
+            text-align: center;
             display: inline-block;
-            /*position:relative;
-            top:-10px;*/
+            cursor: pointer;
         }
-        .el-form-item__content{
-            line-height: inherit;
+        .select-tree .is-empty i:hover{
+            background-color: #0d6aad;
+            color: #ffffff;
         }
-    }
-    .el-tree--highlight-current .el-tree-node.is-current > .el-tree-node__content {
-        background-color: #ddd !important;
-    }
-    .goodsPage .el-tree .el-tree-node > .el-tree-node__content {
-        background-color: #ddd !important;
-    }
     }
 </style>
