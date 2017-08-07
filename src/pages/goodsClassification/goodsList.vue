@@ -75,38 +75,24 @@
                   <el-button type="primary" @click="selectIconDialog = false">确 定</el-button>
                 </span>
             </el-dialog>
-            <el-dialog title="配置商品代码" :visible.sync="dialogTableVisible" size="large" >
+
+            <el-dialog title="配置商品代码" :visible.sync="dialogTableVisible"  >
+                <loadding v-if="loading" />
                 <div class="diaglogBody">
-                    <div class="leftGoodsContainer">
-                        <el-tree
-                                :data="data2"
-                                show-checkbox
-                                default-expand-all
-                                node-key="id"
-                                ref="tree"
-                                highlight-current
-                                :props="defaultProps2">
-                        </el-tree>
+                    <div class="leftGoodsContainer ztree" id="goodsTree">
+
                     </div>
-                    <div class="rightGoodsContainer">
-                        <el-tree
-                                :data="data2"
-                                show-checkbox
-                                default-expand-all
-                                node-key="id"
-                                ref="tree"
-                                highlight-current
-                                :props="defaultProps2">
-                        </el-tree>
+                    <div class="rightGoodsContainer ztree" id="selectedTree">
+
                     </div>
                 </div>
                 <div class="diaglogFooter">
                     <span>选择左边的商品，加入右边列表。</span>
                     <div>
-                        <el-button type="default" size="small">确认选中</el-button>
-                        <el-button type="default" size="small">清除已选</el-button>
-                        <el-button type="default" size="small">保存择</el-button>
-                        <el-button type="default" size="small">关闭</el-button>
+                        <el-button type="default" size="small" @click="moveTreeNode">确认选中</el-button>
+                        <el-button type="default" size="small" @click="removzTree">清除已选</el-button>
+                        <el-button type="default" size="small" @click="save">保存</el-button>
+                        <el-button type="default" size="small" @click="dialogTableVisible=false">关闭</el-button>
                     </div>
                 </div>
             </el-dialog>
@@ -117,17 +103,18 @@ import selectTree from "../../components/tableTree/selectTree.vue"
 import treeter from "../../components/tableTree/treeter"
 import merge from 'element-ui/src/utils/merge';
 import AJAX from './../../assets/js/ajax';
+import loadding from './../../components/loadding/loadding.vue'
 import {tranlateDataTree} from '../../utils';
-import {tranlateDataTree2} from '../../utils'
+import {moveTreeNode,removzTree} from '../../utils/configZtree'
 export default {
-
-
         mixins: [treeter],
         components: {
-            'el-select-tree': selectTree
+            'el-select-tree': selectTree,
+            'loadding':loadding
         },
         data(){
             return {
+                loading:false,//加载动画
                 gccList:[],
                 height:0,
                 filterText:'',
@@ -155,43 +142,13 @@ export default {
                 ,
                 leftContainerData:[],
                 rightContainerData:[],
-                data2: [{
-                    id: 1,
-                    label: '一级 1',
-                    children: [{
-                        id: 4,
-                        label: '二级 1-1',
-                        children: [{
-                            id: 9,
-                            label: '三级 1-1-1'
-                        }, {
-                            id: 10,
-                            label: '三级 1-1-2'
-                        }]
-                    }]
-                }, {
-                    id: 2,
-                    label: '一级 2',
-                    children: [{
-                        id: 5,
-                        label: '二级 2-1'
-                    }, {
-                        id: 6,
-                        label: '二级 2-2'
-                    }]
-                }, {
-                    id: 3,
-                    label: '一级 3',
-                    children: [{
-                        id: 7,
-                        label: '二级 3-1'
-                    }, {
-                        id: 8,
-                        label: '二级 3-2'
-                    }]
-                }],defaultProps2: {
-                    children: 'children',
-                    label: 'label'
+                goodsTree:'',
+                selectedTree:'',
+                setting: {
+                    edit: {enable: true,showRemoveBtn: false,showRenameBtn: false},
+                    view: {selectedMulti:false,nameIsHTML:true,showTitle:false,dblClickExpand:false},
+                    data: {simpleData: {enable: true}},
+                    check: { enable:true, chkboxType:{"Y":"ps","N":"ps"}}
                 }
             }
         },
@@ -251,13 +208,37 @@ export default {
             handleNodeClick(data){
                 this.form = merge({}, data);
             },
+            init(){
+                this.leftContainerData=[];
+                this.rightContainerData=[];
+            },
             handleGoodsClass(){
                 let _this = this;
                this.dialogTableVisible=true;
+               _this.loading=true;
                let menu_id = this.form.id;
                AJAX.get("website/gcc/gccViewGoodsContror/findAllList",{menuid:menu_id},function(res){
+                    _this.loading=false;
+                    _this.init();
+                   res.goodslist.map(function(item,key){
+                        _this.leftContainerData.push({
+                            id:item.hsCode,
+                            pId:item.parentHsCode,
+                            name:`${item.hsCname}(${item.hsCode})`
+                        })
+                   });
+                   res.goodslistbyid.map(function(item,key){
+                       _this.rightContainerData.push({
+                           id:item.hsCode,
+                           pId:item.parentHsCode,
+                           name:`${item.hsCname}(${item.hsCode})`
+                       })
+                   });
 
-               })
+                       _this.goodsTree = $.fn.zTree.init($("#goodsTree"), _this.setting,  _this.leftContainerData);
+                       _this.selectedTree = $.fn.zTree.init($("#selectedTree"), _this.setting,_this.rightContainerData);
+                       _this.selectedTree.expandAll(true);
+                   })
             },
             onSubmit(){
                 let _this = this;
@@ -285,6 +266,26 @@ export default {
                     _this.gccList =tranlateDataTree(data);
                     _this.form = merge({}, _this.gccList[0]);
                 })
+            },
+//            树的操作
+            moveTreeNode(){
+                let zTree1=this.goodsTree;
+                let zTree2=this.selectedTree;
+                moveTreeNode(zTree1,zTree2);
+            },
+            removzTree(){
+                let zTree1=this.goodsTree;
+                let zTree2=this.selectedTree;
+                removzTree(zTree2,zTree1);
+            },
+            save(){
+                let node = this.selectedTree.getNodes();
+                let nodes = this.selectedTree.transformToArray(node);
+                AJAX.post("website/gcc/gccContror/addeditMeun",{
+                    params:JSON.stringify(nodes)
+                },function(res){
+                    _this.$message('操作成功');
+                });
             }
         },
         created(){

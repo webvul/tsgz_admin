@@ -190,7 +190,6 @@
             //获取指定数据源下的数据表
             submitImportTable(){
                 let dat =this;
-                alert(dat.importFormValue);
                 AJAX.get('website/dyn/dynImportTab/getDataTabList',{dbsId:dat.importFormValue},(res)=>{
                     if(res.message==='SUCCESS'){
                         dat.importFormDialog=false;
@@ -226,7 +225,6 @@
                             pageNo:dat.pageNo
                         },(res1)=>{
                             _this.msg = res1.data.data;
-                            console.log(res1.data)
                         })
                     })
 

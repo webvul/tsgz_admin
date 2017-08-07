@@ -8,6 +8,9 @@ import './assets/font_kjmavcnbocz93sor/iconfont.css'
 import $ from 'jquery' //引用jquery插件
 import './assets/bootstrap/css/bootstrap.min.css'
 import './assets/bootstrap/js/bootstrap.min.js'
+/*Tree结构*/
+import './assets/js/zTreeStyle/jquery.ztree.all-3.5.min'
+import './assets/js/zTreeStyle/zTreeStyle.min.css'
 import './assets/js/common' //自定义的全局方法
 import './assets/css/common.css' //引用全局的css样式
 import 'normalize.css'

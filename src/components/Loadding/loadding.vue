@@ -1,6 +1,6 @@
 <template>
   <div class="loadding_img">
-    <img src="./lg.double-ring-spinner.gif" alt="" style="width:5rem;height:5rem;"/>
+    <img src="./lg.double-ring-spinner.gif" alt="" style="width:5rem;height:5rem;max-height:100%;"/>
   </div>
 </template>
 <script>
@@ -24,5 +24,6 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index:999;
   }
 </style>

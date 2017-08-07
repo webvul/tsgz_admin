@@ -18,6 +18,7 @@
                     :data="msg"
                     border
                     :max-height="height"
+                    @select="handleSelect"
                     style="width: 100%">
                 <el-table-column
                         type="index"
@@ -53,6 +54,8 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <el-button type="primary" @click="importTable">导入</el-button>
+            <el-button type="primary" @click="returnDataTable">返回</el-button>
         </div>
     </div>
 </template>
@@ -72,7 +75,8 @@
                 seaForm:{
                     tabName:''
                 },
-                height:400
+                height:400,
+                multipleSelection:[],
             }
         },
         computed:{
@@ -122,9 +126,55 @@
                             dbsId:scope.dbsId,
                             tabName:scope.tabName,
                             dbsDriverclass:scope.dbsDriverclass,
+                            comments:scope.comments,
                         }
                     })
                 })
+            },
+            //导入
+            importTable(){
+                let dat =this;
+                let dbsDriverClass=dat.msg[0].dbsDriverclass;
+                let dbsName=dat.msg[0].dbsName;
+                let nameAndCommentsList=[];
+                //循环列表，获取每行的表名以及备注
+                dat.multipleSelection.map((item,key)=>{
+                    nameAndCommentsList.push(item.nameAndComments);
+                })
+                AJAX.post('website/dyn/dynImportTab/saveAllImportTable',{
+                    nameAndCommentsList:JSON.stringify(nameAndCommentsList),
+                    dbsId:dat.$route.query.dbsId,
+                    dbsDriverClass:dbsDriverClass,
+                    dbsName:dbsName
+                },function(data){
+                    if(data.data.message==='SUCCESS'){
+                        dat.$router.push({
+                            path:'/dynData/DataImport/extTableImport',
+                            query:{
+                                dbsId:dat.$route.query.dbsId,
+                            }
+                        })
+                    }
+                    if(data.data.message!=='SUCCESS'){
+                        dat.$message.error(data.data.message);
+                    }
+
+                })
+            },
+            //返回
+            returnDataTable() {
+                let dat = this;
+                dat.$router.push({
+                    path:'/dynData/DataImport/extTableImport',
+                    query:{
+                        dbsId:dat.$route.query.dbsId,
+                    }
+                })
+            },
+            handleSelect(selection,row){
+                let dat = this;
+                dat.multipleSelection=selection;
+                console.log(dat.multipleSelection);
             }
         },
     };

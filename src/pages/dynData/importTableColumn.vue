@@ -47,9 +47,10 @@
                 <el-table-column
                         prop="isNull"
                         label="是否可空"
-                >
-                </el-table-column>
+                > </el-table-column>
             </el-table>
+            <el-button type="primary" @click="importTable">导入</el-button>
+            <el-button type="primary" @click="returnDataTable">返回</el-button>
         </div>
     </div>
 </template>
@@ -67,8 +68,8 @@
             return {
                 msg:[],
                 seaForm:{
-                    tabName:'',
-                    comments:''
+                    tabName:this.$route.query.tabName,
+                    comments:this.$route.query.comments
                 },
                 height:400
             }
@@ -83,6 +84,7 @@
                 dbsId:dat.$route.query.dbsId,
                 tabName:dat.$route.query.tabName,
                 dbsDriverclass:dat.$route.query.dbsDriverclass,
+                comments:dat.$route.query.comments,
             },function(data){
                 console.log(data.data);
                 console.log(data.data.columnList);
@@ -97,30 +99,40 @@
            })
         },
         methods:{
-            //获取业务表列表
-            search(){
+            //导入
+            importTable(){
                 let dat =this
-                console.log(this.$route.query.id);
-                AJAX.get('website/dyn/dynImportTab/getDataTabList',{
-                    dbsId:dat.$route.query.id,
-                    tabName:dat.seaForm.tabName
+                AJAX.post('website/dyn/dynImportTab/saveImportTable',{
+                    columnList:JSON.stringify(dat.msg),
+                    dbsId:dat.$route.query.dbsId,
+                    tabName:dat.$route.query.tabName,
+                    dbsDriverclass:dat.$route.query.dbsDriverclass,
+                    comments:dat.$route.query.comments,
                 },function(data){
-                    dat.msg = data.data;
+                    if(data.data.message==='SUCCESS'){
+                        dat.$router.push({
+                            path:'/dynData/DataImport/extTableImport',
+                            query:{
+                                dbsId:dat.$route.query.dbsId,
+                            }
+                        })
+                    }
+                    if(data.data.message!=='成功'){
+                        dat.$message.error(data.data.message);
+                    }
 
                 })
             },
-            //查询
-            handleSeach(index,scope) {
+            //返回
+            returnDataTable() {
                 let dat = this;
-                AJAX.get('website/dyn/dynImportTab/getTaCcolumn',{
-                    dbsId:scope.dbsId,
-                    tabName:scope.tabName,
-                    dbsDriverclass:scope.dbsDriverclass,
-                },function(data){
-                    console.log(data.data)
-                    dat.msg = data.data;
-
+                dat.$router.push({
+                    path:'/dynData/DataImport/addDataTable',
+                    query:{
+                        dbsId:dat.$route.query.dbsId,
+                    }
                 })
+
             }
         },
     };
