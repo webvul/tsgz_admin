@@ -1,351 +1,489 @@
 <template>
-    <div class="el-select" v-clickoutside="handleClose">
-        <div
-                class="el-select__tags"
-                v-if="multiple"
-                @click.stop="toggleMenu"
-                ref="tags"
-                :style="{ 'max-width': inputWidth - 32 + 'px' }">
-            <transition-group @after-leave="resetInputHeight">
-                <el-tag
-                        v-for="item in selected"
-                        :key="item.id"
-                        closable
-                        type="primary"
-                        @close="deleteTag($event, item)"
-                        close-transition>
-                    <span class="el-select__tags-text">{{ item[propNames.label] }}</span>
-                </el-tag>
-            </transition-group>
+  <div class="ats-tree" v-clickoutside="handleCloseTree" ref="atsTree">
+    <div class="ats-input" @mouseenter="hovering=true" @mouseleave="hovering=false">
+      <div class="ats-input-single" v-if="!this.multiple">
+        <i class="el-input__icon el-icon-caret-bottom"
+           :class="{'is-reverse':treeVisible,'el-icon-circle-close':showCloseIcon}"
+           @click="handleCloseTree(!treeVisible)"></i>
+        <input type="text"
+               class="el-input__inner"
+               v-model="treeSelected"
+               :placeholder="placetext"
+               @input="handleFilter"
+               @focus="treeVisible=true"
+               @blur="handleAutoComplete">
+      </div>
+
+      <div class="ats-input-multiple el-input__inner" v-if="this.multiple">
+        <i class="el-input__icon el-icon-caret-bottom"
+           :class="{'is-reverse':treeVisible}"
+           @click="handleCloseTree(!treeVisible)"></i>
+        <div class="ats-labels">
+          <div class="el-select__tags" @click.prevent="handleCloseTree(true)">
+            <el-tag
+              v-for="item in checkedItems"
+              :key="item.id"
+              :closable="true"
+              type="primary"
+              class="el-tag--primary"
+              @close="handleDelItem(item,$event)"
+              :title="handleTitleVisible(item[propNames.label])"
+            >
+              {{item[propNames.label] | showEllips}}
+            </el-tag>
+          </div>
+          <input
+            ref="multipleInput"
+            type="text"
+            :placeholder="placetext"
+            v-model="treeSelected"
+            @input="handleFilter"
+            @focus="treeVisible=true"
+            @blur="handleAutoComplete">
         </div>
-        <el-input
-                ref="reference"
-                v-model="selectedLabel"
-                type="text"
-                :placeholder="currentPlaceholder"
-                :name="name"
-                :size="size"
-                :disabled="disabled"
-                :readonly="multiple"
-                :validate-event="false"
-                @focus="visible = true"
-                @click="handleIconClick"
-                @mouseenter.native="inputHovering = true"
-                @mouseleave.native="inputHovering = false"
-                :icon="iconClass">
-        </el-input>
-        <transition
-                name="el-zoom-in-top"
-                @after-leave="doDestroy"
-                @after-enter="handleMenuEnter">
-            <el-select-menu
-                    ref="popper"
-                    v-show="visible && emptyText !== false">
-                <el-scrollbar
-                        tag="div"
-                        wrap-class="el-select-dropdown__wrap"
-                        view-class="el-select-dropdown__list"
-                        class='is-empty'
-                        v-show="treeData && !loading">
-                    <el-tree :data="treeData" ref="tree"
-                             :show-checkbox="multiple"
-                             node-key="id"
-                             check-strictly
-                             :props="propNames"
-                             @check-change="handleCheckChange"
-                             @node-click="handleTreeNodeClick">
-                    </el-tree>
-                </el-scrollbar>
-            </el-select-menu>
-        </transition>
+      </div>
     </div>
+    <el-scrollbar v-show="treeVisible" class="ats-tree-scrollbar" ref="treeScrollbar">
+      <div class="ats-tree-wrapper">
+        <ul class="ats-tree-nodes" style="margin-bottom:5px;margin-top:5px;">
+          <tree-node
+            v-for="child in treeNodes[propNames.children]"
+            :node="child"
+            :key="child.id"
+            :multiple="multiple"
+            :currentNodeId="currentNodeId"
+            :propNames="propNames"
+            :eventHub="eventHub"
+            :query="query"
+            :type="type"
+            :isQuering="isQuering">
+          </tree-node>
+        </ul>
+      </div>
+    </el-scrollbar>
+  </div>
 </template>
 
-<script type="text/babel">
-    import Emitter from 'element-ui/src/mixins/emitter';
-    import Locale from 'element-ui/src/mixins/locale';
-    import ElSelectMenu from 'element-ui/packages/select/src/select-dropdown.vue';
-    import Clickoutside from 'element-ui/src/utils/clickoutside';
-    import {addClass, removeClass, hasClass} from 'element-ui/src/utils/dom';
-    import {addResizeListener, removeResizeListener} from 'element-ui/src/utils/resize-event';
-    import {t} from 'element-ui/src/locale';
-    import merge from 'element-ui/src/utils/merge';
-    import treeter from "../../components/tableTree/treeter"
-    const sizeMap = {
-        'large': 42,
-        'small': 30,
-        'mini': 22
-    };
-    export default {
-        mixins: [Emitter, Locale, treeter],
-        name: 'ElSelectTree',
-        componentName: 'ElSelectTree',
-        computed: {
-            iconClass() {
-                let criteria = this.clearable && !this.disabled &&
-                    this.inputHovering && !this.multiple &&
-                    this.value !== undefined && this.value != null &&
-                    this.value !== '';
-                return criteria ? 'circle-close is-show-close' : 'caret-top';
-            },
-            emptyText() {
-                if (this.loading) {
-                    return this.loadingText || this.t('el.select.loading');
-                } else {
-                    if (this.treeData.length === 0) {
-                        return this.noDataText || this.t('el.select.noData');
-                    }
-                }
-                return null;
-            },
-        },
-        components: {ElSelectMenu},
-        directives: {Clickoutside},
-        props: {
-            name: String,
-            value: {},
-            treeData: Array,
-            size: String,
-            disabled: Boolean,
-            clearable: Boolean,
-            loading: Boolean,
-            popperClass: String,
-            loadingText: String,
-            noDataText: String,
-            multiple: Boolean,
-            propNames: {
-                type: Object,
-                default(){
-                    return {children: 'children', label: 'label', id: 'id'}
-                }
-            },
-            multipleLimit: {
-                type: Number,
-                default: 0
-            },
-            placeholder: {
-                type: String,
-                default() {
-                    return t('el.select.placeholder');
-                }
-            }
-        },
-        data() {
-            return {
-                selected: this.multiple ? [] : {},
-                inputLength: 20,
-                inputWidth: 0,
-                currentPlaceholder: '',
-                dropdownUl: null,
-                visible: false,
-                selectedLabel: '',
-                bottomOverflow: 0,
-                topOverflow: 0,
-                inputHovering: false,
-            };
-        },
-        watch: {
-            value(val) {
-                this.handleResize();
-                if (!!val) {
-                    this.currentPlaceholder = '';
-                } else {
-                    this.currentPlaceholder = this.placeholder;
-                }
-                this.setSelected(val);
-                this.$emit('change', val);
-                this.dispatch('ElFormItem', 'el.form.change', val);
-            },
-            visible(val) {
-                if (!val) {
-                    this.$refs.reference.$el.querySelector('input').blur();
-                    this.handleIconHide();
-                    this.broadcast('ElSelectDropdown', 'destroyPopper');
-                    if (!this.multiple) {
-                        this.inputLength = 20;
-                        this.getOverflows();
-                    }
-                } else {
-                    this.handleIconShow();
-                    this.broadcast('ElSelectDropdown', 'updatePopper');
-                }
-                this.$emit('visible-change', val);
-            },
-        },
-        methods: {
-            handleIconHide() {
-                let icon = this.$el.querySelector('.el-input__icon');
-                if (icon) {
-                    removeClass(icon, 'is-reverse');
-                }
-            },
-            handleIconShow() {
-                let icon = this.$el.querySelector('.el-input__icon');
-                if (icon && !hasClass(icon, 'el-icon-circle-close')) {
-                    addClass(icon, 'is-reverse');
-                }
-            },
-            handleMenuEnter() {
-                if (!this.dropdownUl) {
-                    this.dropdownUl = this.$refs.popper.$el.querySelector('.el-select-dropdown__wrap');
-                    this.getOverflows();
-                }
-                if (!this.multiple && this.dropdownUl) {
-                    this.resetMenuScroll();
-                }
-            },
-            getOverflows() {
-                if (this.dropdownUl && this.selected && this.selected.$el) {
-                    let selectedRect = this.selected.$el.getBoundingClientRect();
-                    let popperRect = this.$refs.popper.$el.getBoundingClientRect();
-                    this.bottomOverflow = selectedRect.bottom - popperRect.bottom;
-                    this.topOverflow = selectedRect.top - popperRect.top;
-                }
-            },
-            resetMenuScroll() {
-                if (this.bottomOverflow > 0) {
-                    this.dropdownUl.scrollTop += this.bottomOverflow;
-                } else if (this.topOverflow < 0) {
-                    this.dropdownUl.scrollTop += this.topOverflow;
-                }
-            },
-            setSelected(ids) {
-                if (!!ids) {
-                    if (this.multiple) {
-                        this.$refs.tree.setCheckedKeys(ids);
-                        this.selected = this.$refs.tree.getCheckedNodes();
-                    } else {
-                        this.selected = this.findFromTree(this.treeData, ids, this.propNames.id, this.propNames.children);
-                        this.selectedLabel = !!this.selected ? this.selected[this.propNames.label] : '';
-                    }
-                } else {
-                    this.selected = this.multiple ? [] : {};
-                    this.selectedLabel = '';
-                }
-            },
-            handleIconClick(event) {
-                if (this.iconClass.indexOf('circle-close') > -1) {
-                    this.deleteSelected(event);
-                } else {
-                    this.toggleMenu();
-                }
-            },
-            doDestroy() {
-                this.$refs.popper && this.$refs.popper.doDestroy();
-            },
-            handleClose() {
-                this.visible = false;
-            },
-            managePlaceholder() {
-                if (this.currentPlaceholder !== '') {
-                    this.currentPlaceholder = this.$refs.input.value ? '' : this.cachedPlaceHolder;
-                }
-            },
-            resetInputState(e) {
-                if (e.keyCode !== 8) this.toggleLastOptionHitState(false);
-                this.inputLength = this.$refs.input.value.length * 15 + 20;
-                this.resetInputHeight();
-            },
-            resetInputHeight() {
-                this.$nextTick(() => {
-                    if (!this.$refs.reference) return;
-                    let inputChildNodes = this.$refs.reference.$el.childNodes;
-                    let input = [].filter.call(inputChildNodes, item => item.tagName === 'INPUT')[0];
-                    input.style.height = Math.max(this.$refs.tags.clientHeight + 6, sizeMap[this.size] || 36) + 'px';
-                    if (this.visible && this.emptyText !== false) {
-                        this.broadcast('ElSelectDropdown', 'updatePopper');
-                    }
-                });
-            },
-            handleTreeNodeClick(nodeData) {
-                if (this.multiple) return;
-                this.$emit('input', nodeData.id);
-                this.visible = false;
-                this.selectedLabel = nodeData[this.propNames.label];
-                this.selected = nodeData;
-                this.handleResize();
-            },
-            handleCheckChange(data, checked, indeterminate) {
-                if (!this.multiple) return;
-                this.selected = this.$refs.tree.getCheckedNodes();
-                let tmpValue = [];
-                if (this.selected) {
-                    this.selected.forEach((item, index) => {
-                        tmpValue.push(item.id);
-                    });
-                }
-                this.$emit('input', tmpValue);
-                this.handleResize();
-            },
-            toggleMenu() {
-                if (this.visible) {
-                    return;
-                }
-                if (!this.disabled) {
-                    this.visible = !this.visible;
-                }
-            },
-            resetScrollTop() {
-                let bottomOverflowDistance = this.options[this.hoverIndex].$el.getBoundingClientRect().bottom -
-                    this.$refs.popper.$el.getBoundingClientRect().bottom;
-                let topOverflowDistance = this.options[this.hoverIndex].$el.getBoundingClientRect().top -
-                    this.$refs.popper.$el.getBoundingClientRect().top;
-                if (bottomOverflowDistance > 0) {
-                    this.dropdownUl.scrollTop += bottomOverflowDistance;
-                }
-                if (topOverflowDistance < 0) {
-                    this.dropdownUl.scrollTop += topOverflowDistance;
-                }
-            },
-            deleteSelected(event) {
-                event.stopPropagation();
-                this.$emit('input', '');
-                this.selected = {};
-                this.selectedLabel = '';
-                this.visible = false;
-            },
-            deleteTag(event, tag) {
-                let index = this.selected.indexOf(tag);
-                if (index > -1 && !this.disabled) {
-                    this.value.splice(index, 1);
-                    this.selected.splice(index, 1);
-                    this.$emit('remove-tag', tag);
-                }
-                event.stopPropagation();
-            },
-            resetInputWidth() {
-                this.inputWidth = this.$refs.reference.$el.getBoundingClientRect().width;
-            },
-            handleResize() {
-                this.resetInputWidth();
-                if (this.multiple) {
-                    this.resetInputHeight();
-                } else {
-                    this.inputLength = 20;
-                }
-            }
-        },
-        created() {
-            this.cachedPlaceHolder = this.currentPlaceholder = this.placeholder;
-            if (this.multiple && !Array.isArray(this.value)) {
-                this.$emit('input', []);
-            }
-            if (!this.multiple && Array.isArray(this.value)) {
-                this.$emit('input', '');
-            }
-            this.setSelected();
-            this.$on('setSelected', this.setSelected);
-        },
-        mounted() {
-            addResizeListener(this.$el, this.handleResize);
-            this.$nextTick(() => {
-                if (this.$refs.reference && this.$refs.reference.$el) {
-                    this.inputWidth = this.$refs.reference.$el.getBoundingClientRect().width;
-                }
-            });
-        },
-        beforeDestroy() {
-            if (this.$el && this.handleResize) removeResizeListener(this.$el, this.handleResize);
+<script>
+  import Vue from 'vue';
+  import {Tag,Scrollbar} from 'element-ui';
+  import treeNode from "./config_tree/treeNode.vue";
+  import Clickoutside from "./config_tree/clickoutside"
+  import debounce from "throttle-debounce/throttle"
+  import {objArrDeepCopy} from "./config_tree/tools"
+  Vue.component(Scrollbar.name, Scrollbar);
+  Vue.component(Tag.name, Tag);
+  export default {
+    name: 'tree',
+    components:{
+      treeNode
+    },
+    props: {
+      treeData:{
+        type:Array,
+        default:[]
+      },
+      propNames:{
+        type:Object,
+        default:{
+          label:'label',
+          children:'children'
         }
-    };
+      },
+      placeholder:{
+        type:String,
+        default:'请选择'
+      },
+      value:{
+      },
+      multiple:{
+        type:Boolean
+      },
+      type:{
+          type:Number,
+           default:0
+      }
+    },
+    created(){
+      this.eventHub.$on('node-click',this.handleNodeClick);
+    },
+    updated(){
+      this.isDefault = true;
+    },
+    computed:{
+      showCloseIcon(){
+        return this.hovering&&this.value !== undefined &&this.value !== ''&&!this.multiple;
+      }
+    },
+    watch:{
+
+      value(val){
+        if(this.isDefault){
+          this.setDefaultValue();
+        }else{
+
+        }
+      },
+      treeData(val){
+        if(val){
+          this.treeNodes = {
+            [this.propNames.children]:objArrDeepCopy(val,{visible:true}),
+            visible:true
+          };
+          if(this.isDefault){
+            this.setDefaultValue();
+          }
+        }
+      },
+      checkedKeys(val){
+        if(val.length){
+          this.placetext = '';
+        }else{
+          this.placetext = this.placeholder;
+        }
+        if(this.multiple){
+          setTimeout(function(){
+            this.resetTreeTop();
+          }.bind(this),400)
+          if(!this.isDefault){
+            this.setInputFocus();
+          }
+        }
+      }
+    },
+    data() {
+      return {
+        treeNodes:{
+          [this.propNames.children]:objArrDeepCopy(this.treeData,{visible:true}),
+          visible:true
+        },
+        hasCode:true,//判断初始是否有节点
+        placetext:this.placeholder,
+        currentNodeId:'',
+        currentSelected:'',
+        treeSelected:'',
+        treeVisible:false,
+        eventHub:new Vue(),
+        isQuering:false,
+        query:'',
+        checkedItems:[],
+        checkedKeys:[],
+        isDefault:true,
+        error:{
+          message:'',
+          data:''
+        },
+        hovering:false
+      }
+    },
+    methods: {
+      resetValue(){
+        if(this.multiple){
+          this.checkedItems = [];
+          this.checkedKeys = [];
+          this.$emit('setSelectedId',[]);
+        }else{
+          this.treeSelected = '';
+          this.currentNodeId = '';
+          this.$emit('setSelectedId','');
+        }
+      },
+      handleCloseTree(val){
+        if(this.showCloseIcon){
+          this.resetValue();
+        }else{
+          if(val==undefined){
+            this.treeVisible = false;
+          }else{
+            this.treeVisible = val;
+          }
+          if(this.multiple){
+            this.treeSelected = '';
+            this.handleFilter();
+            if(val){
+              this.setInputFocus();
+            }
+          }
+        }
+      },
+      handleNodeClick(node,event){
+        if(event){
+          this.isDefault = false;
+        }
+        if(this.multiple){
+          if(!this.hasSameItem(this.checkedItems,node)){
+            this.handleAddItem(node);
+            this.$emit('setSelectedId',this.checkedKeys);
+          }else{
+            this.handleDelItem(node,event);
+          }
+        }else{
+          if(this.type===2&&node.children.length){
+              //如果有子节点就什么都不操作
+          }else{
+            this.currentNodeId = node.id;
+            this.treeSelected = node[this.propNames.label];
+            this.currentSelected = this.treeSelected;
+            this.$emit('setSelectedId',node.id);
+          }
+
+        }
+      },
+      setDefaultValue(){
+        if(!this.multiple){
+          this.setSelected(this.value);
+        }else{
+          this.setCheckedKeys(this.value);
+        }
+      },
+      //单选设置初始值
+      setSelected(val){
+        let self = this;
+        let treeNodes = self.treeNodes;
+        self.resetValue();
+        self.findTreeItem(val,treeNodes);
+        if(!this.currentNodeId){
+          this.setErrorMessage(val);
+        }
+      },
+      //多选设置初始值
+      setCheckedKeys(val){
+        let self = this;
+        let treeNodes = this.treeNodes;
+        this.resetValue();
+        val.forEach(function(id){
+          self.findTreeItem(id,treeNodes);
+        })
+        this.getNotExistedItem(val,this.checkedKeys);
+      },
+      findTreeItem(id,treeNodes){
+        let self = this;
+        let childNodes = treeNodes[self.propNames.children];
+        for(let i=0;i<childNodes.length;i++){
+          if(childNodes[i].id==id){
+            if(self.multiple){
+              self.handleAddItem(childNodes[i]);
+            }else{
+              self.hasCode=false;
+              self.handleNodeClick(childNodes[i]);
+            }
+            break;
+          }else{
+            self.hasCode=true;
+            self.findTreeItem(id,childNodes[i]);
+          }
+        }
+      },
+      handleFilter:debounce(1000,function () {
+        this.isQuering = true;
+        if(this.isQuering){
+          this.query = this.treeSelected;
+          this.treeFilterMethod(this.treeNodes);
+        }
+      }),
+      treeFilterMethod(node){
+        let self = this;
+        let childNodes = node[self.propNames.children];
+        childNodes.forEach((child) =>{
+          child.visible = child[self.propNames.label].toLowerCase().indexOf(self.query.toLowerCase())>-1;
+          self.treeFilterMethod(child);
+        })
+        if (!node.visible && childNodes.length) {
+          let allHidden = true;
+          childNodes.forEach((child) => {
+            if (child.visible) allHidden = false;
+          });
+          node.visible = allHidden === false;
+        }
+        if (node.visible){
+          this.$set(node,'expanded',true);
+          if(self.query===''){
+            node.expanded = false;
+          }
+        }
+      },
+      handleAutoComplete(){
+        setTimeout(function () {
+          this.query = '';
+          if(this.currentNodeId){
+            this.treeSelected = this.currentSelected;
+          }else if(!this.multiple){
+            this.treeSelected = '';
+            this.handleFilter();
+          }
+          if(this.isQuery){
+            this.treeVisible = false;
+          }
+          this.isQuery = false;
+        }.bind(this),250)
+      },
+      handleAddItem(item){
+        this.checkedItems.push(item);
+        this.checkedKeys.push(item.id);
+        this.$set(item,'checked',true);
+      },
+      handleDelItem(item,event){
+        if(event){
+          this.isDefault = false;
+        }
+        this.checkedKeys.splice(this.checkedKeys.indexOf(item.id), 1);
+        this.checkedItems.splice(this.checkedItems.indexOf(item), 1);
+        this.$set(item,'checked',false);
+        this.$emit('setSelectedId',this.checkedKeys);
+      },
+      hasSameItem(obj,item){
+        return obj.indexOf(item)>-1;
+      },
+      getNotExistedItem(all,part){
+        let notExisted = [];
+        all.forEach((item) =>{
+          if(!(part.indexOf(item)>-1))
+            notExisted.push(item);
+        })
+        this.setErrorMessage(notExisted);
+      },
+      setErrorMessage(data){
+        if(!data || !data.toString()) return;
+        let errorText = (data instanceof Array)?data.toString():data;
+        this.error.message = "发现不存在的部门id:"+ errorText;
+        this.error.data = data;
+        this.$emit('errorCallback',this.error);
+      },
+      resetTreeTop(){
+        this.$nextTick(function(){
+          let inputMultiple = this.$refs.atsTree.querySelector(".ats-input-multiple");
+          let treeScrollbar = this.$refs.atsTree.querySelector(".ats-tree-scrollbar");
+          let inputMultipleHeight = inputMultiple.offsetHeight;
+          treeScrollbar.style.top = (inputMultipleHeight + 5) + "px";
+        })
+      },
+      setInputFocus(){
+        let multipleInput = this.$refs.multipleInput;
+        multipleInput.focus();
+      },
+      handleTitleVisible(str){
+        if(!str) return '';
+        let tempLen = 0;
+        for(let i =0; i<str.length;i++){
+          if(str.charCodeAt(i)>255){
+            tempLen+=2;
+          }else{
+            tempLen+=1;
+          }
+        }
+        if(tempLen>=15){
+          return str;
+        }else{
+          return '';
+        }
+      }
+    },
+    filters:{
+      // 截取前18个字节
+      showEllips(str){
+        if(!str) return '';
+        let tempLen = 0;
+        for(let i =0; i<str.length;i++){
+          if(str.charCodeAt(i)>255){
+            tempLen+=2;
+          }else{
+            tempLen+=1;
+          }
+          if(tempLen >= 15){
+            str = str.substring(0,i)+"...";
+            break;
+          }
+        }
+        return str;
+      }
+    },
+    directives: { Clickoutside },
+  }
 </script>
+
+<style lang="scss" scoped >
+  .ats-tree{
+    display: inline-block;
+    position:relative;
+    .ats-input{
+      position: relative;
+      .el-icon-caret-bottom{
+        cursor: pointer;
+        &.is-reverse{
+          transform: rotateZ(180deg);
+        }
+      }
+    }
+    .el-input__inner{
+      width: 360px;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      background-color: #fff;
+      background-image: none;
+      border-radius: 4px;
+      border: 1px solid rgb(191, 204, 217);
+      box-sizing: border-box;
+      color: rgb(31, 46, 61);
+      display: block;
+      font-size: inherit;
+      height: 36px;
+      line-height: 1;
+      outline: 0;
+      padding: 3px 10px;
+      transition: border-color .2s cubic-bezier(.645,.045,.355,1);
+    }
+    .ats-input-multiple{
+      height:auto;
+    }
+    .ats-input-multiple input{
+      line-height:1;
+      height:28px;
+      box-sizing:border-box;
+      outline: none;
+      border: 0px;
+      position: relative;
+      right: 35px;
+      left:0;
+      width:320px;
+    }
+    .ats-input-multiple .el-select__tags{
+      position:relative;
+      height:auto;
+      top: auto;
+      transform: none;
+      width: 320px;
+      &:hover{
+        cursor:pointer;
+      }
+    }
+    .ats-input-multiple .el-select__tags .el-tag{
+      margin:5px;
+      max-width: 150px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      vertical-align: top;
+    }
+    .ats-input-multiple input:focus{
+      outline:none;
+    }
+    .ats-tree-scrollbar{
+      top: 40px;
+      min-width: 360px;
+      max-height: 300px;
+      overflow-y: auto;
+      position: absolute;
+      z-index: 1001;
+      background: #fff;
+      border: 1px solid #d1dbe5;
+      .el-scrollbar__view{
+        overflow-y: auto;
+      }
+      transition:all 0.1s linear;
+    }
+    .ats-tree-wrapper{
+      background-color: #fff;
+
+    }
+  }
+</style>

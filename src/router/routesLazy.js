@@ -7,7 +7,6 @@ const UnFind = resolve => require(['./../main/404.vue'], resolve);
 const MainApp = resolve => require(['./../components/Layout/MainApp.vue'], resolve);
 //用户管理界面
 const PassWord = resolve => require(['./../pages/PersonalInfo/passWord.vue'], resolve); //密码修改页面
-const UserManage =resolve => require(['../pages/PersonalInfo/UserManage.vue'], resolve); //用户账号管理界面
 const PersonalInfo=resolve => require(['../pages/PersonalInfo/index.vue'], resolve); //个人信息界面
 //业务包
 const groupList=resolve => require(['../pages/pack/list.vue'], resolve); //业务包列表页面
@@ -36,13 +35,22 @@ const dataImportTimer =resolve => require(['./../pages/dynData/dataImportTimer.v
 const addDataTable =resolve => require(['./../pages/dynData/addDataTable.vue'], resolve);
 const importTableColumn =resolve => require(['./../pages/dynData/importTableColumn.vue'], resolve);
 const test111 =resolve => require(['./../pages/test/tes111.vue'], resolve);
+//系统设置
+const logList = resolve => require(['../pages/sys/logList.vue'], resolve)
+const menu = resolve => require(['../pages/sys/Menu/menu.vue'], resolve)
+const dict = resolve => require(['../pages/sys/Dict/dict.vue'], resolve)
+const role = resolve => require(['../pages/sys/Role/role.vue'], resolve)
+//系统设置 用户管理
+const userManager = resolve => require(['../pages/sys/InstitutionalUser/userManager.vue'], resolve)
+const areaManager = resolve => require(['../pages/sys/Area/area.vue'], resolve)
+const officeManager = resolve => require(['../pages/sys/Office/officeManager.vue'], resolve)
+
 export default {
     Login,
     Home_view,
     UnFind,
-    MainApp,
+  MainApp,
     PassWord,
-    UserManage,
     PersonalInfo,
     Test,
     //业务包
@@ -62,10 +70,21 @@ export default {
     ServiceTable,
     programmeTable,
     addServiceTable,
-   dataSourceConfig,
+    dataSourceConfig,
     extTableImport,
     dataImportTimer,
     addDataTable,
+    logList,
     importTableColumn,
-    test111
+    test111,
+    //用户管理
+    userManager,
+    //系统设置
+    menu,
+    dict,
+    role,
+    //区域管理
+    areaManager,
+    officeManager,
 };
+

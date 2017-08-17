@@ -1,57 +1,41 @@
 <template>
-    <el-transfer
-            v-model="value3"
-            filterable
-            :left-default-checked="[2, 3]"
-            :right-default-checked="[1]"
-            :render-content="renderFunc"
-            :titles="['Source', 'Target']"
-            :button-texts="['到左边', '到右边']"
-            :footer-format="{
-      noChecked: '${total}',
-      hasChecked: '${checked}/${total}'
-    }"
-            @change="handleChange"
-            :data="data">
-        <el-button class="transfer-footer" slot="left-footer" size="small">操作</el-button>
-        <el-button class="transfer-footer" slot="right-footer" size="small">操作</el-button>
-    </el-transfer>
+  <dendrogram
+       :data="resData"
+       :propNames="defaultProps"
+       :level="4"
+  >
+
+  </dendrogram>
 </template>
-
-<style>
-    .transfer-footer {
-        margin-left: 20px;
-        padding: 6px 5px;
-    }
-</style>
-
 <script>
+    import Dendrogram from '@/components/tableTree/Dendrogram'
+    import {tranlateDataTreeManagement} from '@/utils'
+    import AJAX from '@/assets/js/ajax';
     export default {
         data() {
-            const generateData = _ => {
-                const data = [];
-                for (let i = 1; i <= 15; i++) {
-                    data.push({
-                        key: i,
-                        label: `备选项 ${ i }`,
-                        disabled: i % 4 === 0
-                    });
-                }
-                return data;
-            };
-            return {
-                data: generateData(),
-                value3: [1],
-                renderFunc(h, option) {
-                    return <span>{ option.key } - { option.label }</span>;
-                }
-            };
-        },
-
-        methods: {
-            handleChange(value, direction, movedKeys) {
-                console.log(value, direction, movedKeys);
+            return{
+                resData:[],
+              defaultProps: {
+                children: 'children',
+                label: 'name',
+                id: "id",
+              },
             }
+        },
+        components:{
+          Dendrogram
+        },
+      created(){
+        this.getAjax();
+      },
+        methods: {
+            getAjax(){
+                AJAX.get('website/sys/office/treeData',{},(res)=>{
+                    this.resData=tranlateDataTreeManagement(res);
+                })
+
+            }
+
         }
     };
 </script>

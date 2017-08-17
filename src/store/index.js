@@ -3,7 +3,7 @@
  */
 import Vue from 'vue'
 import Vuex from 'vuex'
-
+import 'babel-polyfill' //解决ie浏览器无内置promise对象
 //引入模块
 import actions from './actions'
 import getters from './getters'

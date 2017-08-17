@@ -57,13 +57,10 @@
 
 <script>
     import {mapState,mapActions} from 'vuex';
-    import ElForm from "../../../node_modules/element-ui/packages/form/src/form.vue";
-    import ElFormItem from "../../../node_modules/element-ui/packages/form/src/form-item.vue";
     import AJAX from './../../assets/js/ajax';
     export default {
         components: {
-            ElFormItem,
-            ElForm},
+          },
         data() {
             return {
                 msg:[],
@@ -109,7 +106,7 @@
                     dbsDriverclass:dat.$route.query.dbsDriverclass,
                     comments:dat.$route.query.comments,
                 },function(data){
-                    if(data.data.message==='SUCCESS'){
+                    if(data.data.stateCode.code===200){
                         dat.$router.push({
                             path:'/dynData/DataImport/extTableImport',
                             query:{
@@ -117,8 +114,8 @@
                             }
                         })
                     }
-                    if(data.data.message!=='成功'){
-                        dat.$message.error(data.data.message);
+                    if(data.data.stateCode.code!==200){
+                        dat.$message.error(data.data.stateCode.message);
                     }
 
                 })

@@ -174,7 +174,7 @@
             ajax(){
                 let _this =this;
                 AJAX.get('website/packsql/getTableConn',{},(res)=>{
-                    _this.dbsNameList = res;
+                    _this.dbsNameList = res.data;
                     //console.log(_this.dbsNameList)
                 })
             },
@@ -255,7 +255,7 @@
                     dbsName:this.form.value
                 },function(res){
                     //console.log(res.data.list);
-                    _this.columnDataList = res.data.list;
+                    _this.columnDataList = res.data.data.list;
                 })
             },
             choItem(item,key){
@@ -267,7 +267,7 @@
                     classname:item.tabName
                 },function(res){
                     //console.log(res.list);
-                    _this.columnDataList = res.data.list;
+                    _this.columnDataList = res.data.data.list;
                     _this.realtables = item.tabName;
                     _this.realcolumn = '';
                     _this.step = 2;
@@ -309,16 +309,16 @@
                          _this.button_status = true;
                          _this.preTable.list = '';
                          _this.preTable.alllist = '';
-                         if(res.data.error=='true'){
+                         if(res.data.data.error=='true'){
                              return this.$message.error('sql错误');
                          }else{
                              _this.hidePreTable = true;
 //                             console.log(res)
-                             _this.preTable.list = res.data.list;
-                             _this.preTable.alllist = res.data.alllist;
+                             _this.preTable.list = res.data.data.list;
+                             _this.preTable.alllist = res.data.data.alllist;
                              //_this.dabeList = res.data.list;
                             // console.log(res.data.list)
-                            res.data.list.map(function(item,key){
+                            res.data.data.list.map(function(item,key){
                                // console.log(item)
                                 _this.dabeList.push({
                                     columnName:item.split("-")[0],

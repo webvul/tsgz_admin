@@ -93,13 +93,11 @@
 
 <script>
     import {mapState,mapActions} from 'vuex';
-    import ElForm from "../../../node_modules/element-ui/packages/form/src/form.vue";
-    import ElFormItem from "../../../node_modules/element-ui/packages/form/src/form-item.vue";
+
     import AJAX from './../../assets/js/ajax';
     export default {
         components: {
-            ElFormItem,
-            ElForm},
+            },
         data() {
             return {
                 msg:[],
@@ -131,8 +129,8 @@
                 comments:dat.seachForm.comments,
                 dbsName:dat.seachForm.dbsName
             },function(data){
-                dat.msg = data.data.data;
-                dat.total=data.data.count;
+                dat.msg = data.data.data.data;
+                dat.total=data.data.data.count;
             })
         },
         mounted(){
@@ -150,7 +148,7 @@
                     pageSize:dat.pageSize,
                     pageNo:page
                 },function(data){
-                    dat.msg = data.data.data;
+                  dat.msg = data.data.data.data;
                 })
 
             },
@@ -160,7 +158,7 @@
                     pageSize:dat.pageSize,
                     pageNo:dat.page
                 },function(data){
-                    dat.msg = data.data.data;
+                  dat.msg = data.data.data.data;
                 })
             },
             //获取业务表列表
@@ -173,8 +171,7 @@
                     comments:dat.seachForm.comments,
                     dbsName:dat.seachForm.dbsName
                 },function(data){
-                    dat.msg = data.data.data;
-                    console.log(data.data)
+                  dat.msg = data.data.data.data;
                 })
             },
             //点击导入按钮，获取所有数据源
@@ -182,16 +179,16 @@
                 let dat =this;
                 AJAX.get('website/dyn/dynImportTab/getDataSource',{
                 },(res1)=>{
-                    console.log(res1.data);
                     dat.tableList=res1.data;
-                }),
+                })
                 dat.importFormDialog=true
             },
             //获取指定数据源下的数据表
             submitImportTable(){
                 let dat =this;
                 AJAX.get('website/dyn/dynImportTab/getDataTabList',{dbsId:dat.importFormValue},(res)=>{
-                    if(res.message==='SUCCESS'){
+
+                    if(res.stateCode.code===200){
                         dat.importFormDialog=false;
                         this.$router.push({
                             path:'/dynData/DataImport/addDataTable',
@@ -201,8 +198,8 @@
                         })
                         this.importFormValue='';
                     }
-                    if(res.message!=='SUCCESS'){
-                        this.$message.error(res.message);
+                    if(res.stateCode.code!==200){
+                        this.$message.error(res.stateCode.message);
                     }
                 })
             },
@@ -224,7 +221,7 @@
                             pageSize:dat.pageSize,
                             pageNo:dat.pageNo
                         },(res1)=>{
-                            _this.msg = res1.data.data;
+                            _this.msg = res1.data.data.data;
                         })
                     })
 

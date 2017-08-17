@@ -28,9 +28,9 @@
                         <el-form :model="form" ref="form">
                             <el-form-item label="父级" :label-width="formLabelWidth">
                                 <!--<el-input v-model="form.parentId" auto-complete="off"></el-input>-->
-                                <el-select-tree v-model="form.parentId" :treeData="gccList" :propNames="defaultProps" clearable
-                                                placeholder="请选择父级">
-                                </el-select-tree>
+                                <!--<el-select-tree v-model="form.parentId" :treeData="gccList" :propNames="defaultProps" clearable-->
+                                                <!--placeholder="请选择父级">-->
+                                <!--</el-select-tree>-->
                             </el-form-item>
                             <el-form-item label="名称" :label-width="formLabelWidth">
                                 <el-input v-model="form.name" auto-complete="off" style="width:300px"></el-input>
@@ -76,32 +76,31 @@
                 </span>
             </el-dialog>
 
-            <el-dialog title="配置商品代码" :visible.sync="dialogTableVisible"  >
-                <loadding v-if="loading" />
-                <div class="diaglogBody">
-                    <div class="leftGoodsContainer ztree" id="goodsTree">
+            <!--<el-dialog title="配置商品代码" :visible.sync="dialogTableVisible"  >-->
+                <!--<loadding v-if="loading" />-->
+                <!--<div class="diaglogBody">-->
+                    <!--<div class="leftGoodsContainer ztree" id="goodsTree">-->
 
-                    </div>
-                    <div class="rightGoodsContainer ztree" id="selectedTree">
+                    <!--</div>-->
+                    <!--<div class="rightGoodsContainer ztree" id="selectedTree">-->
 
-                    </div>
-                </div>
-                <div class="diaglogFooter">
-                    <span>选择左边的商品，加入右边列表。</span>
-                    <div>
-                        <el-button type="default" size="small" @click="moveTreeNode">确认选中</el-button>
-                        <el-button type="default" size="small" @click="removzTree">清除已选</el-button>
-                        <el-button type="default" size="small" @click="save">保存</el-button>
-                        <el-button type="default" size="small" @click="dialogTableVisible=false">关闭</el-button>
-                    </div>
-                </div>
-            </el-dialog>
+                    <!--</div>-->
+                <!--</div>-->
+                <!--<div class="diaglogFooter">-->
+                    <!--<span>选择左边的商品，加入右边列表。</span>-->
+                    <!--<div>-->
+                        <!--<el-button type="default" size="small" @click="moveTreeNode">确认选中</el-button>-->
+                        <!--<el-button type="default" size="small" @click="removzTree">清除已选</el-button>-->
+                        <!--<el-button type="default" size="small" @click="save">保存</el-button>-->
+                        <!--<el-button type="default" size="small" @click="dialogTableVisible=false">关闭</el-button>-->
+                    <!--</div>-->
+                <!--</div>-->
+            <!--</el-dialog>-->
     </div>
 </template>
-<script  type="text/babel">
+<script >
 import selectTree from "../../components/tableTree/selectTree.vue"
-import treeter from "../../components/tableTree/treeter"
-import merge from 'element-ui/src/utils/merge';
+import treeter from "../../components/tableTree/config_tree/treeter"
 import AJAX from './../../assets/js/ajax';
 import loadding from './../../components/loadding/loadding.vue'
 import {tranlateDataTree} from '../../utils';
@@ -109,7 +108,7 @@ import {moveTreeNode,removzTree} from '../../utils/configZtree'
 export default {
         mixins: [treeter],
         components: {
-            'el-select-tree': selectTree,
+           'el-select-tree': selectTree,
             'loadding':loadding
         },
         data(){
@@ -152,6 +151,7 @@ export default {
                 }
             }
         },
+
         mounted(){
             //设置首行高亮
             window.setTimeout(function(){
@@ -165,21 +165,21 @@ export default {
             },
             choNodeKey(obj,node,self){
                 $('.filter-tree .el-tree-node').eq(0).removeClass("is-current");
-                this.form = merge({}, obj);
+                this.form = Object.assign({}, obj);
 
             },
             selectIcon(event){
                 this.form.icon = event.target.className;
                 this.selectIconDialog = false;
             },
-            renderContent(h, {node, data, store}) {
+            /*renderContent(h, {node, data, store}) {
                 return (
                         <span>
             <span>
               <span><i class={data.icon}></i>&nbsp;{node.label}</span>
             </span>
           </span>);
-            },
+            },*/
             newAdd(){
                 this.form = {
                     id: null,
@@ -206,7 +206,7 @@ export default {
                 });
             },
             handleNodeClick(data){
-                this.form = merge({}, data);
+                this.form = Object.assign({}, data);
             },
             init(){
                 this.leftContainerData=[];
@@ -217,17 +217,18 @@ export default {
                this.dialogTableVisible=true;
                _this.loading=true;
                let menu_id = this.form.id;
+               let dats ;
                AJAX.get("website/gcc/gccViewGoodsContror/findAllList",{menuid:menu_id},function(res){
                     _this.loading=false;
                     _this.init();
-                   res.goodslist.map(function(item,key){
+                   res.data.goodslist.map(function(item,key){
                         _this.leftContainerData.push({
                             id:item.hsCode,
                             pId:item.parentHsCode,
                             name:`${item.hsCname}(${item.hsCode})`
                         })
                    });
-                   res.goodslistbyid.map(function(item,key){
+                   res.data.goodslistbyid.map(function(item,key){
                        _this.rightContainerData.push({
                            id:item.hsCode,
                            pId:item.parentHsCode,
@@ -255,16 +256,15 @@ export default {
                         params:JSON.stringify(_this.form)
                     },function(res){
                         _this.$message('操作成功');
-                        _this.updateTreeNode(_this.gccList, merge({},_this.form));
+                        _this.updateTreeNode(_this.gccList, Ob({},_this.form));
                     });
                 }
             },
             load(){
                 let _this = this;
                 AJAX.get('website/gcc/gccContror/findGccList',{},function(data){
-                    console.log(data);
-                    _this.gccList =tranlateDataTree(data);
-                    _this.form = merge({}, _this.gccList[0]);
+                    _this.gccList =tranlateDataTree(data.data);
+                  _this.form = Object.assign({}, _this.gccList[0]);
                 })
             },
 //            树的操作
@@ -279,10 +279,17 @@ export default {
                 removzTree(zTree2,zTree1);
             },
             save(){
+                let _this = this
                 let node = this.selectedTree.getNodes();
                 let nodes = this.selectedTree.transformToArray(node);
-                AJAX.post("website/gcc/gccContror/addeditMeun",{
-                    params:JSON.stringify(nodes)
+                let goodsArr = '';
+                for(var i=0;i<nodes.length;i++){			//把选中的数据从根开始一条一条往右添加,&,后台区用于分为数组
+                    //	console.info(nodes[i].name);
+                    goodsArr = (goodsArr + nodes[i].name) + (((i + 1)== nodes.length) ? '':'&,');
+                }
+                AJAX.post("website/gcc/gccViewGoodsContror/saveGoodCodes",{
+                    params:JSON.stringify(goodsArr),
+                    menuid:this.form.id
                 },function(res){
                     _this.$message('操作成功');
                 });

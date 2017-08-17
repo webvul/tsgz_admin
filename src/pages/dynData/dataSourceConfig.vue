@@ -27,7 +27,7 @@
             <el-table
                     :data="msg"
                     border
-                    :max-height="tableHeight"
+                    :height="($store.state.screenHeight-245)"
                     style="width: 100%">
                 <el-table-column
                         prop="dbsName"
@@ -91,29 +91,29 @@
                        :visible.sync="addFormDialog"
                        style="height: auto">
                 <el-form v-model="addFormValue" class="demo-form-inline" :inline="true">
-                    <el-form-item label="数据源名称:">
+                    <el-form-item label="数据源名称:" prop="dbsName">
                         <el-input v-model="addFormValue.dbsName"></el-input>
                     </el-form-item>
-                    <el-form-item label="数据库类型:">
+                    <el-form-item label="数据库类型:" prop="dbType">
                         <el-select v-model="addFormValue.dbType" placeholder="数据库类型">
                             <el-option label="全部" value=""></el-option>
                             <el-option label="oracle数据库" value="oracle"></el-option>
                             <el-option label="mysql数据库" value="mysql"></el-option>
                         </el-select>
                     </el-form-item>
-                    <el-form-item label="数据库名称: ">
+                    <el-form-item label="数据库名称: " prop="dataBaseName">
                         <el-input v-model="addFormValue.dataBaseName"></el-input>
                     </el-form-item>
-                    <el-form-item label="数据库IP地址:">
+                    <el-form-item label="数据库IP地址:" prop="dbsIp">
                         <el-input v-model="addFormValue.dbsIp"></el-input>
                     </el-form-item>
-                    <el-form-item label="数据库端口:">
+                    <el-form-item label="数据库端口:" prop="dbsPort">
                         <el-input v-model="addFormValue.dbsPort"></el-input>
                     </el-form-item>
-                    <el-form-item label="数据库账号:">
+                    <el-form-item label="数据库账号:" prop="dbsUsername">
                         <el-input v-model="addFormValue.dbsUsername"></el-input>
                     </el-form-item>
-                    <el-form-item label="数据库密码:">
+                    <el-form-item label="数据库密码:"  prop="dbsPassword">
                         <el-input v-model="addFormValue.dbsPassword"></el-input>
                     </el-form-item>
                 </el-form>
@@ -167,14 +167,15 @@
 
 <script>
     import {mapState,mapActions} from 'vuex';
-    import ElForm from "../../../node_modules/element-ui/packages/form/src/form.vue";
-    import ElFormItem from "../../../node_modules/element-ui/packages/form/src/form-item.vue";
+
     import AJAX from './../../assets/js/ajax';
     export default {
         components: {
-            ElFormItem,
-            ElForm},
+            },
         data() {
+          const validateEmpty =(rule, value, callback) => {
+            check.init(value, callback, this.$store.commit);
+          };
             return {
                 msg:[],
                 labelData:{
@@ -206,13 +207,11 @@
                 page: 1, //当前页数
                 pageSize:15,
                 pageSizeOptions:[15,20,25],
-                tableHeight:0,//表格容器的高度
                 updateFormDialog:false,
                 addFormDialog:false,
-                index:-1 //点击行号
+                index:-1, //点击行号
+
             }
-        },
-        computed:{
         },
         created(){
             let dat =this
@@ -224,16 +223,13 @@
                 dbsName:dat.labelData.dbsName,
                 dataBaseName:dat.labelData.dataBaseName
             },function(data){
-                dat.msg = data.data.data;
-                dat.total=data.data.count;
+                dat.msg = data.data.data.data;
+                dat.total=data.data.data.count;
             })
         },
         mounted(){
-            let _this =this;
-            this.tableHeight=$(window).height()-245;
-            $(window).resize(function(){
-                _this.tableHeight=$(window).height()-245;
-            })
+
+
         },
         methods:{
             handleCurrentChange(page){
@@ -243,7 +239,7 @@
                     pageSize:dat.pageSize,
                     pageNo:page
                 },function(data){
-                    dat.msg = data.data.data;
+                    dat.msg = data.data.data.data;
                 })
 
             },
@@ -253,7 +249,7 @@
                     pageSize:dat.pageSize,
                     pageNo:dat.page
                 },function(data){
-                    dat.msg = data.data.data;
+                    dat.msg = data.data.data.data;
                 })
             },
             //获取业务表列表
@@ -266,33 +262,40 @@
                     dbsName:dat.labelData.dbsName,
                     dataBaseName:dat.labelData.dataBaseName
                 },function(data){
-                    dat.msg = data.data.data;
-                    console.log(data.data)
+                   dat.msg = data.data.data.data;
                 })
             },
             //新增数据源
             add(){
                 this.addFormDialog=true;
             },
+
             addDataSource(){
                 let dat = this;
-                AJAX.post('website/dyn/dynDataSource/editData',{params:JSON.stringify(dat.addFormValue)},function (data)
-                {
-                    if(data.data.message==='成功'){
-                        AJAX.post('website/dyn/dynDataSource/findAllList',{
-                            pageSize:dat.pageSize,
-                            pageNo:dat.pageNo
-                        },function(res1){
-                            dat.msg = res1.data.data;
-                            console.log(res1.data)
-                        });
-                        dat.addFormDialog=false;
-                        dat.addFormValue='';
+               /* this.$refs.addFormValue.validate((valid) => {
+                    if (valid) {*/
+                        AJAX.post('website/dyn/dynDataSource/editData',{params:JSON.stringify(dat.addFormValue)},function (data)
+                        {
+                            if(data.data.stateCode.code===200){
+                                AJAX.post('website/dyn/dynDataSource/findAllList',{
+                                    pageSize:dat.pageSize,
+                                    pageNo:dat.pageNo
+                                },function(res1){
+                                    dat.msg = res1.data.data.data;
+                                });
+                                dat.addFormDialog=false;
+                                dat.addFormValue='';
+                            }
+                            if(data.data.stateCode.code!==200){
+                                dat.$message.error(data.data.stateCode.message);
+                            }
+                        })
+                   /* }else {
+                        console.log('数据校验未通过!!');
+                        return false;
                     }
-                    if(data.data.message!=='成功'){
-                        dat.$message.error(data.data.message);
-                    }
-                })
+                })*/
+
             },
             //修改操作，查询单条数据
             handleEdit(index,row){
@@ -310,13 +313,16 @@
                 let dat = this;
                 AJAX.post('website/dyn/dynDataSource/editData',{params:JSON.stringify(dat.formValue)},function (data)
                 {
-                    if(data.data.message==='成功'){
+                  console.log(data)
+                    if(data.data.stateCode.code===200){
+                      console.log(dat.formValue);
+                      console.log(dat.msg[dat.index]);
                         dat.msg[dat.index]=Object.assign(dat.msg[dat.index],dat.formValue);
                         dat.updateFormDialog=false;
                         dat.formValue='';
                     }
-                    if(data.data.message!=='成功'){
-                        dat.$message.error(data.data.message);
+                    if(data.data.stateCode.code!==200){
+                        dat.$message.error(data.data.stateCode.message);
                     }
                 })
             },
@@ -339,8 +345,7 @@
                                 pageSize:dat.pageSize,
                                 pageNo:dat.pageNo
                             },(res1)=>{
-                                _this.msg = res1.data.data;
-                                console.log(res1.data)
+                                _this.msg = res1.data.data.data;
                             })
                         })
 

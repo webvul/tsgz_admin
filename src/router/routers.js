@@ -44,19 +44,88 @@ let router = [
                         leaf: true,//只有一个节点
                     },
                 ]
-            },
-
-            {
-                path: 'userManage',
-                name: '用户管理',
-                iconCls: 'icon iconfont icon-yonghuguanli',//图标样式class
-                component: components.UserManage,
-                leaf: true,//只有一个节点
-            },
+            }
         ]
 
     },
     {
+        path: '/sys',
+        component: components.Home_view,
+        name:'系统设置',
+        redirect: '/sys/userManagement',
+        iconCls: 'fa fa-address-card',//图标样式class
+        children: [
+            {
+                path: 'log',
+                name: '日志',
+                component: components.MainApp,
+                redirect: '/sys/log/logList',
+                iconCls: 'icon iconfont icon-gerenxinxi',//图标样式class
+                children:[
+                    {
+                        path: 'logList',
+                        name: '日志查询',
+                        component: components.logList,
+                        leaf: true,//只有一个节点
+                    },
+
+                ]
+            },
+            {
+                path: 'UserManagement',
+                name: '机构用户',
+                component: components.MainApp,
+                redirect: '/sys/UserManagement/userList',
+                iconCls: 'icon iconfont icon-gerenxinxi',//图标样式class
+                children:[
+                    {
+                        path: 'userList',
+                        name: '用户管理',
+                        component: components.userManager,
+                        leaf: true,//只有一个节点
+                    },
+                    {
+                        path: 'areaManager',
+                        name: '区域管理',
+                        component: components.areaManager,
+                        leaf: true,//只有一个节点
+                    },
+                    {
+                      path: 'officeManager',
+                      name: '机构管理',
+                      component: components.officeManager,
+                      leaf: true,//只有一个节点
+                    }
+                ]
+            },
+            {
+                path: 'config',
+                name: '设置',
+                component: components.MainApp,
+                redirect: '/sys/config',
+                iconCls: 'icon iconfont icon-gerenxinxi',//图标样式class
+                children:[
+                    {
+                        path: 'menu',
+                        name: '菜单管理',
+                        component: components.menu,
+                        leaf: true,//只有一个节点
+                    },{
+                        path: 'dict',
+                        name: '字典管理',
+                        component: components.dict,
+                        leaf: true,//只有一个节点
+                    },{
+                        path: 'role',
+                        name: '角色管理',
+                        component: components.role,
+                        leaf: true,//只有一个节点
+                    },
+                ]
+            },
+        ]
+    },
+   {
         path: '/pack',
         component: components.Home_view,
         name:'业务包',
@@ -249,3 +318,4 @@ let router = [
 ];
 
 export default router;
+

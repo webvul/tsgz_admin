@@ -172,7 +172,7 @@
             let _this = this;
            this.form.name=this.$route.query.name;
             AJAX.get('website/pack/updatesource',{id:this.$route.query.id},function(res){
-                _this.list = res.list;
+                _this.list = res.data.list;
             })
         },
         mounted(){
@@ -200,10 +200,10 @@
                     tablename:item.tableNames
                 },function(res){
                     let cho=[];
-                    res.list.map(function(item,index){
+                    res.data.list.map(function(item,index){
                         if(!item.relationTables) item.relationTables='none';
                     })
-                    _this.dabeList=res.list;
+                    _this.dabeList=res.data.list;
                     //设置初始选中项
                     _this.dabeList.map(function(item,key){
                         if(item.isJoin==='1'){
@@ -269,13 +269,19 @@
             preWatch(){
                 let _this = this;
                 /*_this.dialogTableVisible=false;*/
-                _this.dialogTableVisible1=true;
+
                 AJAX.get("website/pack/findData",{
                     id:_this.$route.query.id,
                     name:_this.tabNames
                 },function(res){
+                    if(res.data.getStatus=='0'){
+                        return _this.$message.error('Excel导入的表不能表预览');
+                    }else{
+                        _this.dialogTableVisible1=true;
+                        _this.preTable=res.data.mapData;
+                    }
                     //console.log(res);
-                    _this.preTable=res.mapData;
+
                 })
             },
             modalColumn(row,index){
@@ -310,8 +316,12 @@
                     mainId:this.$route.query.id,
                     tablename:this.tabNames
                 },function(res){
-                    //console.log(res.list);
-                    _this.columnDataList = res.list;
+                    if(res.data.getStatus=='0'){
+                        return _this.$message.error('Excel导入的表没有表连接不能关联');
+                    }else{
+                        _this.columnDataList = res.list;
+                    }
+
                 })
             },
             //将数据保存store
@@ -375,8 +385,8 @@
                     classname:item.tabName
                 },function(res){
                     //console.log(res.list);
-                    _this.columnDataList = res.list;
-                    _this.realtables = item.tabName;
+                    _this.columnDataList = res.data.list;
+                    _this.realtables = item.data.tabName;
                     _this.realcolumn = '';
                     _this.step = 2;
                 })

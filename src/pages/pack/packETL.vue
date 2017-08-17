@@ -196,7 +196,7 @@
                 let _this =this;
                 AJAX.get('website/packsql/getTableConn',{},(res)=>{
                     console.log(res);
-                    _this.dbsNameList = res;
+                    _this.dbsNameList = res.data;
                 })
             },
             //添加表字段
@@ -210,8 +210,8 @@
                     _this.div_status = 'display:block';
                     AJAX.post('website/packsql/selectData',{name:this.form.value,sql:sql},(res)=> {
                         console.log(res)
-                        _this.nineDataList = res.data.alllist;
-                        _this.columnNameList = res.data.list;
+                        _this.nineDataList = res.data.data.alllist;
+                        _this.columnNameList = res.data.data.list;
                         this.dialogEtlTableVisible=false;
                         //设置初始选中项
                         window.setTimeout(()=>{
@@ -221,7 +221,7 @@
                                 }
                             });
                         },200)
-                        res.data.list.map(function(item,key){
+                        res.data.data.list.map(function(item,key){
                             // console.log(item)
                             _this.dabeList.push({
                                 columnName:item.split("-")[0],
@@ -242,7 +242,7 @@
                 let _this = this;
                 AJAX.post('website/packadd/getTableByConn',{dbsName:this.form.value},(res)=>{
                    // console.log(res.data.list)
-                    _this.tableList = res.data.list;
+                    _this.tableList = res.data.data.list;
                     this.firstcolor = '';
                 })
             },
@@ -296,7 +296,7 @@
                     dbsName:this.form.value
                 },function(res){
                     //console.log(res.data.list);
-                    _this.columnDataList = res.data.list;
+                    _this.columnDataList = res.data.data.list;
                 })
             },
             choItem(item,key){
@@ -308,7 +308,7 @@
                     classname:item.tabName
                 },function(res){
                     //console.log(res.list);
-                    _this.columnDataList = res.data.list;
+                    _this.columnDataList = res.data.data.list;
                     _this.realtables = item.tabName;
                     _this.realcolumn = '';
                     _this.step = 2;

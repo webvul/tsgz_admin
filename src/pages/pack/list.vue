@@ -171,7 +171,7 @@
                 //console.log(packList);
                 AJAX.post('website/pack/saveGroupList',{groupName:group_name},(res)=>{
                     //console.log(res.data.id)
-                    let id = res.data.id
+                    let id = res.data.data.id
                     this.addFormDialog=false;
                    packList.push({
                         groupName:group_name,

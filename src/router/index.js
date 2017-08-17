@@ -9,6 +9,7 @@ import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
 Vue.use(VueRoute);
 let router = new VueRoute({
+    // mode: 'history',
     routes: MyRoutes,
     scrollBehavior (to, from, savedPosition) {
         if (savedPosition) {

@@ -29,7 +29,7 @@
 </template>
 
 <script>
-    import {mapState} from 'vuex';
+    import {mapState,mapActions} from 'vuex';
     import check from './validatedPassword'
     import AJAX from './../../assets/js/ajax';
     export default {
@@ -43,19 +43,6 @@
             };
             const validateNewPassword1 =(rule, value, callback) => {
                 check.init(value,callback,this.$store.commit);
-                /*if(value.length===0){
-                    this.$store.commit('safelyLevel',0);
-                    callback(new Error('新密码不能为空!'));
-                }else if (value.length<4) {
-                    this.$store.commit('safelyLevel',1);
-                    callback(new Error('密码太弱，有盗号风险，请重新输入!'));
-                } else if(value.length<6){
-                    this.$store.commit('safelyLevel',2);
-                    callback(new Error('安全等级一般!'));
-                }else{
-                    this.$store.commit('safelyLevel',3);
-                    callback(new Error('安全等级较高!'));
-                }*/
             };
             return{
                 //密码输入
@@ -69,7 +56,6 @@
                     oldPassword: [
                         {required: true, trigger: 'blur', message: '旧密码不能为空！'},
                         /*{required: true, trigger: 'blur', validator: validateOldPassword}*/
-
                     ],
                     newPassword: [
                         {required: true, trigger: 'blur', validator: validateNewPassword1}
@@ -82,14 +68,10 @@
             }
         },
         methods: {
+          ...mapActions(['submitPassword']),
             submitForm (){
                 let _this =this;
-                AJAX.post('website/sys/user/modifyPwd',{
-                    oldPassword:_this.passwordForm.oldPassword,
-                    newPassword:_this.passwordForm.newPassword2
-                },function(data){
-                    console.info( data.data)
-                })
+                this.submitPassword(_this);
             }
         },
         created(){
@@ -97,7 +79,6 @@
         },
         computed:{...mapState(['level'])},
         mounted() {
-            console.log(this.level);
         }
     }
 </script>

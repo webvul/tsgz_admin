@@ -153,7 +153,6 @@
         },
         computed: mapState(['sidebar']),
         created(){
-            console.log(this.$route.matched);
             this.$store.commit('setCurrentRoute',this.$route.matched);
         }
     }
@@ -170,7 +169,7 @@
         border-radius: 0px !important;
         margin-bottom: 0 !important;
         .left_con{
-            flex:1;
+            flex:2;
             display: flex;
             align-items: center;
             .icon-shousuo {

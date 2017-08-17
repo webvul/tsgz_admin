@@ -59,7 +59,7 @@
             }
         },
         mounted(){
-            console.log("ddsr"+this.$route.path);
+
         }
     }
 </script>

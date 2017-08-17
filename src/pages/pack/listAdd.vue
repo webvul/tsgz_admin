@@ -119,16 +119,17 @@
                 //console.log(item.dbsName)
                 AJAX.post('website/packadd/getTableByConn',{dbsName:item.dbsName},(res)=>{
                     this.page=1;
-                    this.alltablelist = res.data.list;
+                    this.alltablelist = res.data.data.list;
                 })
 
             },
             ajax(){
                 let _this =this;
                 AJAX.post('website/packadd/addGroup',{},(res)=>{
-                    this.dbsNameList = res.data.dbsNameList;
-                    this.busPackageNameList = res.data.list1;
-                    this.alltablelist = res.data.list;
+                  console.log(res.data)
+                    this.dbsNameList = res.data.data.dbsNameList;
+                    this.busPackageNameList = res.data.data.list1;
+                    this.alltablelist = res.data.data.list;
 
                 })
             },
