@@ -45,3 +45,8 @@ table{
 .el-table .cell{
     word-break: keep-all;
 }
+
+/*按钮通用样式*/
+.el-button{
+  border-radius: 0;
+}

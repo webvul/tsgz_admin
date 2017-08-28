@@ -22,6 +22,7 @@
         bottom: 0;
         height: 45px;
         left: 0;
+        z-index:22;
         overflow: hidden;
     }
 

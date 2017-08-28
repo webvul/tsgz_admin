@@ -17,7 +17,7 @@ let personAction={
   submitPersonInfo({commit},dat){
     console.log(dat.user_msg);
     AJAX.post('website/sys/user/info',{params:JSON.stringify(dat.user_msg)},(res)=>{
-      vm.editable = true;
+      dat.editable = false;
     })
   },
   //checkPassWord
@@ -26,6 +26,7 @@ let personAction={
       oldPassword:_this.passwordForm.oldPassword,
       newPassword:_this.passwordForm.newPassword2
     },function(data){
+      _this.init();
       _this.$message.info("修改成功");
     })
   },

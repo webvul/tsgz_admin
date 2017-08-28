@@ -8,7 +8,7 @@
 export default {
   data () {
       return{
-        screenHeight: document.body.clientHeight
+        screenHeight: document.body.clientHeight,
       }
   },
   mounted(){

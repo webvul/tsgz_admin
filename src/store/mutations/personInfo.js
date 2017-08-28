@@ -7,6 +7,9 @@ let personInfoFunction={
   setCurrentRoute:(state,path)=>{
     state.headerCurRouter=path[0].path;
   },
+  setCurrentSiderbarHighLight(state,path){
+    state.sidebarCurrentRouter=path
+  },
   //控制用户修改密码的安全等级
   safelyLevel:(state,level)=>{
     state.level =level;

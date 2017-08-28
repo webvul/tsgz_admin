@@ -18,7 +18,7 @@
         v-if="status===2"
         @handleChangeStatus="changeStatus"
         :form="form"
-        :gccList="gccList"
+        :gccList="gccListTree"
 
       >
 
@@ -33,7 +33,7 @@
   import AJAX from  '../../../assets/js/ajax';
   import MenuList  from './MenuList.vue'
   import AddMenu from './AddMenu.vue'
-//  import {tranlateDataTreeManagement} from './../../../utils';
+  import {tranlateDataTreeManagement} from './../../../utils';
   export default {
     components: {
       MenuList,
@@ -53,6 +53,7 @@
           remarks: '',
         },
         gccList:[],
+        gccListTree:[],
         status:1,
         saveUp:'添加',
       }
@@ -86,7 +87,9 @@
       },
       ajax(){
         let _this =this;
-        AJAX.get('/website/sys/menu/treeData',{},(res)=>{
+        AJAX.get('/website/sys/menuWeb/treeData',{},(res)=>{
+            _this.gccListTree=tranlateDataTreeManagement(res.data);
+            console.log(_this.gccListTree);
           _this.gccList = res.data;
         })
       },

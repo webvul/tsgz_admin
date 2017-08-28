@@ -6,11 +6,8 @@
         <el-form-item label="归属公司：">
           <el-select-tree v-model="management.form.companyId"
                           :treeData="management.companyTree"
-
                           :propNames="defaultProps"
-                          :multiple="false"
                           placeholder="请选择归属公司"
-                          clearable
                           @setSelectedId="setSelectedId"
           >
           </el-select-tree>
@@ -43,7 +40,7 @@
     <div class="tableTree">
       <el-table
         :data="management.data.data"
-        :height="($store.state.screenHeight-275)"
+        :height="($store.state.screenHeight-325)"
         border
       >
         <el-table-column
@@ -176,6 +173,10 @@
     position: absolute;
     height: 40px;
     bottom: 0;
+    .el-pagination{
+      position:relative;
+      top:5px;
+    }
   }
 
 </style>

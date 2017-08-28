@@ -2,29 +2,31 @@
   <el-card class="userContent" :style="'height:'+cardHeight">
     <el-form :model="ruleForm" :rules="rules" ref="ruleForm" label-width="100px" class="demo-ruleForm">
       <el-form-item label="归属公司：">
-        <el-select-tree v-model="ruleForm.companyId" :treeData="companyTree" :propNames="defaultProps" clearable
+        <el-select-tree v-model="ruleForm.companyName" :treeData="companyTree" :propNames="defaultProps" clearable
+                        @setSelectedId="setSelectedcompanyId"
                         placeholder="选择公司">
         </el-select-tree>
       </el-form-item>
       <el-form-item label="归属部门：">
-        <el-select-tree v-model="ruleForm.officeId" :treeData="officeTree" :propNames="defaultProps" clearable
+        <el-select-tree v-model="ruleForm.officeName" :treeData="officeTree" :propNames="defaultProps" clearable
                         :type="2"
+                        @setSelectedId="setSelectedOfficeId"
                         placeholder="选择部门">
         </el-select-tree>
       </el-form-item>
-      <el-form-item label="工号" prop="photo">
+      <el-form-item label="工号" prop="no">
         <el-input v-model="ruleForm.no" size="small"></el-input>
       </el-form-item>
-      <el-form-item label="姓名" prop="photo">
+      <el-form-item label="姓名" prop="name">
         <el-input v-model="ruleForm.name" size="small"></el-input>
       </el-form-item>
-      <el-form-item label="登录名" prop="photo">
+      <el-form-item label="登录名" prop="loginName">
         <el-input v-model="ruleForm.loginName"  size="small"></el-input>
       </el-form-item>
       <el-form-item label="密码" prop="photo">
         <el-input v-model="ruleForm.password" type="password" size="small"></el-input>
       </el-form-item>
-      <el-form-item label="确认密码" prop="newPassword">
+      <el-form-item label="确认密码">
         <el-input v-model="ruleForm.newPassword" type="password" size="small"></el-input>
       </el-form-item>
       <el-form-item label="邮箱" prop="photo">
@@ -89,10 +91,10 @@
             { required: true, message: '请输入归属公司', trigger: 'blur' },
             { min: 3, max: 5, message: '长度在 3 到 5 个字符', trigger: 'blur' }
           ],
-          newPassword: [
-            {required: true, trigger: 'blur', message: '重复密码不能为空！'},
-            {required: true, trigger: 'blur', validator: validateNewPassword}
-          ],
+//          newPassword: [
+//            {required: true, trigger: 'blur', message: '重复密码不能为空！'},
+//            {required: true, trigger: 'blur', validator: validateNewPassword}
+//          ],
           region: [
             { required: true, message: '请选择活动区域', trigger: 'change' }
           ],
@@ -105,8 +107,14 @@
           type: [
             { type: 'array', required: true, message: '', trigger: 'change' }
           ],
-          resource: [
-            { required: true, message: '请选择活动资源', trigger: 'change' }
+          no: [
+            { required: true, message: '请选择工号', trigger: 'blur' }
+          ],
+          name: [
+            { required: true, message: '请选择工号', trigger: 'blur' }
+          ],
+          loginName: [
+            { required: true, message: '请选择工号', trigger: 'blur' }
           ]
         },
         defaultProps: {
@@ -188,7 +196,15 @@
         });
       },
       resetForm(formName) {
-//        this.init();
+         this.$emit('init')
+      },
+      setSelectedcompanyId(val){
+          console.log(val);
+          this.ruleForm.companyName=val.id;
+      },
+      setSelectedOfficeId(val){
+        console.log(val);
+        this.ruleForm.officeName=val.id;
       },
       init(){
         this.ruleForm=Object.assign({},{

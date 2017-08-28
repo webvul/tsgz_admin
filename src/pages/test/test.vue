@@ -1,40 +1,28 @@
 <template>
-  <dendrogram
-       :data="resData"
-       :propNames="defaultProps"
-       :level="4"
-  >
-
-  </dendrogram>
+        <scroll_bar
+           :scroll_bar_style="'width:50%;height:100px;border:1px solid red'"
+        >
+          <div>
+            <p v-for="item in 30">{{item}}</p>
+          </div>
+        </scroll_bar>
 </template>
 <script>
-    import Dendrogram from '@/components/tableTree/Dendrogram'
-    import {tranlateDataTreeManagement} from '@/utils'
-    import AJAX from '@/assets/js/ajax';
+    import qgs_scrollBar from '@/components/Common/qgs_scrollBar.vue'
     export default {
         data() {
             return{
-                resData:[],
-              defaultProps: {
-                children: 'children',
-                label: 'name',
-                id: "id",
-              },
-            }
+
+              }
         },
         components:{
-          Dendrogram
+          'scroll_bar':qgs_scrollBar
         },
       created(){
-        this.getAjax();
+
       },
         methods: {
-            getAjax(){
-                AJAX.get('website/sys/office/treeData',{},(res)=>{
-                    this.resData=tranlateDataTreeManagement(res);
-                })
 
-            }
 
         }
     };

@@ -71,7 +71,19 @@
           ...mapActions(['submitPassword']),
             submitForm (){
                 let _this =this;
-                this.submitPassword(_this);
+                this.submitPassword(this);
+              this.$router.push({
+                path:'/login',
+              })
+
+            },
+            init(){
+                this.$store.commit('safelyLevel',0);
+                this.passwordForm= {
+                    oldPassword: '',
+                    newPassword: '',
+                    newPassword2: '',
+                }
             }
         },
         created(){

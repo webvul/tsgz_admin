@@ -7,17 +7,17 @@
       </header>
       <section class="msg">
         <div class="left">
-          <el-form label-position="right" label-width="100px" :model="user_msg">
+          <el-form label-position="right" label-width="100px" :model="user_msg" :rules="userFormRules" ref="userForm">
             <el-form-item label="用户名：">
               {{user_msg.loginName}}
             </el-form-item>
-            <el-form-item label="昵称：">
+            <el-form-item label="昵称："  prop="name">
               <el-input v-model="user_msg.name"></el-input>
             </el-form-item>
-            <el-form-item label="性别：">
+            <el-form-item label="性别：" prop="sex">
               <el-radio-group v-model="user_msg.sex">
-                <el-radio label="man">男</el-radio>
-                <el-radio label="woman">女</el-radio>
+                <el-radio label="0">男</el-radio>
+                <el-radio label="1">女</el-radio>
               </el-radio-group>
             </el-form-item>
             <el-form-item label="邮箱：">
@@ -26,7 +26,7 @@
             <el-form-item label="电话：">
               <el-input v-model="user_msg.phone"></el-input>
             </el-form-item>
-            <el-form-item label="手机：">
+            <el-form-item label="手机：" prop="mobile">
               <el-input v-model="user_msg.mobile"></el-input>
             </el-form-item>
           </el-form>
@@ -85,7 +85,7 @@
       </section>
     </div>
     <footer>
-      <el-button type="primary"  size="large" @click="submitForm" :disabled="editable">
+      <el-button type="primary"  size="large" @click="submitForm" :disabled="editable" v-touch-ripple>
         <i class="el-icon-check"></i>
         提交</el-button>
     </footer>
@@ -101,11 +101,28 @@
       return {
         editable: false,
         ipMsg:'',
+        userForm: {
+          name: '',
+          sex: ''
+        },
+        //用户信息规则
+        userFormRules: {
+          name: [
+            {required: true, trigger: 'blur', message: '昵称不能为空！'},
+            /*{required: true, trigger: 'blur', validator: validateOldPassword}*/
+          ],
+          sex: [
+            {required: true, trigger: 'blur', message: "性别不能为空!"}
+          ],
+          mobile: [
+            {required: true, trigger: 'blur', message: "手机不能为空!"}
+          ],
+        },
       }
     },
     computed: {...mapState(['user_msg','prefix']),
       dialogImageUrl(){
-        return this.prefix+this.user_msg.photo;
+        return this.prefix+"/jad-saas-mgmt"+this.user_msg.photo;
       }
     },
     created() {
@@ -118,7 +135,16 @@
       submitForm() {
         let vm = this;
         vm.editable = true;
-        this.submitPersonInfo(vm);
+        this.$refs.userForm.validate((valid) => {
+          if (valid) {
+            this.submitPersonInfo(vm);
+          } else {
+            vm.editable = false;
+            console.log('error submit!!');
+            return false;
+          }
+        });
+
       },
       handleAvatarSuccess(res, file) {
         console.log(res)

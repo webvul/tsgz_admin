@@ -315,8 +315,6 @@
                 {
                   console.log(data)
                     if(data.data.stateCode.code===200){
-                      console.log(dat.formValue);
-                      console.log(dat.msg[dat.index]);
                         dat.msg[dat.index]=Object.assign(dat.msg[dat.index],dat.formValue);
                         dat.updateFormDialog=false;
                         dat.formValue='';

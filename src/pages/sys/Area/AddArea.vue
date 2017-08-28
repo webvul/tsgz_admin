@@ -32,7 +32,7 @@
                 <el-input v-model="sendForm.code" auto-complete="off" style="width:300px"></el-input>
             </el-form-item>
             <el-form-item label="备注" :label-width="formLabelWidth">
-                <el-input type="textarea" v-model="sendForm.desc" auto-complete="off" style="width:300px"></el-input>
+                <el-input type="textarea" v-model="sendForm.remarks" auto-complete="off" style="width:300px"></el-input>
             </el-form-item>
             <el-form-item label="" :label-width="formLabelWidth">
                 <el-button size="small" icon="plus" type="primary" @click="submitForm('areaName')" v-text="">保存</el-button>
@@ -103,7 +103,8 @@
               this.$refs[formName].validate((valid) => {
                 if (valid) {
                   //alert('submit!');
-                  AJAX.post('website/sys/area/add', {
+                  //console.log(_this.sendForm.parentId)
+                 AJAX.post('website/sys/area/add', {
                     id:_this.sendForm.id,
                     parent: _this.sendForm.parentId,
                     type: _this.sendForm.type,

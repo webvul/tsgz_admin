@@ -44,8 +44,9 @@ let sysAction={
       pageSize: _this.managerDetail.pageSize,
       pageNo: _this.managerDetail.pageNo
     }, (res) => {
-      _this.managerDetail.data = res.data.data;
-      _this.managerDetail.total = res.data.data.count;
+      console.log(res.data.data.data);
+      _this.tableList = res.data.data.data;
+      _this.total = res.data.data.count;
     })
   },
   // //获取归属公司 归属部门 以及总的树结构

@@ -6,7 +6,9 @@
     <div class="main-container">
       <Navbar/>
       <levelbar></levelbar>
-      <router-view :key="key"></router-view>
+        <div :style="'width:100%;height:'+(screenHeight-134)+'px;min-width:12rem;'">
+          <router-view :key="key"></router-view>
+        </div>
       <FooterBar />
     </div>
   </div>
@@ -16,20 +18,19 @@
     import { mapState } from 'vuex'
     import { Navbar, Sidebar, AppMain ,FooterBar,levelbar} from './../components/Layout';
     export default {
-        name: 'layout',
         components: {
             Navbar,
             Sidebar,
             AppMain,
             FooterBar,
-            levelbar
+            levelbar,
         },
         computed:{
-            ...mapState(['sidebar']),
+            ...mapState(['sidebar','screenHeight']),
             key() {
                 return this.$route.name !== undefined ? this.$route.name + +new Date() : this.$route + +new Date()
             }
-        } ,
+        },
     }
 </script>
 
@@ -83,8 +84,6 @@
       overflow: hidden;
       transition: all .28s ease-out;
       margin-left: 220px;
-      display: flex;
-      flex-flow: column;
       height:100vh;
 
     }

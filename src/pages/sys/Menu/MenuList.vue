@@ -62,7 +62,7 @@
         methods: {
             ajax(){
                 let _this =this;
-                AJAX.get('/website/sys/menu/getMenuList',{},(res)=>{
+                AJAX.get('/website/sys/menuWeb/getMenuList',{},(res)=>{
                     _this.menuList = res.data;
                 })
             },
@@ -71,7 +71,7 @@
             },
             deleteRow(row){
                 let _this= this;
-                AJAX.post('/website/sys/menu/deleteMenu',{id:row.id},(res)=>{
+                AJAX.post('/website/sys/menuWeb/deleteMenu',{id:row.id},(res)=>{
                    if(res.data.stateCode.code === 200){
                      _this.ajax();
                    }
@@ -79,11 +79,12 @@
             },
             update(data){
                 let dat;
-                AJAX.get('/website/sys/menu/getMenu',{
+                AJAX.get('/website/sys/menuWeb/getMenu',{
                     parentId:data.parentId,
                     id:data.id
                 },(res)=>{
                     dat = res.data;
+                    console.log(res.data);
                     this.$emit("changeStatusBySaveup",2,'修改', dat);
                 })
 

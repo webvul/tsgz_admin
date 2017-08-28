@@ -9,6 +9,12 @@
 
     export default {
         name: 'AppMain',
+      data(){
+        return{
+          dialogVisible:false
+        }
+      },
+
         components: {
 
 
@@ -27,11 +33,9 @@
 </script>
 <style lang="scss">
   .appmain{
-    flex:1;
     width:100%;
+    height:100%;
     min-width: 900px;
     overflow: hidden;
-    display: flex;
-    flex-flow: column;
   }
 </style>

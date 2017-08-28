@@ -3,7 +3,7 @@
     <div class="ats-input" @mouseenter="hovering=true" @mouseleave="hovering=false">
       <div class="ats-input-single" v-if="!this.multiple">
         <i class="el-input__icon el-icon-caret-bottom"
-           :class="{'is-reverse':treeVisible,'el-icon-circle-close':showCloseIcon}"
+           :class="{'is-reverse':treeVisible}"
            @click="handleCloseTree(!treeVisible)"></i>
         <input type="text"
                class="el-input__inner"
@@ -95,6 +95,7 @@
         default:'请选择'
       },
       value:{
+          default:''
       },
       multiple:{
         type:Boolean
@@ -225,6 +226,7 @@
             this.treeSelected = node[this.propNames.label];
             this.currentSelected = this.treeSelected;
             this.$emit('setSelectedId',node.id);
+            this.treeVisible = false;
           }
 
         }
@@ -421,13 +423,13 @@
       appearance: none;
       background-color: #fff;
       background-image: none;
-      border-radius: 4px;
+      border-radius: 0;
       border: 1px solid rgb(191, 204, 217);
       box-sizing: border-box;
       color: rgb(31, 46, 61);
       display: block;
       font-size: inherit;
-      height: 36px;
+      height: 30px;
       line-height: 1;
       outline: 0;
       padding: 3px 10px;

@@ -24,26 +24,93 @@
     </div>
     <div class="content">
       <div class="header">
-        <ul>
-          <li :class="status===1?'active':''" @click="handleChangeNav(1)">用户列表</li>
-          <li :class="status===2?'active':''" @click="handleChangeNav(2)">用户添加</li>
-        </ul>
-      </div>
-      <List v-if="status===1"
-            :management="managerDetail"
-            @submitUserList="submitUserList"
-            @changeCurrentPage="changeCurrentPage"
-            @changeSizePage="chageCurrentPageSize"
-            @handleDeleteGet="deleteRow"
-            @handleEditData="editData"
+          <el-form :inline="true" :model="managerDetail.form" >
+            <el-form-item label="归属公司：">
+              <el-select-tree
+                class="el-tree-comp"
+                v-model="managerDetail.form.companyId"
+                :treeData="managerDetail.companyTree"
+                :propNames="defaultProps"
+                placeholder="归属公司"
+                @setSelectedId="setSelectedId"
+              >
+              </el-select-tree>
+            </el-form-item>
+            <el-form-item labelWidth="30px"></el-form-item>
+            <el-form-item label="姓名：">
+              <el-input size="small" class="form_input" v-model="managerDetail.form.name" placeholder=""></el-input>
+            </el-form-item>
+          </el-form>
+          <el-form :inline="true" :model="managerDetail.form" >
+            <el-form-item label="归属部门：">
+              <el-select-tree
+                class="el-tree-comp"
+                size="small"
+                v-model="managerDetail.form.officeId"
+                :treeData="managerDetail.officeTree"
+                :propNames="defaultProps"
+                clearable
+                :type="2"
+                @setSelectedId="setSelectedOffiveId"
+                placeholder="归属部门">
+              </el-select-tree>
+            </el-form-item>
+            <el-form-item label="登录名：">
+              <el-input size="small" class="form_input" v-model="managerDetail.form.loginName" placeholder=""></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" size="small" @click="addList" v-touch-ripple><i class=" icon iconfont icon-xinzeng"></i>新增</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="danger" size="small" @click="deleteList" v-touch-ripple><i class=" icon iconfont icon-delete"></i>批量删除</el-button>
+            </el-form-item>
+            <el-form-item>
+              <el-button size="small" type="primary" @click="search">查询</el-button>
+            </el-form-item>
+          </el-form>
+        </div>
+      <qgs_normal_table
+        :tableList="tableList"
+        :propsName="propsName"
+        :page="(managerDetail.pageNo-1)*managerDetail.pageSize"
+        @edit="edit"
+        :top="180"
+        @deletegroup="handleGetgroup"
+        @handleDeleteVal="handleDeleteVal"
       >
-      </List>
-      <ListAdd v-if="status===2"
-               @handleClickSave="saveForm"
-               :companyTree="managerDetail.companyTree"
-               :officeTree="managerDetail.officeTree"
-               :ruleForm="ruleForm"
-      ></ListAdd>
+        <div class="pageNation">
+          <el-pagination
+            style="float:right;margin-right:30px;"
+            :page-sizes="[10,15,20]"
+            :page-size="managerDetail.pageSize"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+            layout="total, sizes,prev, pager, next, jumper"
+            :total="total">
+          </el-pagination>
+        </div>
+      </qgs_normal_table>
+        <!--<ul>-->
+          <!--<li :class="status===1?'active':''" @click="handleChangeNav(1)">用户列表</li>-->
+          <!--<li :class="status===2?'active':''" @click="handleChangeNav(2)">用户添加</li>-->
+        <!--</ul>-->
+      <!--</div>-->
+      <!--<List v-if="status===1"-->
+            <!--:management="managerDetail"-->
+            <!--@submitUserList="submitUserList"-->
+            <!--@changeCurrentPage="changeCurrentPage"-->
+            <!--@changeSizePage="chageCurrentPageSize"-->
+            <!--@handleDeleteGet="deleteRow"-->
+            <!--@handleEditData="editData"-->
+      <!--&gt;-->
+      <!--</List>-->
+      <!--<ListAdd v-if="status===2"-->
+               <!--@handleClickSave="saveForm"-->
+               <!--:companyTree="managerDetail.companyTree"-->
+               <!--:officeTree="managerDetail.officeTree"-->
+               <!--:ruleForm="ruleForm"-->
+               <!--@init="init"-->
+      <!--&gt;</ListAdd>-->
     </div>
   </section>
 </template>
@@ -52,18 +119,49 @@
   import AJAX from './../../../assets/js/ajax';
   import {tranlateDataTreeManagement} from './../../../utils';
   import {mapActions} from 'vuex'
-  import List from './list/list.vue'
-  import ListAdd from './list/listadd.vue'
+  import selectTree from "@/components/tableTree/selectTree.vue"
+  import qgs_scrollBar from '@/components/Common/qgs_scrollBar.vue'
+  import qgs_normal_table from '@/components/Common/qgs_normal_table'
   export default {
+    components: {qgs_scrollBar,'el-select-tree':selectTree, qgs_normal_table},
     data () {
       return {
         type: '', //1归属公司 2归属部门
-        loadding: true, //为true显示加载动画 为false显示页面
+        loadding: true, //为true显示加载动画 为false显示页面,
         //树结构
         defaultProps: {
           children: 'children',
           label: 'name',
         },
+        //表单列表
+        tableList:[],
+        propsName:[
+          {
+            label: '归属公司',
+            dat: 'companyName'
+          },
+          {
+            label: '归属部门',
+            dat: 'officeName'
+          },
+          {
+            label: '登录名',
+            dat: 'loginName'
+          },
+          {
+            label: '姓名',
+            dat: 'name'
+          },
+          {
+            label: '电话',
+            dat: 'phone'
+          },
+          {
+            label: '手机',
+            dat: 'mobile'
+          }
+        ],
+        total:0, //总页数
         managementMenu: [],
         managerDetail: {
           form: {
@@ -77,7 +175,6 @@
           data: [],
           pageSize: 10,
           pageNo: 1,
-          total: 0
         },
         filterText: '',
         status: 1,
@@ -118,19 +215,42 @@
         this.$refs.ManagerTableTree.filter(val);
       }
     },
-    components: {
-      List,
-      ListAdd
-    },
     methods: {
       ...mapActions(['getUserList','getListTypeTree']),
+      addList(){
+        alert("添加按钮");
+      },
+      deleteList(){
+        alert('批量删除')
+      },
+      //树结构的选中项
+      setSelectedId(val){
+
+      },
+      setSelectedOffiveId(){
+
+      },
+      //获取查询结果
+      search(){
+
+      },
+      //获取批量删除列表
+      handleGetgroup(gro){
+          console.log(gro);
+      },
+      handleDeleteVal(val){
+         alert('单个删除')
+      },
+      edit(){
+
+      },
       //当前页的跳转
-      changeCurrentPage(page){
+      handleCurrentChange(page){
         this.managerDetail.pageNo = page;
         this.getUserList(this)
       },
       //修改每一页的数量
-      chageCurrentPageSize(page){
+      handleSizeChange(page){
         this.managerDetail.pageSize = page;
         this.getUserList(this);
       },
@@ -214,6 +334,8 @@
         return data.name.indexOf(value) !== -1;
       },
       choNodeKey(obj, node, self){
+        //判断节点是否展开或者关闭
+        console.log(obj);
         //判断对象是公司还是部门
         if (obj.children.length) this.managerDetail.form.companyId = obj.id;
         this.managerDetail.form.officeId = obj.id;
@@ -232,20 +354,33 @@
       this.getUserList(this);
     },
     mounted(){
+
     }
   }
 </script>
 
 <!--使用sass语法进行编译样式-->
-<style lang="scss" scoped>
+<style lang="scss">
+  .icon-xinzeng{
+    font-size:14px;
+    padding-right:12px;
+  }
+  .icon-delete{
+    font-size:12px;
+    padding-right:12px;
+  }
   .userManagementPage {
-    display: flex;
-    padding-bottom: 45px;
+    position: relative;
+    height:100%;
+    overflow: hidden;
     .tableTree {
-      width: 200px;
-      overflow-x: auto;
-      position: relative;
-      z-index: 1;
+      width: 210px;
+      height:102%;
+      position: absolute;
+      overflow: scroll;
+      top:0;
+      left:0;
+      z-index: -1;
 
       .el-input {
         width: 175px;
@@ -260,37 +395,47 @@
       }
     }
     .content {
+      height:100%;
+      width:100%;
+      background:#fff;
+      margin-left:193px;
+      padding-right:210px;
+      display: inline-block;
       position: relative;
-      margin-left: -15px;
-      /*height:100%;*/
-      z-index: 2;
-      background: #fff;
-      flex: 4;
       border-left: 1px solid #ddd;
       .header {
-        height: 45px;
-        ul {
-          margin-left: 5px;
-          margin-top: 5px;
-          height: 40px;
-          line-height: 40px;
-          list-style: none;
-          border-bottom: 1px solid #ddd;
-          display: flex;
-          li {
-            cursor: pointer;
-            padding: 0 25px;
-            position: relative;
-            bottom: -1px;
-            &.active {
-              border: 1px solid #ddd;
-              border-bottom: 1px solid #fff;
-              background: #fff;
-              color: #000;
+        width:100%;
+        display: inline-block;
+        white-space: nowrap;
+          .el-form{
+            position:relative;
+            height:45px;
+            padding-left:30px;
+            top:2px;
+          }
+          .form_input{
+            width:150px;
+            .el-input__inner{
+              border-radius:0;
             }
           }
-        }
+
       }
+    }
+    .el-tree-comp{
+       width:240px;
+      .el-input__inner{
+        width:240px !important;
+      }
+      .ats-tree-scrollbar{
+        width:240px !important;
+        min-width:240px !important;
+      }
+    }
+    .pageNation {
+      position:relative;
+      top:2px;
+      width: 100%;
     }
   }
 </style>

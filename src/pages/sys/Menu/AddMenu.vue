@@ -1,8 +1,12 @@
 <template>
     <div class="page DataSourceConfig"  ref="dataSourceContainer">
+      {{sendForm.parentId}}
         <el-form :model="sendForm" :rules="rules" ref="areaName" >
             <el-form-item label="上级菜单" :label-width="formLabelWidth">
-                <el-select-tree v-model="sendForm.parentId" :treeData="gccList" :propNames="defaultProps" clearable
+                <el-select-tree v-model="sendForm.parentId"
+                                :treeData="gccList"
+                                :propNames="defaultProps"
+                                clearable
                                 placeholder="请选择上级菜单">
                 </el-select-tree>
             </el-form-item>
@@ -80,7 +84,7 @@
                 }else {
                     _this.sendForm.isShow = 0;
                 }
-                AJAX.post('website/sys/menu/saveOrEdit', {
+                AJAX.post('website/sys/menuWeb/saveOrEdit', {
                     //params:_this.sendForm
                     id: _this.sendForm.id,
                     parentId:_this.sendForm.parentId,

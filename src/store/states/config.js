@@ -1,6 +1,9 @@
  /*vuex 全局配置方法*/
 
 let configState={
+  router:[
+    {test:[1,2,1]}
+  ],
   sidebar:{
     opened:true  //控制侧边栏是否关闭打开
   },
@@ -30,7 +33,7 @@ let configState={
   headerCurRouter:'',
   sidebarCurrentRouter:'',
   //全局窗口自适应数据
-  screenHeight:0
+  screenHeight:0,
 }
 
 export {configState}
