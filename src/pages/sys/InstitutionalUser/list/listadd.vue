@@ -145,7 +145,7 @@
       AJAX.get('website/sys/user/getDictList',{type:this.type},(res)=>{
         _this.user_type=res.data.type;
       })
-      AJAX.get('website/sys/user/form',{userId:this.ruleForm.id},(res)=>{
+      AJAX.get('website/sys/user/getUseInfo',{userId:this.ruleForm.id},(res)=>{
           console.log(res.data.officeId);
         _this.allRoles=res.data.allRoles;
         _this.ruleForm.oldLoginName=res.data.user.loginName;
@@ -180,7 +180,7 @@
 
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            AJAX.post("website/sys/user/save",{
+            AJAX.post("website/sys/user/saveOrUpdate",{
                 params:JSON.stringify(_this.ruleForm)
             },(res)=>{
               if(res.data.stateCode.code===200){

@@ -6,18 +6,18 @@
     :show-close="false"
     :close-on-click-modal="false"
   >
-    <div class="header">
-     <span class="left">{{title}}</span>
+    <div class="dialog-header">
+      <span class="left">{{title}}</span>
       <span class="right">
         <i class=" icon iconfont icon-delete" style="font-size:14px;" @click="handleCancle"></i>
       </span>
     </div>
-   <slot></slot>
+    <slot></slot>
     <div class="footer" v-if="!hideFooter">
-       <div class="left" @click="handleSubmit">
-         <i class=" icon iconfont icon-gou" style="padding-right:7px;"></i>
-         <span>确认</span>
-       </div>
+      <div class="left" @click="handleSubmit">
+        <i class=" icon iconfont icon-gou" style="padding-right:7px;"></i>
+        <span>确认</span>
+      </div>
       <div class="right" @click="handleCancle">
         <i style="padding-right:7px;" class="icon iconfont icon-guanbi1"></i>
         <span>取消</span>
@@ -27,17 +27,17 @@
 </template>
 
 <script>
-    export default {
-        props:['dialog','title','hideFooter'],
-      methods:{
-        handleCancle(){
-            this.$emit('cancle')
-        },
-        handleSubmit(){
-          this.$emit('submit')
-        },
-      }
+  export default {
+    props:['dialog','title','hideFooter'],
+    methods:{
+      handleCancle(){
+        this.$emit('cancle')
+      },
+      handleSubmit(){
+        this.$emit('submit')
+      },
     }
+  }
 
 </script>
 
@@ -49,7 +49,7 @@
     .el-dialog__body{
       padding:0
     }
-    .header{
+    .dialog-header{
       width:100%;
       height:30px;
       border-bottom:2px solid #00a9f1;
@@ -90,7 +90,7 @@
         border:none;
         position:relative;
         bottom:-1px;
-    }
+      }
       .right{
         float:right;
         height:32px;

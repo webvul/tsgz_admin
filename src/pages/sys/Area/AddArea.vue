@@ -1,5 +1,5 @@
 <template>
-    <div class="page DataSourceConfig"  ref="dataSourceContainer">
+    <div class="DataSourceConfig"  ref="dataSourceContainer">
         <el-form :model="sendForm" :rules="rules" ref="areaName" >
             <el-form-item label="上级区域" :label-width="formLabelWidth">
                 <el-select-tree v-model="sendForm.parentId"
@@ -94,16 +94,18 @@
       },
         methods: {
             setSelectedId(val){
-              this.sendForm.companyId=val;
+                console.log(val);
+              this.sendForm.parentId=val;
             },
 
             submitForm (formName) {
+              console.log(this.sendForm.type)
              // console.log(this.$refs[formName])
               let _this = this;
               this.$refs[formName].validate((valid) => {
                 if (valid) {
                   //alert('submit!');
-                  //console.log(_this.sendForm.parentId)
+
                  AJAX.post('website/sys/area/add', {
                     id:_this.sendForm.id,
                     parent: _this.sendForm.parentId,
@@ -112,8 +114,8 @@
                     remarks: _this.sendForm.desc,
                     name: _this.sendForm.name,
                   }, function (data) {
+                     //_this.$emit('getGccList')
                     _this.$emit("handleChangeStatus",1);
-
                   })
                 } else {
                   return false;
@@ -130,8 +132,6 @@
 
 <style lang="scss">
     .DataSourceConfig{
-        display: flex;
-        flex-flow: column;
         position:relative;
         .header{
             width:100%;

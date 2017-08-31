@@ -48,8 +48,10 @@
           href:'',
           target: 0,
           sort: '',
-          isShow: '',
+          isShow: '显示',
           permission: '',
+          redirect:'',
+          component:'',
           remarks: '',
         },
         gccList:[],
@@ -69,7 +71,19 @@
       handleChangeNav(status){
         this.status=status;
         this.saveUp='添加';
-        this.form = {};
+        this.form = {
+          id: null,
+          parentId:null,
+          name: '',
+          href:'',
+          target: 0,
+          sort: '',
+          isShow: '显示',
+          permission: '',
+          redirect:'',
+          component:'',
+          remarks: '',
+        };
       },
       handleChangeNavAddTree(status, id){
         this.status=status;

@@ -50,3 +50,33 @@ table{
 .el-button{
   border-radius: 0;
 }
+.icon-xinzeng {
+  font-size: 14px;
+  padding-right: 12px;
+}
+
+.icon-delete {
+  font-size: 12px;
+  padding-right: 12px;
+}
+.icon-search{
+  font-size: 12px;
+  padding-right: 12px;
+}
+[v-cloak]{
+  display: none;
+}
+.el-switch{
+  top:2px;
+}
+.el-switch.is-checked .el-switch__core {
+  border-color: #75c988;
+  background-color: #75c988;
+}
+.el-checkbox__input.is-checked .el-checkbox__inner{
+  border-color: #75c988;
+  background-color: #75c988;
+}
+.el-checkbox__input .el-checkbox__inner{
+  border-radius: 0;
+}

@@ -8,8 +8,8 @@ import MyRoutes from './routers'
 import store from './../store/index'
 import NProgress from 'nprogress'
 import 'nprogress/nprogress.css'
+import components from './routesLazy';
 Vue.use(VueRoute);
-console.log(store.state.router);
 let router = new VueRoute({
     // mode: 'history',
     routes: MyRoutes,
@@ -22,10 +22,17 @@ let router = new VueRoute({
     }
 
 });
+// let addRouter=
+// if(addRouter){
+//   router.addRoutes(transRouter(addRouter));
+//   router.options.routes=Object.assign({},transRouter(addRouter));
+//   console.log(router)
+// }
 router.beforeEach((to, from, next) => {
     NProgress.done().start();//模拟页面加载的滚动条
     if (to.path === '/login') {
         sessionStorage.removeItem('Token');
+      sessionStorage.removeItem('menu_router');
     }
     let token = JSON.parse(sessionStorage.getItem('Token'));
     if (!token && to.path !== '/login') {
@@ -34,6 +41,8 @@ router.beforeEach((to, from, next) => {
         next()
     }
 })
+
+
 //路由完成之后的操作
 router.afterEach(route => {
     NProgress.done()

@@ -123,6 +123,8 @@
         }, function (data) {
           if (data.data.stateCode.code === 200){
             _this.$emit("handleChangeNav",1,"")
+          }else {
+            alert(data.data.stateCode.message)
           }
         })
       },

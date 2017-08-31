@@ -28,8 +28,7 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex'
-  import {mapGetters} from 'vuex'
+  import {mapState,mapGetters} from 'vuex'
   import loadding from './../components/loadding/loadding.vue'
   import AJAX from './../assets/js/ajax'
   export default {
@@ -41,6 +40,7 @@
           account: 'admin',
           checkPass: '123456'
         },
+        ac_data:{},
         rules2: {
           account: [
             {required: true, message: '请输入账号', trigger: 'blur'},
@@ -57,7 +57,6 @@
     mounted: function () {
     },
     //解构赋值，获取state和getters里面的值
-    /*computed: {...mapState(['num']),...mapGetters(['changeNum'])},*/
     components: {
       loadding
     },
@@ -73,10 +72,9 @@
             let loginParams = {username: this.ruleForm2.account, password: this.ruleForm2.checkPass};
 
             AJAX.post('website/sys/user/loginweb', loginParams, (res) => {
-              console.log(res.data);
               _this.logining = false;
-              sessionStorage.setItem('Token', JSON.stringify(res.data.data.token));
-              _this.$router.push({path: '/home/Personal'});
+              _this.ac_data=res.data.data;
+              _this.$store.commit("menu_router",_this);
             })
           } else {
             console.log('error submit!!');

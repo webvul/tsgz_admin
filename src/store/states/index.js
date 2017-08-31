@@ -3,5 +3,6 @@
  */
 import {configState} from './config';
 import {personInfoState} from './personalInfo';
-const states=Object.assign(configState,personInfoState);
+import {sys} from './sys';
+const states=Object.assign(configState,personInfoState,sys);
 export default states;

@@ -83,6 +83,9 @@
         type:Array,
         default:[]
       },
+      originId:{
+        type:String,
+      },
       propNames:{
         type:Object,
         default:{
@@ -192,6 +195,7 @@
       handleCloseTree(val){
         if(this.showCloseIcon){
           this.resetValue();
+          this.treeVisible = true;
         }else{
           if(val==undefined){
             this.treeVisible = false;
@@ -219,9 +223,15 @@
             this.handleDelItem(node,event);
           }
         }else{
-          if(this.type===2&&node.children.length){
+          if((this.type===2&&node.children.length)){
+
               //如果有子节点就什么都不操作
+          }else if(node.isuser&&node.isuser==='0'){
+                if(!node.children.length) this.$message('请选择到个人');
           }else{
+            if(this.originId===node.id){
+              return alert('不能使用自己作为上级区域')
+            }
             this.currentNodeId = node.id;
             this.treeSelected = node[this.propNames.label];
             this.currentSelected = this.treeSelected;
@@ -417,7 +427,7 @@
       }
     }
     .el-input__inner{
-      width: 360px;
+      /*width: 360px;*/
       -webkit-appearance: none;
       -moz-appearance: none;
       appearance: none;
@@ -471,7 +481,7 @@
     }
     .ats-tree-scrollbar{
       top: 40px;
-      min-width: 360px;
+      min-width: 300px;
       max-height: 300px;
       overflow-y: auto;
       position: absolute;

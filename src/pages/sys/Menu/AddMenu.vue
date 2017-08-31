@@ -1,11 +1,12 @@
 <template>
-    <div class="page DataSourceConfig"  ref="dataSourceContainer">
+    <div class=" DataSourceConfig"  ref="dataSourceContainer">
       {{sendForm.parentId}}
         <el-form :model="sendForm" :rules="rules" ref="areaName" >
             <el-form-item label="上级菜单" :label-width="formLabelWidth">
                 <el-select-tree v-model="sendForm.parentId"
                                 :treeData="gccList"
                                 :propNames="defaultProps"
+                                @setSelectedId="setSelectedId"
                                 clearable
                                 placeholder="请选择上级菜单">
                 </el-select-tree>
@@ -16,6 +17,12 @@
             <el-form-item label="链接" :label-width="formLabelWidth">
                 <el-input v-model="sendForm.href" auto-complete="off" style="width:300px"></el-input>
             </el-form-item>
+          <el-form-item label="重定向" :label-width="formLabelWidth" prop="redirect" >
+            <el-input v-model="sendForm.redirect" auto-complete="off" style="width:300px"></el-input>
+          </el-form-item>
+          <el-form-item label="组件" :label-width="formLabelWidth" prop="component" >
+            <el-input v-model="sendForm.component" auto-complete="off" style="width:300px"></el-input>
+          </el-form-item>
             <el-form-item label="目标" :label-width="formLabelWidth">
                 <el-input v-model="sendForm.target" auto-complete="off" style="width:300px"></el-input>
             </el-form-item>
@@ -55,7 +62,19 @@
         props:['form','gccList'],
         data() {
             return {
-                sendForm:{},
+                sendForm:{
+                  id: null,
+                  parentId:null,
+                  name: '',
+                  href:'',
+                  target: 0,
+                  sort: '',
+                  isShow: '显示',
+                  permission: '',
+                  redirect:'',
+                  component:'',
+                  remarks:'',
+                },
                 formLabelWidth: '100px',
                 defaultProps: {
                     children: 'children',
@@ -66,6 +85,7 @@
                 name: [
                   {required: true, message: '请输入区域名称', trigger: 'blur'},
                 ],
+                component:{required: true, message: '请选择组件', trigger: 'blur'},
               }
             }
         },       computed:{
@@ -77,6 +97,9 @@
             this.sendForm=this.form;
         },
         methods: {
+          setSelectedId(val){
+            this.sendForm.parentId=val;
+          },
             submitForm () {
                 let _this = this;
                 if (_this.sendForm.isShow === '显示'){
@@ -93,10 +116,16 @@
                     target: _this.sendForm.target,
                     sort: _this.sendForm.sort,
                     isShow: _this.sendForm.isShow,
+                    redirect:_this.sendForm.redirect,
+                    component:_this.sendForm.component,
                     permission: _this.sendForm.permission,
                     remarks: _this.sendForm.remarks,
                 }, function (data) {
-                  _this.$emit("handleChangeStatus",1);
+                  if (data.data.stateCode.code === 200){
+                    _this.$emit("handleChangeStatus",1);
+                  }else {
+                    alert(data.data.stateCode.message)
+                  }
                 })
             },
             goback () {
@@ -108,9 +137,10 @@
 
 <style lang="scss">
     .DataSourceConfig{
-        display: flex;
-        flex-flow: column;
         position:relative;
+        width:100%;
+        height:100%;
+        overflow: scroll;
         .header{
             width:100%;
             height:50px;

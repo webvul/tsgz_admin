@@ -81,6 +81,7 @@
                     parent_ids: data.parent_ids,
               }, (res)=>{
               /!*console.log(res)*!/
+              //this.$emit('getGccList');
               //_this.areaList = res;
               this.ajax();
             })

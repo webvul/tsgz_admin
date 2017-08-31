@@ -155,7 +155,7 @@
     computed: mapState(['sidebar']),
     created(){
       this.$store.commit('setCurrentRoute',this.$route.matched);
-      this.$store.commit('setCurrentSiderbarHighLight',this.$route.matched[1].path)
+//      this.$store.commit('setCurrentSiderbarHighLight',this.$route.matched[1].path)
     }
   }
 </script>

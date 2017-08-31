@@ -60,7 +60,6 @@
     }
     .header{
       position:relative;
-      top:-12px;
       width:100%;
       height:3px;
       background: #00a9f1;

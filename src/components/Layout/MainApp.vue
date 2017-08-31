@@ -32,10 +32,5 @@
     }
 </script>
 <style lang="scss">
-  .appmain{
-    width:100%;
-    height:100%;
-    min-width: 900px;
-    overflow: hidden;
-  }
+
 </style>

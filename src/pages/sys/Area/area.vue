@@ -11,12 +11,14 @@
           <list
             v-if="status===1"
             @changeStatusBySaveup="changeStatusBySaveup"
+            @getGccList="ajax"
           >
           </list>
           <ListAdd
             :form="form"
             v-if="status===2"
             :gccList="gccList"
+            @getGccList="ajax"
             @handleChangeStatus="changeStatus"
           >
 
@@ -81,7 +83,8 @@
                 this.saveUp='添加';
           },
           changeStatus(sta){
-              //alert(sta);
+
+            //this.ajax();
             this.form={
               id: null,
               name: '',
@@ -94,7 +97,27 @@
             this.saveUp='添加';
           },
           changeStatusBySaveup(sta,saveUp,data){
-            //alert(sta);
+            switch (data.type){
+              case'国家':{
+                data.type='1';
+                  break;
+              }
+              case'省份、直辖市':{
+                data.type='2';
+                break;
+              }
+              case'地市':{
+                data.type='3';
+                break;
+              }
+              case'区县':{
+                data.type='4';
+                break;
+              }
+              default:{
+                  break;
+              }
+            }
             this.form={
               id: null,
               name: '',

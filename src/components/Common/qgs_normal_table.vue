@@ -64,6 +64,8 @@
   import qgs_scrollBar from '@/components/Common/qgs_scrollBar.vue'
   import qgs_model from '@/components/Common/qgs-dialog.vue'
   import qgsDeleteDialog  from './qgs-delete-dialog'
+
+
   export default {
     props:['tableList','propsName','page','top'],
     computed:{...mapState(['screenHeight'])},
@@ -79,8 +81,6 @@
         searchId:'',//查询详情的id
       }
     },
-    watch:{
-    },
     methods:{
       handleSelectionChange(val){
         let temp =[];
@@ -93,6 +93,7 @@
         this.$emit('edit',list)
       },
       handleDelete(val){
+        this.temp=val;
         this.dialogDeleteVisible=true;
       },
       //确认删除
@@ -101,14 +102,13 @@
         let temp=[];
           temp.push(this.temp.id);
         this.$emit('handleDeleteVal',temp)
-      }
+      },
     },
     mounted(){
-        this.$nextTick(()=>{
-            $('.mormal_qgs_tableList .el-table__header-wrapper').css('top',this.top+'px');
-            $('.mormal_qgs_tableList .el-table__body-wrapper').css('margin-top',(this.top-140)+'px')
-
-        })
+      this.$nextTick(()=>{
+        $('.mormal_qgs_tableList .el-table__header-wrapper').css('top',this.top+'px');
+        $('.mormal_qgs_tableList .el-table__body-wrapper').css('margin-top',(this.top-140)+'px')
+      })
     }
   }
 
@@ -152,7 +152,6 @@
     }
     .el-table__header-wrapper{
       position: fixed;
-      top:0;
       width:100%;
       z-index: 10;
       .el-table th{

@@ -27,7 +27,15 @@ let personAction={
       newPassword:_this.passwordForm.newPassword2
     },function(data){
       _this.init();
-      _this.$message.info("修改成功");
+      if(data.data.stateCode.code==-100){
+        _this.$message.info(data.data.stateCode.message);
+      }else{
+        _this.$message.info("修改成功");
+        _this.$router.push({
+                path:'/login',
+        })
+      }
+
     })
   },
 

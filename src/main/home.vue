@@ -57,7 +57,6 @@
       .main-container{
         margin-left: 0;
         position:relative;
-        display: flex;
       }
     }
     .sidebar-wrapper {

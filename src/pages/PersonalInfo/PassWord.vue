@@ -72,9 +72,6 @@
             submitForm (){
                 let _this =this;
                 this.submitPassword(this);
-              this.$router.push({
-                path:'/login',
-              })
 
             },
             init(){

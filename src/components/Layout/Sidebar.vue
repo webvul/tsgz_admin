@@ -13,26 +13,26 @@
                         :default-active="$route.path"
                         unique-opened
                         router>
+                    <!--<template-->
+                            <!--v-for="(item,index) in route.children"-->
+                            <!--v-if="!item.hidden &&!item.leaf">-->
+                        <!--<el-submenu :index="item.path">-->
+                            <!--<template slot="title">-->
+                                <!--<i :class="item.iconCls"></i>-->
+                                <!--<span class='menu-name'>{{item.name}}</span>-->
+                            <!--</template>-->
+                            <!--<el-menu-item-->
+                                    <!--v-for='(child,cindex) in item.children'-->
+                                    <!--:key='child.path'-->
+                                    <!--v-if="!child.hidden"-->
+                                    <!--:index='$route.matched[0].path+"/"+item.path+"/"+child.path'>-->
+                                <!--<span class='menu-name'>{{child.name}}</span>-->
+                            <!--</el-menu-item>-->
+                        <!--</el-submenu>-->
+                    <!--</template>-->
                     <template
                             v-for="(item,index) in route.children"
-                            v-if="!item.hidden &&!item.leaf">
-                        <el-submenu :index="item.path">
-                            <template slot="title">
-                                <i :class="item.iconCls"></i>
-                                <span class='menu-name'>{{item.name}}</span>
-                            </template>
-                            <el-menu-item
-                                    v-for='(child,cindex) in item.children'
-                                    :key='child.path'
-                                    v-if="!child.hidden"
-                                    :index='$route.matched[0].path+"/"+item.path+"/"+child.path'>
-                                <span class='menu-name'>{{child.name}}</span>
-                            </el-menu-item>
-                        </el-submenu>
-                    </template>
-                    <template
-                            v-for="(item,index) in route.children"
-                            v-if="!item.hidden &&item.leaf">
+                            v-if="!item.hidden">
                             <el-menu-item
                                     :key='item.path'
                                     v-if="!item.hidden"

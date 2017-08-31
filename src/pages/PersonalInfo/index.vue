@@ -147,8 +147,6 @@
 
       },
       handleAvatarSuccess(res, file) {
-        console.log(res)
-        console.log(file)
         this.user_msg.photo = res.path;
       },
       beforeAvatarUpload(file) {
@@ -168,11 +166,9 @@
         this.editable=false;
       },
       handlePictureCardPreview(file){
-        console.log(file);
         this.dialogImageUrl = file.url;
       },
       handleSuccess(file){
-        console.log(file);
       }
     }
   };

@@ -1,12 +1,12 @@
 <template>
-    <div class="page ServiceTable" ref="serviceTableContainer">
+    <div class="page dict_manager" ref="serviceTableContainer">
         <div class="header">
             <el-form v-model="labelData" label-position="right" label-width="90px" class="ServiceTableForm">
                 <el-form-item label="类型：">
                     <el-input v-model="labelData.type" size="small"></el-input>
                 </el-form-item>
                 <el-form-item label="描述：">
-                    <el-input v-model="labelData.desc" size="small"></el-input>
+                    <el-input v-model="labelData.description" size="small"></el-input>
                 </el-form-item>
                 <el-button type="primary" size="small" class="btn1" @click="getList">
                     查询
@@ -18,7 +18,7 @@
         </div>
         <el-table
                 :data="msg"
-                :height="$store.state.screenHeight-230"
+                :height="$store.state.screenHeight-220"
                 border
                 style="width:100%"
                 >
@@ -62,112 +62,85 @@
                 </template>
             </el-table-column>
         </el-table>
-        <el-col :span="24" class="toolbar">
-            <div class="left">
-                <span style="padding-left:10px;">选择页数：</span>
-                <el-select v-model="pageSize"  placeholder="选择页数" class="pageSize" size="small" @change="getList">
-                    <el-option
-                            v-for="item in pageSizeOptions"
-                            :key="item"
-                            :label="item"
-                            :value="item">
-                    </el-option>
-                </el-select>
+      <qgs_dialog
+        :dialog="editFormDialog"
+        @cancle="editFormDialog=false"
+        :title="'商品新增/编辑'"
+        @submit="handleSubmitEdit"
+      >
+        <div class="el-dialog-body">
+          <el-form :label-position="'right'" label-width="60px" :model="form" ref="ruleForm" :rules="rules">
+            <div style="display: inline-block">
+              <el-form-item label="类型" prop="type">
+                <el-input v-model="form.type" size="small"></el-input>
+              </el-form-item>
+              <el-form-item label="标签" prop="label">
+                <el-input v-model="form.label" size="small"></el-input>
+              </el-form-item>
+              <el-form-item label="键值">
+                <el-input v-model="form.value" size="small"></el-input>
+              </el-form-item>
             </div>
-            <el-pagination class="button" layout="prev, pager, next" @current-change="getList" :page-size="pageSize" :total="total" style="padding-right:20px;">
-            </el-pagination>
-        </el-col>
-        <el-dialog
-                title="字典添加"
-                :visible.sync="addFormDialog"
-                size="tiny"
-                >
-            <el-form>
-                <el-form-item label="键值">
-                    <el-input v-model="form.value"></el-input>
-                </el-form-item>
-                <el-form-item label="标签">
-                    <el-input v-model="form.label"></el-input>
-                </el-form-item>
-                <el-form-item label="类型">
-                    <el-input v-model="form.type"></el-input>
-                </el-form-item>
-                <el-form-item label="描述">
-                    <el-input v-model="form.desc"></el-input>
-                </el-form-item>
-                <el-form-item label="排序">
-                    <el-input v-model="form.sort"></el-input>
-                </el-form-item>
-                <el-form-item label="备注">
-                    <el-input v-model="form.remarks"></el-input>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="addFormDialog = false">取 消</el-button>
-                <el-button type="primary" @click="submitAddFormList">确 定</el-button>
-              </span>
-        </el-dialog>
+            <div style="display: inline-block">
+              <el-form-item label="描述">
+                <el-input v-model="form.description" size="small"></el-input>
+              </el-form-item>
+              <el-form-item label="排序">
+                <el-input v-model="form.sort" size="small"></el-input>
+              </el-form-item>
+              <el-form-item label="备注">
+                <el-input v-model="form.remarks" size="small"></el-input>
+              </el-form-item>
+            </div>
+          </el-form>
+        </div>
 
-        <el-dialog
-                title="字典编辑"
-                :visible.sync="editFormDialog"
-                size="tiny"
-        >
-            <el-form>
-                <el-form-item label="键值">
-                    <el-input v-model="editForm.value"></el-input>
-                </el-form-item>
-                <el-form-item label="标签">
-                    <el-input v-model="editForm.label"></el-input>
-                </el-form-item>
-                <el-form-item label="类型">
-                    <el-input v-model="editForm.type"></el-input>
-                </el-form-item>
-                <el-form-item label="描述">
-                    <el-input v-model="editForm.desc"></el-input>
-                </el-form-item>
-                <el-form-item label="排序">
-                    <el-input v-model="editForm.sort"></el-input>
-                </el-form-item>
-                <el-form-item label="备注">
-                    <el-input v-model="editForm.remarks"></el-input>
-                </el-form-item>
-            </el-form>
-            <span slot="footer" class="dialog-footer">
-                <el-button @click="addFormDialog = false">取 消</el-button>
-                <el-button type="primary" @click="submitEditFormList(editForm.id)">确 定</el-button>
-              </span>
-        </el-dialog>
+      </qgs_dialog>
+      <el-col :span="24" class="toolbar">
+        <div class="left">
+          <span style="padding-left:10px;">选择页数：</span>
+          <el-select v-model="pageSize"  placeholder="选择页数" class="pageSize" size="small" @change="getList">
+            <el-option
+              v-for="item in pageSizeOptions"
+              :key="item"
+              :label="item"
+              :value="item">
+            </el-option>
+          </el-select>
+        </div>
+        <el-pagination class="button_page" layout="prev, pager, next" @current-change="getList" :page-size="pageSize" :total="total" style="padding-right:20px;">
+        </el-pagination>
+      </el-col>
     </div>
+
 </template>
 
 <script>
     import AJAX from '../../../assets/js/ajax';
+    import qgs_dialog from '@/components/Common/qgs-dialog.vue'
     export default {
+        components:{
+          qgs_dialog
+        },
         data() {
             return {
                 msg:[],
                 labelData:{
-                    desc:'',
+                    description:'',
                     type:'',
                 },
                 form:{
                     value:'',
                     label:'',
                     type:'',
-                    desc:'',
+                    description:'',
                     sort:'',
                     remarks:'',
                 },
-                editForm:{
-                    id:'',
-                    value:'',
-                    label:'',
-                    type:'',
-                    desc:'',
-                    sort:'',
-                    remarks:'',
-                },
+              rules:{
+                label:{ required: true, message: '', trigger: 'blur' },
+                type:{ required: true, message: null, trigger: 'blur' }
+              },
                 total: 0, //总页数
                 page: 1, //当前页数
                 pageSize:15,
@@ -201,7 +174,7 @@
                 //获取业务表列表
                 AJAX.get("website/sys/dict/getDictList",{
                     type:labelData.type,
-                    desc:labelData.desc,
+                    description:labelData.description,
                     pageNo:this.page,
                     pageSize:this.pageSize
                 },function(data){
@@ -209,6 +182,21 @@
                     dat.total=data.data.dictList.count;
                 })
             },
+          handleSubmitEdit(){
+            let _this = this;
+            let form = _this.form;
+            AJAX.post('website/sys/dict/saveOrEdit',
+              {
+                params:JSON.stringify(form)
+              },(res)=>{
+                if(res.data.stateCode.code===200){
+                  this.editFormDialog=false;
+                  this.getList(1)
+                }else{
+                  this.$message.error(res.data.stateCode.message);
+                }
+              })
+          },
             //删除
             handleDelete(index,scope){
                 let dat = Object.assign(scope,{
@@ -232,76 +220,40 @@
             },
             //新增
             add(){
-                this.addFormDialog=true;
-            },
-            //新增
-            submitAddFormList(){
-                let _this = this;
-                let form = _this.form;
-                AJAX.post('website/sys/dict/saveOrEdit',
-                    {
-                        value : form.value,
-                        label : form.label,
-                        type : form.type,
-                        description : form.desc,
-                        sort : form.sort,
-                        remarks : form.remarks,
-                    },(res)=>{
-                    if(res.data.stateCode.code===200){
-                        this.addFormDialog=false;
-                        this.getList(1)
-                    }else{
-                        this.$message.error(res.data.stateCode.msg);
-                    }
-                })
+                this.init();
+                this.editFormDialog=true;
             },
             //根据id获得字典信息
             edit(index,scope){
                 let dat = Object.assign(scope,{});
                 let editForm = this.editForm;
+                let _this=this;
                 AJAX.get('website/sys/dict/getDict',{id:dat.id},function(data){
-                    editForm.id = data.data.id;
-                    editForm.value = data.data.value;
-                    editForm.label = data.data.label;
-                    editForm.type = data.data.type;
-                    editForm.desc = data.data.description;
-                    editForm.sort = data.data.sort;
-                    editForm.remarks = data.data.remarks;
+                  _this.form=Object.assign({},data.data);
+
                 })
                 this.editFormDialog=true;
             },
-            //修改
-            submitEditFormList(id){
-                let _this = this;
-                let editForm = _this.editForm;
-                AJAX.post('website/sys/dict/saveOrEdit',
-                    {
-                        id:id,
-                        value : editForm.value,
-                        label : editForm.label,
-                        type : editForm.type,
-                        description : editForm.desc,
-                        sort : editForm.sort,
-                        remarks : editForm.remarks,
-                    },(res)=>{
-                        if(res.data.stateCode.code===200){
-                            this.editFormDialog=false;
-                            this.getList(1)
-                        }else{
-                            this.$message.error(res.data.stateCode.msg);
-                        }
-                    })
-            },
-
+            init(){
+              this.form={
+                  id:'',
+                  value:'',
+                  label:'',
+                  type:'',
+                  description:'',
+                  sort:'',
+                  remarks:'',
+              }
+            }
         },
 
     };
 </script>
 
 <style lang="scss">
-    .ServiceTable{
-        display: flex;
-        flex-flow: column;
+    .dict_manager{
+        width:100%;
+        height:100%;
         position:relative;
        .header{
            width:100%;
@@ -337,13 +289,13 @@
        }
        .toolbar{
            position: absolute;
-           bottom:45px;
+           bottom:0;
            height:45px;
        overflow-x: hidden;
-           display: flex;
-           justify-content: space-between;
-           align-items: center;
            .left{
+             float:left;
+             position:relative;
+             top:12px;
                width:240px;
                overflow: hidden;
                .pageSize{
@@ -353,8 +305,24 @@
                    }
                }
            }
+         .button_page{
+           float:right;
+           position:relative;
+           top:11px;
+         }
 
 
         }
+      .el-dialog-body{
+        width:550px;
+        padding:20px;
+        .el-form-item{
+          margin-bottom:0
+        }
+        .el-input__inner{
+          border-radius:0;
+        }
+      }
     }
+
 </style>
